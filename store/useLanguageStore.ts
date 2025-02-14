@@ -7,15 +7,15 @@ interface LanguageState {
 
 const useLanguageStore = create<LanguageState>((set) => {
   // Get the locale from localStorage or default to 'en'
-  const initialLocale = localStorage.getItem('locale') || 'en';
+  const initialLocale = typeof window !== 'undefined' ? localStorage.getItem('locale') || 'en' : 'en';
 
   return {
     locale: initialLocale,
     setLocale: (locale) => {
       set({ locale });
       if (typeof window !== 'undefined') { 
-      localStorage.setItem('locale', locale);
-    } // Set the locale in localStorage
+        localStorage.setItem('locale', locale);
+      } 
     },
   };
 });
