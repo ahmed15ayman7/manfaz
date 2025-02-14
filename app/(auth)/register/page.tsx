@@ -8,6 +8,10 @@ import CusTextFormField from '@/components/ui/cus_text_form_field'; // Adjust th
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
+import { toast } from 'react-toastify';
+import { setUserData } from '@/lib/actions/user.action';
+import { apiUrl } from '@/constant';
+import axios from 'axios';
 const RegisterView: React.FC = () => {
   const t = useTranslations(); // Using next-intl for translations
   const router = useRouter(); // For navigation
@@ -31,9 +35,44 @@ const RegisterView: React.FC = () => {
     if (!name) return t('name_required');
     if (name.length < 3) return t('name_too_short');
   }
-  const handleRegister = () => {
-    // Add your registration logic here
-    router.push('/path/to/your/successPage'); // Adjust the route accordingly
+  const handleRegister = async (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log(email,password);
+    
+    let toastId = toast.loading(t('please_wait'));
+    try {
+      let res = await axios.post(`${apiUrl}/auth/login`,{
+        email,
+        password,phone
+      })
+      if(res.status === 200){
+        toast.update(toastId, {
+          render: t('login_success'),
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+          closeButton: true
+        });
+        res.data?.data!==null && await setUserData(res.data?.data);
+        router.push('/');
+      }else{
+        toast.update(toastId, {
+          render: t('login_failed'),
+          type: 'error',
+          isLoading: false,
+          autoClose: 3000,
+          closeButton: true
+        });
+      }
+    } catch (error) {
+      toast.update(toastId, {
+        render: t('login_failed'),
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+        closeButton: true
+      });
+    }
   };
 
   return (
@@ -77,7 +116,7 @@ const RegisterView: React.FC = () => {
         <CusTextButton
           buttonText={t('sign_up')}
           textStyle="text-white" // Use Tailwind CSS class directly
-          onPressed={handleRegister}
+          onPressed={(e)=>handleRegister(e)}
           backgroundColor="bg-primary" // Use Tailwind CSS class directly
           borderSideColor="border-primary" // Use Tailwind CSS class directly
         />
