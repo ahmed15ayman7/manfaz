@@ -38,7 +38,7 @@ const LeftSidebar = () => {
             <button onClick={async(e)=>{
               e.preventDefault();
               await SignOut();
-              router.push('/sign-in');
+              router.push('/login');
             }}>
               <div className="flex gap-4 cursor-pointer">
                 <IconLogout size={24} />
