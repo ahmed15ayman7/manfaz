@@ -1,0 +1,1 @@
+export const apiUrl = "https://manfaz-production.up.railway.app"
