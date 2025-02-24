@@ -51,7 +51,8 @@
         "home": "ہوم",
         "orders": "آرڈرز",
         "notification": "اطلاعات",
-        "profile": "پروفائل"
+        "profile": "پروفائل",
+        "cart": "ٹوکری"
     },
 
     "orders_tab": {
@@ -104,9 +105,61 @@
         "paint_wall": "بیرونی دیوار کی پینٹنگ بغیر پروفائل",
         "paint_service_description": "🏡✨ اپنی بیرونی دیواروں کو نئے اور شاندار انداز میں رنگ و روغن کے ماہر سروس کے ساتھ خوبصورت بنائیں۔",
         "price_includes_tax": "قیمت میں VAT شامل ہے",
-        "price": "17 SAR",
-        "installments": "قسطیں: 3 ادائیگیاں 5.67 SAR/ماہ",
+        "price": "ریال",
+        "installments": "قسطیں: 3 ادائیگیاں 5.67 ریال/ماہ",
         "order_now": "ابھی آرڈر کریں",
         "view_details": "تفصیلات دیکھیں"
+    },
+    "services": {
+        "warranty_days": "{days} دن کی وارنٹی",
+        "monthly_installment": "قسط {amount} ریال / ماہ",
+        "price_includes_vat": "قیمت میں ٹیکس شامل ہے",
+        "add_to_cart": "ٹوکری میں شامل کریں",
+        "order_now": "ابھی آرڈر کریں",
+        "show_details": "تفصیلات دیکھیں",
+        "description": "تفصیل",
+        "what_included": "اس میں کیا شامل ہے",
+        "faqs": "عام سوالات کے جوابات",
+        "back": "واپس جائیں",
+        "service_not_found": "سروس نہیں ملی",
+        "loading": "لوڈ ہو رہا ہے..."
+    },
+    "cart": {
+        "title": "ٹوکری",
+        "services_count": "{count} خدمات",
+        "empty_cart": "ٹوکری خالی ہے",
+        "no_services": "آپ نے ابھی تک کوئی خدمت شامل نہیں کی",
+        "browse_services": "خدمات دیکھیں",
+        "complete_order": "آرڈر مکمل کریں",
+        "checkout": "چیک آؤٹ",
+        "order_summary": "آرڈر کا خلاصہ",
+        "services_count_label": "خدمات کی تعداد",
+        "total": "کل رقم",
+        "remove_from_cart": "ٹوکری سے نکالیں"
+    },
+    "checkout": {
+        "title": "چیک آؤٹ",
+        "order_summary": "آرڈر کا خلاصہ",
+        "services_count": "{count} خدمات",
+        "total_amount": "کل رقم",
+        "payment_method": "ادائیگی کا طریقہ",
+        "cash": "نقد ادائیگی",
+        "card": "کریڈٹ کارڈ",
+        "tabby": "ٹیبی کے ذریعے قسطیں",
+        "tamara": "تمارا کے ذریعے قسطیں",
+        "contact_info": "رابطے کی معلومات",
+        "name": "نام",
+        "phone": "موبائل نمبر",
+        "email": "ای میل",
+        "address": "پتہ",
+        "city": "شہر",
+        "notes": "اضافی نوٹس",
+        "confirm_order": "آرڈر کی تصدیق کریں",
+        "empty_cart": "ٹوکری خالی ہے",
+        "empty_cart_message": "آپ نے ابھی تک کوئی خدمت شامل نہیں کی",
+        "browse_services": "خدمات دیکھیں",
+        "required_field": "یہ فیلڈ ضروری ہے",
+        "invalid_email": "غلط ای میل پتہ",
+        "invalid_phone": "غلط فون نمبر"
     }
 }

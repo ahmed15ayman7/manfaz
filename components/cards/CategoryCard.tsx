@@ -1,11 +1,20 @@
 import React from 'react'
 
-const CategoryCard = ({category,image}:{category:string,image:string}) => {
+interface CategoryCardProps {
+  category: string
+  image: string
+  categoryId: string
+  onClick: () => void
+}
+
+const CategoryCard = ({category, image, categoryId, onClick}: CategoryCardProps) => {
   return (
-    <div>        <div  className="flex flex-col items-center">
-    <img src={image} alt={category} className="w-10 h-10" />
-    <p className="text-xs font-medium mt-1 text-center">{category}</p>
-  </div></div>
+    <div className="  cursor-pointer" onClick={onClick}>
+        <div className="flex bg-white p-2 rounded-md flex-col items-center">
+          <img src={image} alt={category} className="w-10 h-10" />
+          <p className="text-xs font-medium mt-1 text-center">{category}</p>
+        </div>
+    </div>
   )
 }
 

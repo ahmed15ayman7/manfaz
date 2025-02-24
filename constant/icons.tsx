@@ -1,4 +1,4 @@
-import { IconBell, IconClipboardList, IconHome, IconUser } from "@tabler/icons-react";
+import { IconBell, IconClipboardList, IconHome, IconUser, IconShoppingCart } from "@tabler/icons-react";
 
 export const SidebarLinks = [
     {
@@ -12,15 +12,18 @@ export const SidebarLinks = [
       label: "orders",
     },
     {
+      icon: <IconShoppingCart size={24} />,
+      route: "/checkout",
+      label: "cart",
+    },
+    {
       icon: <IconBell size={24} />,
       route: "/notification",
       label: "notification",
     },
-
     {
       icon: <IconUser size={24} />,
       route: "/profile",
       label: "profile",
     },
-  ];
-  
+];

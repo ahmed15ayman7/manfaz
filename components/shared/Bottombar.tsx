@@ -8,6 +8,8 @@ import { useTranslations } from 'next-intl';
 
 import React from 'react'
 import { getUserData } from '@/lib/actions/user.action'
+import  useCartStore  from '@/store/useCartStore'
+import { Badge } from '@mui/material'
 
 const Bottombar = () => {
     const t = useTranslations('');
@@ -16,6 +18,11 @@ const Bottombar = () => {
     queryKey:['userData'],
     queryFn:()=>getUserData(),
   })
+  let {items} = useCartStore();
+  let [items2,setItems2] = React.useState(items);
+  React.useEffect(()=>{
+    setItems2(items);
+  },[items])
   return (
     <section className='bottombar'>
      <div className="bottombar_container">
@@ -24,6 +31,9 @@ const Bottombar = () => {
         if(link.route==='/profile') link.route=`/profile${!isLoading ? `?id=${userData?.id}`:""}`
         return(
         <Link key={index} href={link.route} className={`bottombar_link ${isActive && ' bg-primary-500'}`}>
+            {items2.length > 0 && link.route=="/checkout" ? (
+              <Badge className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 rounded-full px-2  bg-primary text-white">{items2.length}</Badge>
+            ):null}
             {link.icon}
             <span className=' text-black hidden sm:block'>{t(`bottom_nav.${link.label}`)}</span>
           </Link>

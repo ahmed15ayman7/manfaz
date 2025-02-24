@@ -41,7 +41,7 @@ const RegisterView: React.FC = () => {
     
     let toastId = toast.loading(t('please_wait'));
     try {
-      let res = await axios.post(`${apiUrl}/auth/login`,{
+      let res = await axios.post(`${apiUrl}/auth/register`,{
         email,
         password,phone
       })

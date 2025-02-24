@@ -19,11 +19,11 @@ export default function RootLayout({
 
         <LeftSidebar/>
         <section className="main-container relative">
-        <div className=" w-full max-w-4xl" style={{direction:locale === 'en' ? 'ltr' : 'rtl'}}>
+        <div className=" w-full " style={{direction:locale === 'en' ? 'ltr' : 'rtl'}}>
         {children}
         </div>
         </section>
-        <RightSidebar/>
+        {/* <RightSidebar/> */}
       </main>
       <BottomSidebar/>
         </div>

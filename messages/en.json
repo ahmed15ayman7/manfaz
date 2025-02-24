@@ -49,8 +49,9 @@
       "bottom_nav": {
         "home": "Home",
         "orders": "Orders",
-        "notification": "Notification",
-        "profile": "Profile"
+        "notification": "Notifications",
+        "profile": "Profile",
+        "cart": "Cart"
       },
   
       "orders_tab":{
@@ -100,10 +101,62 @@
         "paint_wall": "External wall painting without profile",
         "paint_service_description": "🏡✨ Give your external walls a new and vibrant look with a professional painting service without a profile.",
         "price_includes_tax": "Price includes VAT",
-        "price": "17 SAR",
+        "price": "SAR",
         "installments": "Installments: 3 payments of 5.67 SAR/month",
         "order_now": "Order Now",
         "view_details": "View Details"
+      },
+      "services": {
+        "warranty_days": "{days} Days Warranty",
+        "monthly_installment": "Installment {amount} SAR / Month",
+        "price_includes_vat": "Price includes VAT",
+        "add_to_cart": "Add to Cart",
+        "order_now": "Order Now",
+        "show_details": "Show Details",
+        "description": "Description",
+        "what_included": "What's Included",
+        "faqs": "Frequently Asked Questions",
+        "back": "Go Back",
+        "service_not_found": "Service Not Found",
+        "loading": "Loading..."
+      },
+      "cart": {
+        "title": "Cart",
+        "services_count": "{count} Services",
+        "empty_cart": "Cart is Empty",
+        "no_services": "You haven't added any services to your cart yet",
+        "browse_services": "Browse Services",
+        "complete_order": "Complete Order",
+        "checkout": "Checkout",
+        "order_summary": "Order Summary",
+        "services_count_label": "Number of Services",
+        "total": "Total",
+        "remove_from_cart": "Remove from Cart"
+      },
+      "checkout": {
+        "title": "Checkout",
+        "order_summary": "Order Summary",
+        "services_count": "{count} Services",
+        "total_amount": "Total Amount",
+        "payment_method": "Payment Method",
+        "cash": "Cash Payment",
+        "card": "Credit Card",
+        "tabby": "Installments via Tabby",
+        "tamara": "Installments via Tamara",
+        "contact_info": "Contact Information",
+        "name": "Name",
+        "phone": "Mobile Number",
+        "email": "Email",
+        "address": "Address",
+        "city": "City",
+        "notes": "Additional Notes",
+        "confirm_order": "Confirm Order",
+        "empty_cart": "Cart is Empty",
+        "empty_cart_message": "You haven't added any services to your cart yet",
+        "browse_services": "Browse Services",
+        "required_field": "This field is required",
+        "invalid_email": "Invalid email address",
+        "invalid_phone": "Invalid phone number"
       }
     }
     
