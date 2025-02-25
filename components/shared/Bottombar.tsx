@@ -30,9 +30,9 @@ const Bottombar = () => {
         let isActive=(pathname.includes(link.label)&&link.route.length>1)||pathname === link.route;
         if(link.route==='/profile') link.route=`/profile${!isLoading ? `?id=${userData?.id}`:""}`
         return(
-        <Link key={index} href={link.route} className={`bottombar_link ${isActive && ' bg-primary-500'}`}>
+        <Link key={index} href={link.route} className={`relative bottombar_link ${isActive && ' bg-primary-500'}`}>
             {items2.length > 0 && link.route=="/checkout" ? (
-              <Badge className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 rounded-full px-2  bg-primary text-white">{items2.length}</Badge>
+              <Badge style={{position:'absolute'}} className=" top-0 right-0 rounded-full px-2 translate-x-1/2 -translate-y-1/2  bg-primary text-white">{items2.length}</Badge>
             ):null}
             {link.icon}
             <span className=' text-black hidden sm:block'>{t(`bottom_nav.${link.label}`)}</span>
