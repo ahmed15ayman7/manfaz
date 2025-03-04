@@ -36,7 +36,7 @@ const BottomSheet = ({ isOpen, onClose, children, title }: BottomSheetProps) => 
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-full"
             >
-              <Dialog.Panel className="w-full transform overflow-hidden rounded-t-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full transform overflow-hidden rounded-t-2xl bg-white p-6 text-left rtl:text-right align-middle shadow-xl transition-all">
                 {title && (
                   <Dialog.Title
                     as="h3"

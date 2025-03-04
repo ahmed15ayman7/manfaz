@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useTranslations } from 'next-intl'; // Using next-intl for localization
+import { useLocale, useTranslations } from 'next-intl'; // Using next-intl for localization
 import { useRouter } from 'next/navigation'; // Using Next.js router for navigation
 import CusTextButton from '@/components/ui/cus_text_button'; // Adjust the import according to your structure
 import CusTextFormField from '@/components/ui/cus_text_form_field'; // Adjust the import according to your structure
@@ -12,61 +12,81 @@ import { toast } from 'react-toastify';
 import { setUserData } from '@/lib/actions/user.action';
 import { apiUrl } from '@/constant';
 import axios from 'axios';
+import { FormControl, Select, MenuItem } from '@mui/material';
+
 const RegisterView: React.FC = () => {
   const t = useTranslations(); // Using next-intl for translations
   const router = useRouter(); // For navigation
+  const locale = useLocale();
   // Function to validate email format
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [focusPhone, setFocusPhone] = useState(false);
   let [phone, setPhone] = useState('');
-  function validateEmail(email: string|undefined): string | undefined {
+  const [role, setRole] = useState<'user' | 'worker'>('user');
+  const [fullName, setFullName] = useState('');
+
+  function validateEmail(email: string | undefined): string | undefined {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!re.test(String(email).toLowerCase())) return t('invalid_email');
   }
 
   // Function to validate password strength
-  function validatePassword(password: string|undefined): string | undefined {
+  function validatePassword(password: string | undefined): string | undefined {
     if (!password) return t('password_required');
     if (password.length < 6) return t('password_too_short');
   }
-  function validateName(name: string|undefined): string | undefined {
+
+  function validateName(name: string | undefined): string | undefined {
     if (!name) return t('name_required');
     if (name.length < 3) return t('name_too_short');
   }
+
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(email,password);
-    
     let toastId = toast.loading(t('please_wait'));
     try {
-      let res = await axios.post(`${apiUrl}/auth/register`,{
+      const response = await axios.post(`${apiUrl}/auth/register?lang=${locale}`, {
+        name: fullName,
         email,
-        password,phone
-      })
-      if(res.status === 200){
+        password,
+        phone,
+        role
+      });
+
+      if (response.status) {
         toast.update(toastId, {
-          render: t('login_success'),
+          render: t('register_success'),
           type: 'success',
           isLoading: false,
           autoClose: 3000,
           closeButton: true
         });
-        res.data?.data!==null && await setUserData(res.data?.data);
-        router.push('/');
-      }else{
+
+        // تخزين كلمة المرور في localStorage مؤقتاً للاستخدام في صفحة التحقق
+        sessionStorage.setItem('temp_auth', JSON.stringify({
+          phone,
+          email,
+          password
+        }));
+
+        // التوجيه إلى صفحة التحقق مع تمرير معرف المستخدم
+        router.push(`/verify?userId=${response.data.data.id}`);
+      } else {
+        console.log(response.data);
         toast.update(toastId, {
-          render: t('login_failed'),
+          render: t('register_failed') + ` ${response.data?.message}`,
           type: 'error',
           isLoading: false,
           autoClose: 3000,
           closeButton: true
         });
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.log(error.response.data.message);
       toast.update(toastId, {
-        render: t('login_failed'),
+        render: t('register_failed') + ` ${error.response.data.message}`,
         type: 'error',
         isLoading: false,
         autoClose: 3000,
@@ -81,42 +101,57 @@ const RegisterView: React.FC = () => {
         <img src="/assets/images/manfaz_logo.png" alt="Manfaz Logo" className="h-36 mb-8" />
         <h1 className="text-2xl font-bold text-center text-primary">{t('create_account')}</h1>
         <p className="text-gray-600 text-center mb-8">{t('description_create_account')}</p>
-        
+
         <CusTextFormField
           hintText={t('full_name')}
+          controller={(value) => setFullName(value)}
           validator={(value) => validateName(value)}
         />
         <CusTextFormField
           hintText={t('email')}
           validator={(value) => validateEmail(value)}
+          controller={(value) => setEmail(value)}
         />
-        <div className="" style={{direction:"ltr"}}>
-
-<PhoneInput
-  country={"sa"}
-  onFocus={e=>setFocusPhone(true)}
-  onBlur={e=>setFocusPhone(false)}
-  containerClass={`border rounded-[16px] py-2  bg-white ${focusPhone ? 'ring-2  outline-none' : 'border-gray-300 '}`}
-  dropdownStyle={{border:"none !important"}}
-  value={phone}
-  onChange={(phone: string) => setPhone(phone)}
-/>
-  </div>
+        <div className="" style={{ direction: "ltr" }}>
+          <PhoneInput
+            country={"sa"}
+            onFocus={e => setFocusPhone(true)}
+            onBlur={e => setFocusPhone(false)}
+            containerClass={`border rounded-[16px] py-2  bg-white ${focusPhone ? 'ring-2  outline-none' : 'border-gray-300 '}`}
+            dropdownStyle={{ border: "none !important" }}
+            value={phone}
+            onChange={(phone: string) => setPhone(phone)}
+          />
+        </div>
         <CusTextFormField
-              fillColor="bg-white" // Use Tailwind CSS class directly
-              hintText={t('password')}
-              
-              controller={(value) => setPassword(value)}
-              validator={validatePassword}
-              handelShowPassword={()=>setShowPassword(!showPassword)}
-              isObscureText={!showPassword}
-              suffixIcon={showPassword ? <IconEyeOff /> : <IconEye />}
+          fillColor="bg-white" // Use Tailwind CSS class directly
+          hintText={t('password')}
+          controller={(value) => setPassword(value)}
+          validator={validatePassword}
+          handelShowPassword={() => setShowPassword(!showPassword)}
+          isObscureText={!showPassword}
+          suffixIcon={showPassword ? <IconEyeOff /> : <IconEye />}
         />
-        
+        <FormControl style={{ borderRadius: "16px !important" }} sx={{
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderRadius: "16px !important"
+            }
+          }
+        }} className='min-w-[300px]' >
+          <Select
+            value={role}
+            onChange={(e) => setRole(e.target.value as 'user' | 'worker')}
+            className="bg-white rounded-[16px] h-[48px] min-w-[300px]"
+          >
+            <MenuItem value="user">{t('user')}</MenuItem>
+            <MenuItem value="worker">{t('worker')}</MenuItem>
+          </Select>
+        </FormControl>
         <CusTextButton
           buttonText={t('sign_up')}
           textStyle="text-white" // Use Tailwind CSS class directly
-          onPressed={(e)=>handleRegister(e)}
+          onPressed={(e) => handleRegister(e)}
           backgroundColor="bg-primary" // Use Tailwind CSS class directly
           borderSideColor="border-primary" // Use Tailwind CSS class directly
         />

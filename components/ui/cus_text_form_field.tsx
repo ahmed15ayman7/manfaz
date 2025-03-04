@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import  useStore from '@/store/useLanguageStore';
+import React, { useState, forwardRef } from "react";
+import useStore from '@/store/useLanguageStore';
 
 interface CusTextFormFieldProps {
   contentPadding?: string; // Tailwind CSS padding class
@@ -18,7 +18,7 @@ interface CusTextFormFieldProps {
   handelShowPassword?: () => void; // Validation function
 }
 
-const CusTextFormField: React.FC<CusTextFormFieldProps> = ({
+const CusTextFormField = forwardRef<HTMLInputElement, CusTextFormFieldProps>(({
   contentPadding = "p-4", // Default padding
   focusedBorder = "border-blue-500", // Default focused border
   enabledBorder = "border-gray-300", // Default enabled border
@@ -31,10 +31,10 @@ const CusTextFormField: React.FC<CusTextFormFieldProps> = ({
   controller,
   validator,
   handelShowPassword
-}) => {
+}, ref) => {
   const [value, setValue] = useState<string>("");
   const [error, setError] = useState<string | undefined>("");
-  const{locale} = useStore();
+  const { locale } = useStore();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setValue(newValue);
@@ -52,10 +52,10 @@ const CusTextFormField: React.FC<CusTextFormFieldProps> = ({
   return (
     <div className={`relative ${fillColor} rounded-[16px]`}>
       <input
+        ref={ref}
         type={isObscureText ? "password" : "text"}
-        className={`block w-full min-w-[300px] ${contentPadding} border ${
-          error ? "border-red-500" : enabledBorder
-        } focus:outline-none focus:ring-2 ${focusedBorder} rounded-[16px]`}
+        className={`block w-full min-w-[300px] ${contentPadding} border ${error ? "border-red-500" : enabledBorder
+          } focus:outline-none focus:ring-2 ${focusedBorder} rounded-[16px]`}
         placeholder={hintText}
         value={value}
         onChange={handleChange}
@@ -73,6 +73,6 @@ const CusTextFormField: React.FC<CusTextFormFieldProps> = ({
       )}
     </div>
   );
-};
+});
 
 export default CusTextFormField;

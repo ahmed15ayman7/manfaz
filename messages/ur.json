@@ -4,10 +4,11 @@
     "on_boarding_description": "سعودی عرب میں بہترین سروس فراہم کنندگان دریافت کریں، اور آسانی اور پیشہ ورانہ مہارت کے ساتھ اپنے خیالات کو حقیقت میں بدلیں۔",
     "start_now": "ابھی شروع کریں",
     "select_language": "زبان منتخب کریں",
-  
     "welcome": "منفذ میں خوش آمدید",
     "login_description": "اپنے اکاؤنٹ میں لاگ ان کریں تاکہ اپنا سفر جاری رکھ سکیں۔",
     "email": "ای میل",
+    "email_or_phone": "ای میل یا فون نمبر",
+    "store": "دکان",
     "password": "پاس ورڈ",
     "full_name": "پورا نام",
     "login": "لاگ ان",
@@ -31,7 +32,16 @@
     "register_success": "رجسٹریشن کامیاب ہوگئی",
     "register_failed": "رجسٹریشن ناکام ہوگئی",
     "logout": "لاگ آؤٹ",
-      "home": {
+    "user": "صارف",
+    "worker": "کارکن",
+    "manfaz": "المُنفذ",
+    "home": {
+        "good_morning": "صبح بخیر",
+        "no_services_found": "خدمات نہیں ملی",
+        "search_placeholder": "آپ کیا تلاش کر رہے ہیں؟",
+        "popular_services": "مشہور خدمات",
+        "quick_actions": "منسوخ کردیے گئے خدمات",
+        "not_available_service": "منسوخ کردیے گئے خدمات",
         "food_and_drinks": "خوراک اور مشروبات",
         "restaurant_coffee_drinks": "ریستوران - کافی - مشروبات",
         "price_range": "20.00 - 50.00$",
@@ -46,7 +56,6 @@
         "see_all": "سب دیکھیں",
         "daily_solutions": "روزمرہ کے حل"
     },
-  
     "bottom_nav": {
         "home": "ہوم",
         "orders": "آرڈرز",
@@ -54,7 +63,6 @@
         "profile": "پروفائل",
         "cart": "ٹوکری"
     },
-
     "orders_tab": {
         "requests": "درخواستیں",
         "all": "  سب  ",
@@ -69,12 +77,10 @@
         "status": "حالت",
         "active": "فعال"
     },
-  
     "get_user_location_view": {
         "confirm_location": "مقام کی تصدیق کریں",
         "choose": "منتخب کریں"
     },
-
     "profile_tab": {
         "name": "یوسف",
         "not_verified": "تصدیق شدہ نہیں",
@@ -94,7 +100,6 @@
         "orders_count": "0 آرڈرز",
         "less_than": "< 0"
     },
-  
     "home_service_details_view": {
         "title": "عنوان",
         "paints": "رنگ و روغن",
@@ -161,5 +166,32 @@
         "required_field": "یہ فیلڈ ضروری ہے",
         "invalid_email": "غلط ای میل پتہ",
         "invalid_phone": "غلط فون نمبر"
-    }
+    },
+    "location": {
+        "add_location": "نیا مقام شامل کریں",
+        "edit_location": "مقام میں ترمیم کریں",
+        "name": "مقام کا نام",
+        "type": "مقام کی قسم",
+        "type_home": "گھر",
+        "type_work": "دفتر",
+        "type_other": "دیگر",
+        "address": "پتہ",
+        "building": "عمارت",
+        "apartment": "اپارٹمنٹ",
+        "floor": "منزل",
+        "street": "گلی",
+        "area": "علاقہ",
+        "city": "شہر",
+        "notes": "نوٹس",
+        "click_to_select": "مقام منتخب کرنے کے لیے کلک کریں",
+        "save_error": "مقام محفوظ کرنے میں خرابی"
+    },
+    "common": {
+        "save": "محفوظ کریں"
+    },
+    "search": {
+        "stores_placeholder": "متجر میں تلاش کریں",
+        "services_placeholder": "خدمات میں تلاش کریں"
+    },
+    "all": "سب"
 }
