@@ -31,11 +31,11 @@ const LeftSidebar = () => {
           let isActive = (pathname.includes(link.label) && link.route.length > 1) || pathname === link.route;
           if (link.route === '/profile') link.route = `/profile${!isLoading ? `?id=${userData?.id}` : ""}`
           return (
-            <Link key={index} href={link.route} className={`relative leftsidebar_link ${isActive && ' bg-background'}`}>
+            <Link key={index} href={link.route} className={`relative leftsidebar_link ${isActive && ' bg-primary text-white'}`}>
               {link.icon}
-              <span className=' text-black max-lg:hidden'>{t(`bottom_nav.${link.label}`)}</span>
+              <span className=' max-lg:hidden'>{t(`bottom_nav.${link.label}`)}</span>
               {items2.length > 0 && link.route == "/checkout" ? (
-                <Badge style={{ position: 'absolute' }} className="absolute top-0 right-0 rounded-full px-2 translate-x-1/2 -translate-y-1/2  bg-primary text-white">{items2.length}</Badge>
+                <Badge style={{ position: 'absolute' }} className="absolute top-0 right-0 rounded-full px-2 translate-x-1/2 -translate-y-1/2  bg-primary text-white border-2 border-white">{items2.length}</Badge>
               ) : null}
 
             </Link>

@@ -1,11 +1,23 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
+interface TabsComponentProps {
+  items: {
+    title: string;
+    key: string;
+    content: ReactNode;
+    loading: ReactNode;
+  }[];
+  selectedTab: string;
+  isLoading: boolean;
+  onTabChange: (newTab: string) => void;
+}
 
-const TabsComponent = ({ items }:{items:{title:string,content:React.ReactNode}[]}) => {
-  const [selectedTab, setSelectedTab] = useState(0);
+const TabsComponent = ({ items, selectedTab, onTabChange, isLoading }: TabsComponentProps) => {
   const firstBtnRef = useRef<HTMLButtonElement>(null);
-
+  const t = useTranslations("orders");
   useEffect(() => {
     firstBtnRef.current?.focus();
   }, []);
@@ -18,12 +30,11 @@ const TabsComponent = ({ items }:{items:{title:string,content:React.ReactNode}[]
             <button
               ref={index === 0 ? firstBtnRef : null}
               key={index}
-              onClick={() => setSelectedTab(index)}
-              className={`outline-none w-full p-2 hover:bg-blue-300 rounded-xl text-cneter focus:ring-2 focus:bg-blue-600 focus:text-white ${
-                selectedTab === index ? 'bg-blue-600 text-white' : 'ring-2 bg-white text-blue-600'
-              } `}
+              onClick={() => onTabChange(item.key)}
+              className={`outline-none w-full p-2 hover:bg-blue-300 rounded-xl text-cneter focus:ring-2 focus:bg-blue-600 focus:text-white ${selectedTab === item.key ? 'bg-blue-600 text-white' : 'ring-2 bg-white text-blue-600'
+                } `}
             >
-              {item.title}
+              {t(item.key)}
             </button>
           ))}
         </div>
@@ -32,15 +43,15 @@ const TabsComponent = ({ items }:{items:{title:string,content:React.ReactNode}[]
           {items.map((item, index) => (
             <div
               key={index}
-              className={`${selectedTab === index ? '' : 'hidden'}`}
+              className={`${selectedTab === item.key ? '' : 'hidden'}`}
             >
-                    <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="space-y-4"
-      >
-              {item.content}
-                    </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-4"
+              >
+                {isLoading ? item.loading : item.content}
+              </motion.div>
             </div>
           ))}
         </div>

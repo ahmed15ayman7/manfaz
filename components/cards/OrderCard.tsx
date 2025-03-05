@@ -1,27 +1,60 @@
-import { Card, Typography, Badge } from '@mui/material'
-import React from 'react'
+import { Order } from "@/interfaces";
+import { Card, Typography, Badge, Skeleton } from "@mui/material";
 
-const OrderCard = ({ order }:{order:{id:string,seller:string,date:string,title:string,messages:number,notifications:number}}) => {
-  return (
-    <Card key={order.id} className="p-4 flex flex-col space-y-2 shadow-md rounded-lg">
-    <Typography variant="h6" className="font-semibold text-blue-600">
-      Order ID {order.id}
-    </Typography>
-    <Typography variant="body2" className="text-gray-600">
-      <strong>Seller:</strong> {order.seller}
-    </Typography>
-    <Typography variant="body2" className="text-gray-600">
-      {order.date}
-    </Typography>
-    <Typography variant="body2" className="text-gray-800">
-      <strong>Title:</strong> {order.title}
-    </Typography>
-    <div className="flex space-x-2">
-      <Badge badgeContent={order.messages} color="primary" />
-      <Badge badgeContent={order.notifications} color="secondary" />
-    </div>
-  </Card>
-  )
+interface OrderCardProps {
+  order?: Order;
+  loading?: boolean;
 }
 
-export default OrderCard
+const OrderCard = ({ order, loading }: OrderCardProps) => {
+  if (loading) {
+    return (
+      <Card className="p-4 mb-4">
+        <div className="flex justify-between items-center">
+          <Skeleton variant="text" width={100} height={24} />
+          <Skeleton variant="circular" width={60} height={24} />
+        </div>
+
+        <div className="mt-2">
+          <Skeleton variant="text" width="100%" height={20} />
+          <Skeleton variant="text" width="80%" height={20} />
+        </div>
+
+        <div className="flex justify-between items-center mt-4">
+          <Skeleton variant="text" width={120} height={20} />
+          <Skeleton variant="text" width={100} height={20} />
+        </div>
+      </Card>
+    );
+  }
+
+  if (!order) return null;
+
+  return (
+    <Card className="p-4 mb-4">
+      <div className="flex justify-between items-center">
+        <Typography variant="subtitle1" className="font-bold">
+          {order.id}
+        </Typography>
+        <Badge color="primary" badgeContent={order.status}>
+          <span></span>
+        </Badge>
+      </div>
+
+      <Typography variant="body1" className="mt-2">
+        {order.description || 'لا يوجد وصف'}
+      </Typography>
+
+      <div className="flex justify-between items-center mt-4">
+        <Typography variant="body2" color="textSecondary">
+          السعر: {order.totalAmount} ريال
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {new Date(order.createdAt).toLocaleDateString('ar-SA')}
+        </Typography>
+      </div>
+    </Card>
+  );
+};
+
+export default OrderCard;

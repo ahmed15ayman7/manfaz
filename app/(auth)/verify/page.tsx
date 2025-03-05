@@ -10,7 +10,7 @@ const VerifyPage = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [otp, setOtp] = useState(["", "", "", ""]);
-    const [timeLeft, setTimeLeft] = useState(10); // 3 minutes
+    const [timeLeft, setTimeLeft] = useState(180); // 3 minutes
     const [retimeLeft, setReTimeLeft] = useState(180); // 3 minutes
     const [canResend, setCanResend] = useState(false);
     const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
@@ -20,7 +20,7 @@ const VerifyPage = () => {
 
     useEffect(() => {
         if (!userId) {
-            router.push("/register");
+            router.back();
             return;
         }
 

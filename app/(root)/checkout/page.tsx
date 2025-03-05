@@ -2,13 +2,16 @@
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import useCartStore from '@/store/useCartStore'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IconCash, IconCreditCard } from '@tabler/icons-react'
-import { useQuery, useQueries } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
 import axios from 'axios'
 import { apiUrl } from '@/constant'
 import useStore from '@/store/useLanguageStore'
 import LoadingComponent from '@/components/shared/LoadingComponent'
+import { useSession } from 'next-auth/react'
+import PhoneInput from 'react-phone-input-2'
+import "react-phone-input-2/lib/style.css"
 
 type PaymentMethod = 'cash' | 'card' | 'tabby' | 'tamara'
 
@@ -27,6 +30,7 @@ export default function CheckoutPage() {
   const t = useTranslations()
   const { items, removeItem } = useCartStore()
   const { locale } = useStore()
+  const [focusPhone, setFocusPhone] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash')
   const [formData, setFormData] = useState({
     name: '',
@@ -47,10 +51,22 @@ export default function CheckoutPage() {
       enabled: !!item?.id && !!locale
     })) || []
   })
-
+  let { data: userData, status } = useSession();
   const isLoading = itemQueries?.some(query => query?.isLoading)
   const isError = itemQueries?.some(query => query?.isError)
 
+  useEffect(() => {
+    if (status !== 'loading' && userData && userData?.user) {
+      setFormData({
+        name: userData?.user?.name || '',
+        phone: userData?.user?.phone || '',
+        email: userData?.user?.email || '',
+        address: userData?.user?.locations[0]?.address || '',
+        city: '',
+        notes: ''
+      })
+    }
+  }, [status, userData])
   const getTotalPrice = () => {
     return itemQueries?.reduce((total, query) => total + (query?.data?.price || 0), 0) || 0
   }
@@ -68,7 +84,7 @@ export default function CheckoutPage() {
 
   if (!items?.length) {
     return (
-      <div className="container mx-auto p-4 text-center">
+      <div className=" mx-auto p-4 text-center">
         <h1 className="text-2xl font-bold mb-4">{t('checkout.empty_cart')}</h1>
         <p className="text-gray-600 mb-6">{t('checkout.empty_cart_message')}</p>
         <button
@@ -81,7 +97,7 @@ export default function CheckoutPage() {
     )
   }
 
-  if (isLoading) {
+  if (isLoading || status === 'loading') {
     return <LoadingComponent />
   }
 
@@ -92,11 +108,10 @@ export default function CheckoutPage() {
       </div>
     )
   }
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">{t('checkout.title')}</h1>
-      
+
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           {/* Contact Information */}
@@ -116,14 +131,19 @@ export default function CheckoutPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">{t('checkout.phone')}</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+                <div className="" style={{ direction: "ltr" }}>
+                  <PhoneInput
+                    country={"sa"}
+                    onFocus={e => setFocusPhone(true)}
+                    onBlur={e => setFocusPhone(false)}
+                    containerClass={`border rounded-[16px] py-2 bg-white ${focusPhone ? 'ring-2 outline-none' : 'border-gray-300'}`}
+                    dropdownStyle={{ border: "none !important" }}
+                    value={formData.phone}
+                    onChange={(value, data, event, formattedValue) => {
+                      setFormData({ ...formData, phone: value })
+                    }}
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">{t('checkout.email')}</label>
@@ -178,9 +198,8 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 onClick={() => setPaymentMethod('cash')}
-                className={`flex items-center gap-3 p-4 border rounded-lg ${
-                  paymentMethod === 'cash' ? 'border-primary bg-primary/5' : ''
-                }`}
+                className={`flex items-center gap-3 p-4 border rounded-lg ${paymentMethod === 'cash' ? 'border-primary bg-primary/5' : ''
+                  }`}
               >
                 <IconCash className="text-primary" size={24} />
                 <span>{t('checkout.cash')}</span>
@@ -188,9 +207,8 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 onClick={() => setPaymentMethod('card')}
-                className={`flex items-center gap-3 p-4 border rounded-lg ${
-                  paymentMethod === 'card' ? 'border-primary bg-primary/5' : ''
-                }`}
+                className={`flex items-center gap-3 p-4 border rounded-lg ${paymentMethod === 'card' ? 'border-primary bg-primary/5' : ''
+                  }`}
               >
                 <IconCreditCard className="text-primary" size={24} />
                 <span>{t('checkout.card')}</span>
@@ -198,9 +216,8 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 onClick={() => setPaymentMethod('tabby')}
-                className={`flex items-center gap-3 p-4 border rounded-lg ${
-                  paymentMethod === 'tabby' ? 'border-primary bg-primary/5' : ''
-                }`}
+                className={`flex items-center gap-3 p-4 border rounded-lg ${paymentMethod === 'tabby' ? 'border-primary bg-primary/5' : ''
+                  }`}
               >
                 <img src="/imgs/tabby.png" alt="Tabby" className="w-10 h-6" />
                 <span>{t('checkout.tabby')}</span>
@@ -208,9 +225,8 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 onClick={() => setPaymentMethod('tamara')}
-                className={`flex items-center gap-2 p-4 border rounded-lg ${
-                  paymentMethod === 'tamara' ? 'border-primary bg-primary/5' : ''
-                }`}
+                className={`flex items-center gap-2 p-4 border rounded-lg ${paymentMethod === 'tamara' ? 'border-primary bg-primary/5' : ''
+                  }`}
               >
                 <img src="/imgs/tamara.png" alt="Tamara" className="w-10 h-6" />
                 <span>{t('checkout.tamara')}</span>
@@ -225,13 +241,13 @@ export default function CheckoutPage() {
               {items?.map((item, index) => {
                 const query = itemQueries[index]
                 const itemData = query?.data
-                
+
                 return (
                   <div key={item?.id} className="flex items-center gap-4 border-b pb-4 last:border-0 last:pb-0">
                     {itemData?.imageUrl && (
-                      <img 
-                        src={itemData.imageUrl} 
-                        alt={itemData.name} 
+                      <img
+                        src={itemData.imageUrl}
+                        alt={itemData.name}
                         className="w-20 h-20 rounded-lg object-cover"
                       />
                     )}
@@ -261,7 +277,7 @@ export default function CheckoutPage() {
         {/* Order Summary */}
         <div className="bg-white rounded-lg p-6 shadow-sm h-fit">
           <h2 className="text-xl font-semibold mb-4">{t('checkout.order_summary')}</h2>
-          
+
           <div className="space-y-3 mb-6">
             <div className="flex items-center justify-between">
               <span className="text-gray-600">{t('checkout.services_count', { count: items?.length })}</span>

@@ -26,6 +26,7 @@
   "password_too_short": "Password is too short",
   "please_wait": "Please wait...",
   "login_success": "Login successful",
+  "verify_your_account": "Verify your account",
   "login_failed": "Login failed",
   "name_required": "Name is required",
   "name_too_short": "Name is too short",
@@ -203,5 +204,16 @@
     "services_placeholder": "Search for services"
   },
   "all": "All",
-  "all_stores_categories": "All Categories"
+  "all_stores_categories": "All Categories",
+  "orders": {
+    "per_page": "Per Page",
+    "title": "Orders",
+    "all": "All",
+    "pending": "Pending",
+    "in_progress": "In Progress",
+    "completed": "Completed",
+    "canceled": "Canceled",
+    "error": "Error loading orders",
+    "no_orders": "No orders"
+  }
 }

@@ -32,9 +32,9 @@ const PopularServices = () => {
       </div>
       <div className="grid grid-cols-3 gap-4 mt-2 max-xl:grid-cols-2">
         {isLoading && <div className="w-full h-24  rounded-md animate-pulse flex gap-5">
-          <div className="w-full h-full  bg-gray-200 rounded-md animate-pulse"></div>
-          <div className="w-full h-full bg-gray-200 rounded-md animate-pulse"></div>
-          <div className="w-full h-full bg-gray-200 rounded-md animate-pulse"></div>
+          <div className="w-full h-full min-w-[100px]  bg-gray-200 rounded-md animate-pulse"></div>
+          <div className="w-full h-full min-w-[100px] bg-gray-200 rounded-md animate-pulse"></div>
+          <div className="w-full h-full min-w-[100px] bg-gray-200 rounded-md animate-pulse"></div>
         </div>}
         {!isLoading && services?.map((service: any, index: number) => (
           <ServicesCard key={index} service={service} id={service.id} />

@@ -151,15 +151,17 @@ export interface Order {
     longitude?: number;
     price?: number;
     duration?: number;
-    status: "pending" | "in_progress" | "completed" | "canceled";
+    status: OrderStatus;
     totalAmount: number;
-    paymentStatus: "pending" | "paid" | "failed";
+    paymentStatus: PaymentStatus;
     createdAt: Date;
     updatedAt: Date;
     storeId?: string;
     store?: Store;
 }
+export type OrderStatus = "pending" | "in_progress" | "completed" | "canceled";
 
+export type PaymentStatus = "pending" | "paid" | "failed";
 export interface Worker {
     id: string;
     userId: string;

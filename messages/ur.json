@@ -26,6 +26,7 @@
     "password_too_short": "پاس ورڈ بہت چھوٹا ہے",
     "please_wait": "براہ کرم انتظار کریں",
     "login_success": "لاگ ان کامیاب ہوا",
+    "verify_your_account": "اپنا اکاؤنٹ تصدیق کریں",
     "login_failed": "لاگ ان ناکام ہوگیا",
     "name_required": "نام ضروری ہے",
     "name_too_short": "نام بہت چھوٹا ہے",
@@ -194,5 +195,16 @@
         "services_placeholder": "خدمات میں تلاش کریں"
     },
     "all": "سب",
-    "all_stores_categories": "سب کے فئات"
+    "all_stores_categories": "سب کے فئات",
+    "orders": {
+        "all": "سب",
+        "per_page": "فی صفحہ",
+        "title": "آرڈرز",
+        "pending": "زیر التواء",
+        "in_progress": "جاری ہے",
+        "completed": "مکمل",
+        "canceled": "منسوخ",
+        "error": "آرڈرز لوڈ کرنے میں خرابی",
+        "no_orders": "آرڈرز نہیں ملی"
+    }
 }

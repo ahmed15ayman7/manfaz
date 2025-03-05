@@ -32,7 +32,7 @@ const LoginView: React.FC = () => {
     // نزيل كل الرموز ماعدا الأرقام
     const numbersOnly = value.replace(/[^0-9]/g, '');
     // إذا كان المدخل يحتوي على 3 أرقام أو أكثر، نعتبره رقم هاتف
-    return numbersOnly.length >= 1;
+    return value.length <= 1 && numbersOnly.length >= 1;
   };
 
   // دالة للتحكم في تغيير القيمة
@@ -62,9 +62,15 @@ const LoginView: React.FC = () => {
         [isPhoneInput ? 'phone' : 'email']: emailOrPhone,
         password,
         role,
-        redirect: false // مهم: لمنع إعادة التوجيه التلقائي
+        redirect: false,
+        callbackUrl: '/api/auth/session'
       });
-      console.log(result);
+
+      const response = await fetch('/api/auth/session');
+      const session = await response.json();
+
+      console.log('User Data:', session.user);
+
       if (result?.error && !result.ok) {
         toast.update(toastId, {
           render: t('login_failed'),
@@ -74,16 +80,34 @@ const LoginView: React.FC = () => {
           closeButton: true
         });
       } else {
-        toast.update(toastId, {
-          render: t('login_success'),
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-          closeButton: true
-        });
-        router.push('/'); // التوجيه للصفحة الرئيسية
+        if (!session.user.isVerified) {
+          toast.update(toastId, {
+            render: t('verify_your_account'),
+            type: 'info',
+            isLoading: false,
+            autoClose: 3000,
+            closeButton: true
+          });
+          sessionStorage.setItem('temp_auth', JSON.stringify({
+            phone: session.user.phone,
+            email: session.user.email,
+            password: session.user.password
+          }));
+          router.push(`/verify?userId=${session.user.id}`);
+        }
+        else {
+          if (result?.url) {
+            toast.update(toastId, {
+              render: t('login_success'),
+              type: 'success',
+              isLoading: false,
+              autoClose: 3000,
+              closeButton: true
+            });
+            router.push(result.url);
+          }
+        }
       }
-
     } catch (error) {
       console.log(error);
       toast.update(toastId, {

@@ -27,6 +27,7 @@
   "please_wait": "الرجاء الانتظار",
   "login_success": "تسجيل الدخول بنجاح",
   "login_failed": "فشل تسجيل الدخول",
+  "verify_your_account": "قم بالتحقق من حسابك",
   "name_required": "الاسم مطلوب",
   "name_too_short": "الاسم قصير جداً",
   "register_success": "تم التسجيل بنجاح",
@@ -203,5 +204,16 @@
     "services_placeholder": "ابحث عن خدمة"
   },
   "all": "الكل",
-  "all_stores_categories": "كل الفئات"
+  "all_stores_categories": "كل الفئات",
+  "orders": {
+    "per_page": "لكل صفحة",
+    "title": "الطلبات",
+    "all": "الكل",
+    "pending": "قيد الانتظار",
+    "in_progress": "قيد التنفيذ",
+    "completed": "مكتمل",
+    "canceled": "ملغي",
+    "error": "حدث خطأ في تحميل الطلبات",
+    "no_orders": "لا توجد طلبات"
+  }
 }

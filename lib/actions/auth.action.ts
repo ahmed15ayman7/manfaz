@@ -73,7 +73,7 @@ export const resendOTP = async (userId: string) => {
         if (!response.ok) {
             toast.update(toastId, { render: "فشل إعادة إرسال الرمز", type: "error", isLoading: false, autoClose: 3000 });
         }
-        toast.update(toastId, { render: "تم إرسال الرمز بنجاح", type: "success", isLoading: false, autoClose: 3000 });
+        toast.update(toastId, { render: "تم إرسال الرمز بنجاح", type: "info", isLoading: false, autoClose: 3000 });
         return response.json();
     } catch (error) {
         toast.update(toastId, { render: "حدث خطأ أثناء إعادة إرسال الرمز", type: "error", isLoading: false, autoClose: 3000 });
