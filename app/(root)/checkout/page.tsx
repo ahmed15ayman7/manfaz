@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import useCartStore from '@/store/useCartStore'
 import { useState, useEffect } from 'react'
-import { IconCash, IconCreditCard } from '@tabler/icons-react'
+import { IconCash, IconCreditCard, IconPlus } from '@tabler/icons-react'
 import { useQueries } from '@tanstack/react-query'
 import axios from 'axios'
 import { apiUrl } from '@/constant'
@@ -12,6 +12,9 @@ import LoadingComponent from '@/components/shared/LoadingComponent'
 import { useSession } from 'next-auth/react'
 import PhoneInput from 'react-phone-input-2'
 import "react-phone-input-2/lib/style.css"
+import { Select, MenuItem, SelectChangeEvent } from '@mui/material'
+import { createOrder } from '@/lib/actions/orders.actions'
+import { UserLocation } from '@/interfaces'
 
 type PaymentMethod = 'cash' | 'card' | 'tabby' | 'tamara'
 
@@ -28,18 +31,33 @@ const getService = async ({ id, locale, type }: { id: string; locale: string; ty
 export default function CheckoutPage() {
   const router = useRouter()
   const t = useTranslations()
-  const { items, removeItem } = useCartStore()
+  const { items, removeItem, clearCart } = useCartStore()
   const { locale } = useStore()
   const [focusPhone, setFocusPhone] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash')
+  const [selectedServiceId, setSelectedServiceId] = useState({}as typeof items[0])
   const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    address: '',
-    city: '',
-    notes: ''
+    locationId:"",
+    notes: '',
+    serviceId: items[0]?.id || '',
+    providerId: '',
+    price: 0,
+    totalAmount: 0
   })
+
+  const handleAddressChange = (event: SelectChangeEvent<string>, id: string | undefined) => {
+    const selectedAddress = event.target.value ;
+    if (selectedAddress === 'new') {
+      router.push(`/user-locations/${id || ""}`);
+    } else {
+      setFormData(prev => ({ ...prev, locationId: selectedAddress }));
+    }
+  };
+
+  const handleServiceSelect = (item: any) => {
+    setSelectedServiceId(item);
+    setFormData(prev => ({ ...prev, serviceId: item.id }));
+  };
 
   // Use useQueries instead of mapping over items with individual useQuery hooks
   const itemQueries = useQueries({
@@ -56,17 +74,19 @@ export default function CheckoutPage() {
   const isError = itemQueries?.some(query => query?.isError)
 
   useEffect(() => {
+    setSelectedServiceId(items[0]);
     if (status !== 'loading' && userData && userData?.user) {
       setFormData({
-        name: userData?.user?.name || '',
-        phone: userData?.user?.phone || '',
-        email: userData?.user?.email || '',
-        address: userData?.user?.locations[0]?.address || '',
-        city: '',
-        notes: ''
+        locationId: userData?.user?.locations[0]?.id||"",
+        notes: '',
+        serviceId: items[0]?.id || '',
+        providerId: '', // Assuming providerId will be set later
+        price: getTotalPrice(),
+        totalAmount: getTotalPrice()
       })
     }
-  }, [status, userData])
+  }, [status, userData, items])
+
   const getTotalPrice = () => {
     return itemQueries?.reduce((total, query) => total + (query?.data?.price || 0), 0) || 0
   }
@@ -76,10 +96,21 @@ export default function CheckoutPage() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Implement checkout logic here
-    console.log({ formData, paymentMethod, items, totalPrice: getTotalPrice() })
+    try {
+      if (userData?.user?.id) {
+      const response = await createOrder({ locationId: formData.locationId, notes: formData.notes, serviceId: formData.serviceId, providerId: formData.providerId, price: formData.price, totalAmount: formData.totalAmount, userId:  userData?.user?.id, status: 'pending', paymentStatus: 'pending'},selectedServiceId.type)
+      if(response.id){
+        removeItem(formData.serviceId);
+        router.push(`/orders`);
+      }
+    }
+      // Redirect or show success message
+    } catch (error) {
+      console.error('Error creating order:', error)
+      // Show error message
+    }
   }
 
   if (!items?.length) {
@@ -109,7 +140,7 @@ export default function CheckoutPage() {
     )
   }
   return (
-    <div className="container mx-auto p-4">
+    <div className=" mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">{t('checkout.title')}</h1>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -119,64 +150,23 @@ export default function CheckoutPage() {
             <h2 className="text-xl font-semibold mb-4">{t('checkout.contact_info')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">{t('checkout.name')}</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-              <div>
                 <label className="block text-sm font-medium mb-1">{t('checkout.phone')}</label>
-                <div className="" style={{ direction: "ltr" }}>
-                  <PhoneInput
-                    country={"sa"}
-                    onFocus={e => setFocusPhone(true)}
-                    onBlur={e => setFocusPhone(false)}
-                    containerClass={`border rounded-[16px] py-2 bg-white ${focusPhone ? 'ring-2 outline-none' : 'border-gray-300'}`}
-                    dropdownStyle={{ border: "none !important" }}
-                    value={formData.phone}
-                    onChange={(value, data, event, formattedValue) => {
-                      setFormData({ ...formData, phone: value })
-                    }}
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{t('checkout.email')}</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{t('checkout.city')}</label>
-                <input
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium mb-1">{t('checkout.address')}</label>
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  required
+                <Select
+                  value={formData.locationId}
+                  onChange={(e) => handleAddressChange(e, userData?.user?.id)}
+                  displayEmpty
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+                >
+                  {userData?.user?.locations.map((location, index) => (
+                    <MenuItem key={index} value={location.address}>
+                      {location.address}
+                    </MenuItem>
+                  ))}
+                  <MenuItem value="new"><IconPlus /> {t('checkout.add_new_address')}</MenuItem>
+                </Select>
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium mb-1">{t('checkout.notes')}</label>
@@ -237,13 +227,20 @@ export default function CheckoutPage() {
           {/* Cart Items */}
           <div className="bg-white rounded-lg p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-4">{t('checkout.order_summary')}</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 mb-4">
               {items?.map((item, index) => {
                 const query = itemQueries[index]
                 const itemData = query?.data
 
                 return (
-                  <div key={item?.id} className="flex items-center gap-4 border-b pb-4 last:border-0 last:pb-0">
+                  <div
+                    key={item?.id}
+                    style={{
+                      backgroundColor: selectedServiceId?.id === item?.id ? '#5A9CFF50' : ''
+                    }}
+                    className={`flex p-2  items-center gap-4 border-b pb-4  cursor-pointer border ${selectedServiceId?.id === item?.id ? '  border-primary  rounded-lg' : 'last:border-transparent '}`}
+                    onClick={() => handleServiceSelect(item)}
+                  >
                     {itemData?.imageUrl && (
                       <img
                         src={itemData.imageUrl}

@@ -135,7 +135,7 @@ export interface Store {
     rewards: Reward[]; // المكافآت
 }
 export interface Order {
-    id: string;
+    id?: string;
     userId: string;
     user?: User;
     serviceId: string;
@@ -146,16 +146,16 @@ export interface Order {
     deliveryDriver?: DeliveryDriver;
     description?: string;
     imageUrl?: string;
-    address?: string;
-    latitude?: number;
-    longitude?: number;
+    locationId: string;
+    location?:UserLocation;
+    notes:string;
     price?: number;
     duration?: number;
     status: OrderStatus;
     totalAmount: number;
     paymentStatus: PaymentStatus;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
     storeId?: string;
     store?: Store;
 }

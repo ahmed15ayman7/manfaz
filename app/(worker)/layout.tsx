@@ -1,7 +1,11 @@
 "use client";
 // import { Metadata } from "next";
 import "../globals.css";
-import { Topbar, LeftSidebar, Bottombar } from "@/components/worker";
+// import { Topbar, LeftSidebar, Bottombar } from "@/components/worker";
+import Bottombar from "@/components/shared/Bottombar";
+import LeftSidebar from "@/components/shared/LeftSidebar";
+import Topbar from "@/components/shared/Topbar";
+import  useStore  from '@/store/useLanguageStore';
 
 // export const metadata: Metadata = {
 //   title: "Worker Dashboard",
@@ -13,19 +17,21 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  let { locale } =  useStore();
   return (
-    <div className="flex flex-row h-screen">
-      <LeftSidebar />
-      
-      <div className="flex flex-col flex-1">
-        <Topbar />
-        
-        <main className="flex-1 overflow-y-auto bg-light-2 p-4 pt-20">
-          {children}
-        </main>
-        
-        <Bottombar />
+    <div style={{direction:'ltr'}} >
+    <Topbar isWorker/>
+    <main className=' flex flex-row w-full'>
+
+      <LeftSidebar isWorker/>
+      <section className="main-container relative">
+      <div className=" w-full " style={{direction:locale === 'en' ? 'ltr' : 'rtl'}}>
+      {children}
       </div>
-    </div>
+      </section>
+      {/* <RightSidebar/> */}
+    </main>
+    <Bottombar isWorker/>
+      </div>
   );
 }

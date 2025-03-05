@@ -34,8 +34,8 @@ const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll }: {
                 '&::-webkit-scrollbar': {
                     display: 'none'
                 },
-                '-ms-overflow-style': 'none',
-                'scrollbarWidth': 'none',
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none',
                 '& .MuiChip-root': {
                     flexShrink: 0,
                     direction: locale === 'ar' ? 'rtl' : 'ltr',
@@ -51,9 +51,9 @@ const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll }: {
             }}
         >
 
-            {isLoadingCategories ? [1, 2, 3, 4, 5, 6, 7].map(e => <Skeleton key={e} width={100} height={30} variant="rounded" />) : [
+            {isLoadingCategories ? Array(8).map(e => <Skeleton key={e} width={100} height={30} variant="rounded" />) : [
                 <Chip
-                    key={0}
+                    key={1000}
                     icon={<IconDiscount size={20} />}
                     label={t('all')}
                     sx={{
@@ -63,7 +63,7 @@ const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll }: {
                     clickable
                     onClick={() => onFilterChange('')}
                     color={selectedFilter === '' ? 'primary' : 'default'}
-                />, ...[...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data]?.map((category: any) => (
+                />, ...categories?.data?.map((category: any) => (
                     <Chip
                         key={category.id}
                         icon={
@@ -87,8 +87,8 @@ const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll }: {
                         clickable
                     />
                 ))
-                , <Chip
-                    key={0}
+                ,categories?.data?.length > 5 && !showAll ? <Chip
+                    key={1000000}
                     icon={<IconDiscount size={20} />}
                     label={t('home.see_all')}
                     sx={{
@@ -98,9 +98,9 @@ const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll }: {
                     clickable
                     onClick={handleShowAll}
                     color={showAll ? 'primary' : 'default'}
-                />]}
+                />:undefined]}
         </Stack>
     );
 };
 
-export default StoreFilters; 
+export default StoreFilters;

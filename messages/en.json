@@ -62,7 +62,11 @@
     "orders": "Orders",
     "notification": "Notifications",
     "profile": "Profile",
-    "cart": "Cart"
+    "cart": "Cart",
+    "settings": "Settings",
+    "earnings": "Earnings",
+    "reviews": "Reviews",
+    "schedule": "Schedule"
   },
   "orders_tab": {
     "requests": "Requests",
@@ -144,6 +148,7 @@
     "remove_from_cart": "Remove from Cart"
   },
   "checkout": {
+    "add_new_address": "Add New Address",
     "title": "Checkout",
     "order_summary": "Order Summary",
     "services_count": "{count} Services",

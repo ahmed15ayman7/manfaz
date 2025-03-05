@@ -146,7 +146,14 @@ const VerifyPage = () => {
                 }
 
                 toast.success("تم التحقق وتسجيل الدخول بنجاح");
+                if (response.data.role === "worker") {
+                    router.push('/worker');
+                    
+                }else if (response.data.role === "store") {
+                    router.push('/store');
+                } else {
                 router.push('/');
+                }
             }
         } catch (error) {
             console.log(error);

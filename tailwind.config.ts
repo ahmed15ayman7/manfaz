@@ -212,6 +212,15 @@ export default {
 
         divider: "var(--divider)",
       },
+      opacity: {
+        15: "0.15",
+        25: "0.25",
+        50: "0.5",
+        75: "0.75",
+        85: "0.85",
+        90: "0.9",
+        95: "0.95",
+      },
       fontWeight: {
         thin: "100", // w100 - Thin
         "extra-light": "200", // w200 - Extra-light

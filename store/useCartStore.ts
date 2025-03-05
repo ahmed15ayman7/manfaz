@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 
 interface CartItem {
   id: string
-  type: 'service' | 'delivery'
+  type: 'service' | 'delivery'|"product"
 }
 
 interface CartStore {

@@ -1,5 +1,5 @@
 import { IconBell, IconClipboardList, IconHome, IconUser, IconShoppingCart } from "@tabler/icons-react";
-
+import { Home, Calendar, ClipboardList, Star, Settings, Wallet } from "lucide-react";
 export const SidebarLinks = [
     {
       icon: <IconHome size={24} />,
@@ -26,4 +26,36 @@ export const SidebarLinks = [
       route: "/profile",
       label: "profile",
     },
+];
+export const sidebarLinksWorkers = [
+  {
+    icon: <Home size={24} />,
+    route: "/worker/",
+    label: "home",
+  },
+  {
+    icon: <Calendar size={24} />,
+    route: "/worker/schedule",
+    label: "schedule",
+  },
+  {
+    icon: <ClipboardList size={24} />,
+    route: "/worker/orders",
+    label: "orders",
+  },
+  {
+    icon: <Star size={24} />,
+    route: "/worker/reviews",
+    label: "reviews",
+  },
+  {
+    icon:   <Wallet size={24} />,
+    route: "/worker/earnings",
+    label: "earnings",
+  },
+  {
+    icon: <Settings size={24} />,
+    route: "/worker/settings",
+    label: "settings",
+  },
 ];

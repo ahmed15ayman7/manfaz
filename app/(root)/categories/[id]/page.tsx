@@ -248,8 +248,8 @@ let ShowAllCategories = ({ locale, onFilterChange, selectedFilter }: { locale: s
                 }}
             >
 
-                {isLoading ? [1, 2, 3, 4, 5, 6, 7].map(e => <Skeleton key={e} width={100} height={30} variant="rounded" />) : [
-                    ...[...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data, ...categories?.data]?.map((category: any, index: number) => (
+                {isLoading ? Array(7).map(e => <Skeleton key={e} width={100} height={30} variant="rounded" />) : [
+                    ...categories?.data?.map((category: any, index: number) => (
                         <Chip
                             key={category.id}
                             icon={

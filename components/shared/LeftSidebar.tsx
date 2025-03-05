@@ -7,11 +7,11 @@ import { useTranslations } from 'next-intl';
 import { getUserData } from '@/lib/actions/user.action'
 import { useQuery } from '@tanstack/react-query'
 import { IconLogout } from '@tabler/icons-react'
-import { SidebarLinks } from '@/constant/icons'
+import { SidebarLinks,sidebarLinksWorkers } from '@/constant/icons'
 import useCartStore from '@/store/useCartStore'
 import { Badge } from '@mui/material'
 import { signOut } from 'next-auth/react';
-const LeftSidebar = () => {
+const LeftSidebar = ({isWorker}:{isWorker?:boolean}) => {
   let pathname = usePathname();
   let router = useRouter();
   let { data: userData, isLoading } = useQuery({
@@ -24,10 +24,11 @@ const LeftSidebar = () => {
   React.useEffect(() => {
     setItems2(items);
   }, [items])
+  let sidebarLinks=isWorker?sidebarLinksWorkers:SidebarLinks;
   return (
     <section className='leftsidebar'>
       <div className=" flex flex-col gap-2 px-6 mb-auto">
-        {SidebarLinks.map((link, index) => {
+        {sidebarLinks.map((link, index) => {
           let isActive = (pathname.includes(link.label) && link.route.length > 1) || pathname === link.route;
           if (link.route === '/profile') link.route = `/profile${!isLoading ? `?id=${userData?.id}` : ""}`
           return (

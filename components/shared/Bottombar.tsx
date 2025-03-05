@@ -1,5 +1,5 @@
 'use client'
-import { SidebarLinks } from '@/constant/icons'
+import { SidebarLinks,sidebarLinksWorkers } from '@/constant/icons'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -11,7 +11,7 @@ import { getUserData } from '@/lib/actions/user.action'
 import useCartStore from '@/store/useCartStore'
 import { Badge } from '@mui/material'
 
-const Bottombar = () => {
+const Bottombar = ({isWorker}:{isWorker?:boolean}) => {
   const t = useTranslations('');
   let pathname = usePathname();
   let { data: userData, isLoading } = useQuery({
@@ -23,10 +23,11 @@ const Bottombar = () => {
   React.useEffect(() => {
     setItems2(items);
   }, [items])
+  let sidebarLinks=isWorker?sidebarLinksWorkers:SidebarLinks;
   return (
     <section className='bottombar'>
       <div className="bottombar_container">
-        {SidebarLinks.map((link, index) => {
+        {sidebarLinks.map((link, index) => {
           let isActive = (pathname.includes(link.label) && link.route.length > 1) || pathname === link.route;
           if (link.route === '/profile') link.route = `/profile${!isLoading ? `?id=${userData?.id}` : ""}`
           return (

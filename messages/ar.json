@@ -62,7 +62,12 @@
     "orders": "الطلبات",
     "notification": "الإشعارات",
     "profile": "الحساب",
-    "cart": "السلة"
+    "cart": "السلة",
+    "settings": "الإعدادات",
+    "earnings": "الأرباح",
+    "reviews": "التقييمات",
+    "schedule": "الجدول"
+
   },
   "orders_tab": {
     "requests": "الطلبات",
@@ -144,6 +149,7 @@
     "remove_from_cart": "إزالة من السلة"
   },
   "checkout": {
+    "add_new_address": "إضافة عنوان جديد",
     "title": "إتمام الطلب",
     "order_summary": "ملخص الطلب",
     "services_count": "{count} خدمات",

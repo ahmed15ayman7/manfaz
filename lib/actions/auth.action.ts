@@ -32,7 +32,6 @@ export const verifyOTP = async (userId: string, otp: string) => {
                 ...data.data,
                 email: authData.email,
                 phone: authData.phone,
-                password: authData.password
             };
             // حذف البيانات المؤقتة
             sessionStorage.removeItem('temp_auth');

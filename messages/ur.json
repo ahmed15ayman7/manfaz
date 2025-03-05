@@ -62,7 +62,11 @@
         "orders": "آرڈرز",
         "notification": "اطلاعات",
         "profile": "پروفائل",
-        "cart": "ٹوکری"
+        "cart": "ٹوکری",
+        "settings": "ترتیبات",
+        "earnings": "کمائی",
+        "reviews": "جائزے",
+        "schedule": "شیڈول"
     },
     "orders_tab": {
         "requests": "درخواستیں",
@@ -144,6 +148,7 @@
         "remove_from_cart": "ٹوکری سے نکالیں"
     },
     "checkout": {
+        "add_new_address": "نیا پتہ شامل کریں",
         "title": "چیک آؤٹ",
         "order_summary": "آرڈر کا خلاصہ",
         "services_count": "{count} خدمات",
