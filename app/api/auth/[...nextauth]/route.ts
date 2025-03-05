@@ -1,5 +1,5 @@
 import { apiUrl } from "@/constant";
-import NextAuth, { User } from "next-auth";
+import NextAuth from "next-auth";
 import { User as UserType } from "@/interfaces";
 
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -59,6 +59,15 @@ const handler = NextAuth({
             session.user = token.user as UserType;
             session.accessToken = token.accessToken as string;
             return session;
+        },
+        async redirect({ url, baseUrl }) {
+            if (url.startsWith('/login')) {
+                return baseUrl;
+            }
+            if (!url.startsWith(baseUrl)) {
+                return baseUrl;
+            }
+            return url;
         }
     },
     session: {

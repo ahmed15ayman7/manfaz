@@ -193,5 +193,6 @@
         "stores_placeholder": "متجر میں تلاش کریں",
         "services_placeholder": "خدمات میں تلاش کریں"
     },
-    "all": "سب"
+    "all": "سب",
+    "all_stores_categories": "سب کے فئات"
 }

@@ -202,5 +202,6 @@
     "stores_placeholder": "ابحث عن متجر",
     "services_placeholder": "ابحث عن خدمة"
   },
-  "all": "الكل"
+  "all": "الكل",
+  "all_stores_categories": "كل الفئات"
 }

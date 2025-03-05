@@ -202,5 +202,6 @@
     "stores_placeholder": "Search for stores",
     "services_placeholder": "Search for services"
   },
-  "all": "All"
+  "all": "All",
+  "all_stores_categories": "All Categories"
 }

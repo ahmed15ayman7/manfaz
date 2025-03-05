@@ -184,3 +184,10 @@ body {
 .ul:has(li:active){
   
 }
+.css-1ocwoqn-MuiStack-root>:not(style)~:not(style) {
+  margin-left: 16px !important;
+}
+[dir="rtl"] .css-1ocwoqn-MuiStack-root>:not(style)~:not(style) {
+  margin-left: 0px !important;
+  margin-right: 16px !important;
+}
