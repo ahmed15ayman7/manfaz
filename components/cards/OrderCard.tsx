@@ -50,7 +50,7 @@ const OrderCard = ({ order, loading }: OrderCardProps) => {
           السعر: {order.totalAmount} ريال
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {new Date(order.createdAt).toLocaleDateString('ar-SA')}
+          {new Date(order.createdAt|| '').toLocaleDateString('ar-SA')}
         </Typography>
       </div>
     </Card>
