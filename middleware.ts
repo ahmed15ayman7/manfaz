@@ -6,7 +6,7 @@ export const config = {
 
     "/",
     "/categories/:path*",
-    "/workers/:path*",
+    "/worker/:path*",
     "/stores/:path*",
     "/products/:path*",
     "/cart/:path*",

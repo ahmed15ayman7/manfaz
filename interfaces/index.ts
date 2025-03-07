@@ -168,8 +168,6 @@ export interface Worker {
     user?: User;
     title: string;
     description: string;
-    location: string;
-    profileImage?: string;
     isAvailable: boolean;
     isFavorite: boolean;
     hourlyRate: number;
@@ -180,8 +178,37 @@ export interface Worker {
     reviewsCount: number;
     createdAt: Date;
     updatedAt: Date;
+    isVerified: boolean;
+    totalJobsDone: number;
+    about?: string;
+    experiences: WorkExperience[];
+    reviews: Review[];
     orders: Order[];
-}
+  }
+  
+  export interface WorkExperience {
+    id: string;
+    workerId: string;
+    worker: Worker;
+    title: string;
+    company: string;
+    duration: string;
+    description: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }
+  
+  export interface Review {
+    id: string;
+    workerId: string;
+    worker: Worker;
+    userId: string;
+    user: User;
+    rating: number;
+    comment: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }
 export interface DeliveryDriver {
     id: string;
     userId: string;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Typography, TextField, Pagination, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import OrderCard from "../cards/OrderCard";
 import TabsComponent from '../ui/TabsComponent';
@@ -11,18 +11,22 @@ const OrdersList = () => {
   const [selectedTab, setSelectedTab] = useState<OrderStatus | "all">("all");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { user } = useUser();
+  const { user ,status} = useUser();
   const t = useTranslations("orders");
 
-  const { data, isLoading, error } = useOrders(
-    user?.id || '',
+  const { data, isLoading, error ,refetch} = useOrders(
+    user?.id||'',
     user?.role || '',
     limit,
     page,
     '',
     selectedTab === "all" ? "" : selectedTab as OrderStatus,
-    'pending' as PaymentStatus
+    '' as PaymentStatus
   );
+  useEffect(() => {
+    refetch();
+    console.log(user)
+  }, [selectedTab, page, limit,user?.id,user?.role]);
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -101,7 +105,7 @@ const OrdersList = () => {
       loading: loading
     },
   ];
-
+  console.log(data)
   return (
     <div className="w-full p-4">
       <div className="flex justify-between items-center mb-4">
