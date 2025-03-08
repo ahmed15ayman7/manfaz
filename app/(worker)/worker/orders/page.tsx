@@ -118,7 +118,7 @@ export default function WorkerOrdersPage() {
                   <div>
                     <h3 className="font-medium">{order.service?.name}</h3>
                     <p className="text-sm text-gray-500">
-                      {order.user?.name} • {formatDate(order.scheduledTime, locale)}
+                      {order.user?.name} • {formatDate(order.scheduleOrder?.schedule.scheduledTime || new Date(), locale)}
                     </p>
                     {order.description && (
                       <p className="text-sm text-gray-600 mt-2">{order.description}</p>

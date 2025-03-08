@@ -100,7 +100,7 @@ export default function CheckoutPage() {
     e.preventDefault()
     try {
       if (userData?.user?.id) {
-      const response = await createOrder({ locationId: formData.locationId, notes: formData.notes, serviceId: formData.serviceId, providerId: formData.providerId, price: formData.price, totalAmount: formData.totalAmount, userId:  userData?.user?.id, status: 'pending', paymentStatus: 'pending'},selectedServiceId.type)
+      const response = await createOrder({ locationId: formData.locationId, notes: formData.notes, serviceId: formData.serviceId, providerId: formData.providerId, price: formData.price, totalAmount: formData.totalAmount, userId:  userData?.user?.id, status: 'pending', paymentStatus: 'pending',id:""},selectedServiceId.type)
       if(response.id){
         removeItem(formData.serviceId);
         router.push(`/orders`);

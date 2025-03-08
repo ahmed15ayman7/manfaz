@@ -14,9 +14,10 @@ import StatsCard from '@/components/worker/StatsCard'
 import RecentOrdersCard from '@/components/worker/RecentOrdersCard'
 import RecentReviewsCard from '@/components/worker/RecentReviewsCard'
 import EarningsChart from '@/components/worker/EarningsChart'
+import axiosInstance from '@/lib/axios';
 
 const getWorkerDashboard = async ({ locale }: { locale: string }) => {
-  const res = await axios.get(`${apiUrl}/workers/dashboard?lang=${locale}`)
+  const res = await axiosInstance.get(`${apiUrl}/workers/dashboard?lang=${locale}`)
   return res.data
 }
 

@@ -84,7 +84,7 @@ export default function WorkerSchedulePage() {
 
   // Group orders by time
   const timeSlots = orders.reduce((acc: Record<string, Order[]>, order) => {
-    const time = new Date(order.scheduledTime).toLocaleTimeString(locale, {
+    const time = new Date(order.scheduleOrder?.schedule.scheduledTime || new Date()).toLocaleTimeString(locale, {
       hour: '2-digit',
       minute: '2-digit',
     })

@@ -158,11 +158,12 @@ export interface Order {
     updatedAt?: Date;
     storeId?: string;
     store?: Store;
-    scheduledTime: string;
+    scheduleOrder?:ScheduleOrder
 }
 export type OrderStatus = "pending" | "in_progress" | "completed" | "canceled";
 
 export type PaymentStatus = "pending" | "paid" | "failed";
+
 export interface Worker {
     id: string;
     userId: string;
@@ -189,7 +190,65 @@ export interface Worker {
         date: string;
         amount: number;
     }[];
+    schedules: Schedule[];
 }
+// Enums
+export enum StatusEnum {
+    SCHEDULED = "SCHEDULED",
+    IN_PROGRESS = "IN_PROGRESS",
+    COMPLETED = "COMPLETED",
+    CANCELED = "CANCELED",
+  }
+  
+  export enum ShiftEnum {
+    MORNING = "MORNING",
+    EVENING = "EVENING",
+    NIGHT = "NIGHT",
+  }
+  
+  export enum WorkerTypeEnum {
+    DRIVER = "DRIVER",
+    TECHNICIAN = "TECHNICIAN",
+    ELECTRICIAN = "ELECTRICIAN",
+    PLUMBER = "PLUMBER",
+    OTHER = "OTHER",
+  }
+  
+  export enum PriorityEnum {
+    LOW = "LOW",
+    MEDIUM = "MEDIUM",
+    HIGH = "HIGH",
+  }
+  export interface ScheduleOrder {
+    id: string;
+    scheduleId: string;
+    orderId: string;
+    order: Order;
+    schedule: Schedule;
+    createdAt: Date;
+    updatedAt: Date;
+  }
+  
+  // Schedule Interface
+  export interface Schedule {
+    id: string;
+    workerId: string;
+    scheduledTime: Date;
+    date: Date;
+    day: string; // e.g., "Monday", "Tuesday"
+    shiftType: ShiftEnum;
+    worker: Worker;
+    location?: string;
+    scheduleOrders: ScheduleOrder[]; // Array of Order IDs
+    maxOrders: number;
+    ordersCount: number;
+    isFull: boolean;
+    status: StatusEnum;
+    priority: PriorityEnum;
+    notes?: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }
   
 export interface WorkExperience {
     id: string;
