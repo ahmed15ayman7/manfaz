@@ -60,7 +60,22 @@ export default function EarningsChart({ data = [] }: EarningsChartProps) {
 
   return (
     <div className="w-full h-64">
-      <Line data={chartData} options={options} />
+      <Line 
+        data={chartData} 
+        options={{
+          ...options,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(tickValue: number | string) {
+                  return `$${tickValue}`
+                }
+              }
+            }
+          }
+        }} 
+      />
     </div>
   )
-} 
+}

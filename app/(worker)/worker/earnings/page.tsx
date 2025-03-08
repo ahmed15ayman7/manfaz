@@ -1,144 +1,179 @@
-import { ArrowUpRight, Download, DollarSign, TrendingUp, Wallet } from "lucide-react";
+"use client"
 
-const earnings = [
-  {
-    id: "1",
-    service: "Home Cleaning",
-    amount: 150,
-    date: "2025-02-24",
-    status: "completed",
-    customer: "Ahmed Mohamed",
-  },
-  {
-    id: "2",
-    service: "Furniture Assembly",
-    amount: 200,
-    date: "2025-02-23",
-    status: "pending",
-    customer: "Sara Ahmed",
-  },
-  // Add more sample earnings...
-];
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
+import useStore from '@/store/useLanguageStore'
+import { formatDate } from '@/lib/utils'
+import EarningsChart from '@/components/worker/EarningsChart'
+import API_ENDPOINTS from '@/lib/apis'
+import axiosInstance from '@/lib/axios'
 
-const stats = [
-  {
-    title: "Total Earnings",
-    value: "$2,450",
-    icon: DollarSign,
-    change: "+12%",
-    description: "vs. previous month",
-  },
-  {
-    title: "Pending Payments",
-    value: "$350",
-    icon: Wallet,
-    change: "-5%",
-    description: "vs. previous month",
-  },
-  {
-    title: "Average Order Value",
-    value: "$175",
-    icon: TrendingUp,
-    change: "+8%",
-    description: "vs. previous month",
-  },
-];
+interface EarningsData {
+  total: number
+  available: number
+  pending: number
+  history: {
+    id: string
+    amount: number
+    type: 'order' | 'withdrawal'
+    status: 'completed' | 'pending'
+    createdAt: Date
+    order?: {
+      id: string
+      service?: {
+        name: string
+      }
+      user?: {
+        name: string
+      }
+    }
+  }[]
+  chart: {
+    date: string
+    amount: number
+  }[]
+}
 
-export default function EarningsPage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold">Earnings</h2>
-        <div className="flex items-center space-x-4">
-          <button className="btn-secondary flex items-center">
-            <Download className="w-4 h-4 mr-2" />
-            Download Report
-          </button>
-          <select className="rounded-lg border p-2">
-            <option value="all">All Time</option>
-            <option value="month">This Month</option>
-            <option value="week">This Week</option>
-          </select>
+const getWorkerEarnings = async ({ locale, period }: { locale: string; period: string }) => {
+  const url = API_ENDPOINTS.workers.getById('me', { lang: locale, include: 'earnings', period }, false)
+  const res = await axiosInstance.get(url)
+  return res.data
+}
+
+export default function WorkerEarningsPage() {
+  const { locale } = useStore()
+  const t = useTranslations('worker_dashboard')
+  const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'year'>('month')
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['worker-earnings', selectedPeriod],
+    queryFn: () => getWorkerEarnings({ locale, period: selectedPeriod }),
+  })
+
+  const earnings: EarningsData = data?.data || {
+    total: 0,
+    available: 0,
+    pending: 0,
+    history: [],
+    chart: [],
+  }
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="animate-pulse space-y-6">
+          {/* Stats Skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="bg-white rounded-lg p-6">
+                <div className="h-4 w-24 bg-gray-200 rounded mb-2" />
+                <div className="h-8 w-32 bg-gray-200 rounded" />
+              </div>
+            ))}
+          </div>
+
+          {/* Chart Skeleton */}
+          <div className="bg-white rounded-lg p-6">
+            <div className="h-6 w-32 bg-gray-200 rounded mb-4" />
+            <div className="h-64 bg-gray-200 rounded" />
+          </div>
+
+          {/* History Skeleton */}
+          <div className="bg-white rounded-lg p-6">
+            <div className="h-6 w-32 bg-gray-200 rounded mb-4" />
+            <div className="space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="flex justify-between items-center">
+                  <div className="h-4 w-48 bg-gray-200 rounded" />
+                  <div className="h-4 w-24 bg-gray-200 rounded" />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="container mx-auto p-4">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">{t('earnings')}</h1>
+        <select
+          value={selectedPeriod}
+          onChange={(e) => setSelectedPeriod(e.target.value as 'week' | 'month' | 'year')}
+          className="p-2 border rounded-lg"
+        >
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="year">This Year</option>
+        </select>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
-          return (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="bg-white rounded-lg p-6">
+          <p className="text-sm text-gray-600">Total Earnings</p>
+          <p className="text-2xl font-bold">${earnings.total.toFixed(2)}</p>
+        </div>
+        <div className="bg-white rounded-lg p-6">
+          <p className="text-sm text-gray-600">Available Balance</p>
+          <p className="text-2xl font-bold">${earnings.available.toFixed(2)}</p>
+        </div>
+        <div className="bg-white rounded-lg p-6">
+          <p className="text-sm text-gray-600">Pending Earnings</p>
+          <p className="text-2xl font-bold">${earnings.pending.toFixed(2)}</p>
+        </div>
+      </div>
+
+      {/* Chart */}
+      <div className="bg-white rounded-lg p-6 mb-6">
+        <h2 className="text-lg font-semibold mb-4">{t('earnings_overview')}</h2>
+        <EarningsChart data={earnings.chart} />
+      </div>
+
+      {/* Earnings History */}
+      <div className="bg-white rounded-lg p-6">
+        <h2 className="text-lg font-semibold mb-4">Earnings History</h2>
+        <div className="space-y-4">
+          {earnings.history.map((item) => (
             <div
-              key={stat.title}
-              className="rounded-xl bg-white p-6 shadow-sm"
+              key={item.id}
+              className="flex justify-between items-center p-4 border rounded-lg"
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">{stat.title}</p>
-                  <p className="mt-2 text-3xl font-bold">{stat.value}</p>
-                </div>
-                <div className="rounded-full bg-primary-50 p-3">
-                  <Icon className="h-6 w-6 text-primary-500" />
-                </div>
+              <div>
+                <p className="font-medium">
+                  {item.type === 'order'
+                    ? `Order: ${item.order?.service?.name}`
+                    : 'Withdrawal'}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {item.type === 'order' && item.order?.user?.name}
+                  {' • '}
+                  {formatDate(item.createdAt, locale)}
+                </p>
               </div>
-              <div className="mt-4 flex items-center space-x-2">
-                <span className="text-sm font-medium text-green-500">
-                  {stat.change}
-                </span>
-                <span className="text-sm text-gray-500">{stat.description}</span>
+              <div className="text-right">
+                <p
+                  className={`font-medium ${
+                    item.type === 'withdrawal' ? 'text-red-600' : 'text-green-600'
+                  }`}
+                >
+                  {item.type === 'withdrawal' ? '-' : '+'}${item.amount.toFixed(2)}
+                </p>
+                <p
+                  className={`text-sm ${
+                    item.status === 'completed' ? 'text-green-600' : 'text-yellow-600'
+                  }`}
+                >
+                  {item.status === 'completed' ? 'Completed' : 'Pending'}
+                </p>
               </div>
             </div>
-          );
-        })}
-      </div>
-
-      {/* Earnings Chart */}
-      <div className="rounded-xl bg-white p-6 shadow-sm">
-        <h3 className="text-xl font-semibold mb-4">Earnings Overview</h3>
-        <div className="h-64 flex items-center justify-center text-gray-500">
-          Chart placeholder - Implement with your preferred chart library
-        </div>
-      </div>
-
-      {/* Earnings Table */}
-      <div className="rounded-xl bg-white shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b">
-          <h3 className="text-xl font-semibold">Recent Earnings</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Service</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {earnings.map((earning) => (
-                <tr key={earning.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{earning.service}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{earning.customer}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${earning.amount}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{earning.date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        earning.status === "completed"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {earning.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          ))}
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,15 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from 'react'
 import { User, Lock, Bell, Globe, CreditCard } from "lucide-react";
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
-import axios from 'axios'
 import Image from 'next/image'
 import { toast } from 'react-toastify'
-import { apiUrl } from '@/constant'
 import useStore from '@/store/useLanguageStore'
 import { Worker } from '@/interfaces'
 import SettingsSkeleton from '@/components/skeletons/SettingsSkeleton'
+import API_ENDPOINTS from '@/lib/apis'
+import axiosInstance from '@/lib/axios'
 
 const settingsTabs = [
   {
@@ -40,7 +40,8 @@ const settingsTabs = [
 ];
 
 const getWorkerSettings = async ({ locale }: { locale: string }) => {
-  const res = await axios.get(`${apiUrl}/workers/settings?lang=${locale}`)
+  const url = API_ENDPOINTS.workers.getById('me', { lang: locale }, false)
+  const res = await axiosInstance.get(url)
   return res.data
 }
 
@@ -48,7 +49,10 @@ export default function WorkerSettingsPage() {
   const { locale, setLocale } = useStore()
   const t = useTranslations('worker_settings')
   const [activeTab, setActiveTab] = useState("profile");
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>('')
+  const [skills, setSkills] = useState<string[]>([])
+  const [newSkill, setNewSkill] = useState('')
 
   const { data: settingsData, isLoading, refetch } = useQuery({
     queryKey: ['worker-settings'],
@@ -56,9 +60,11 @@ export default function WorkerSettingsPage() {
   })
 
   const updateSettingsMutation = useMutation({
-    mutationFn: (data: FormData) =>
-      axios.patch(`${apiUrl}/workers/settings`, data, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+    mutationFn: (formData: FormData) =>
+      axiosInstance.patch(API_ENDPOINTS.workers.update('me', {}, false), formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       }),
     onSuccess: () => {
       toast.success(t('settings_updated'))
@@ -69,21 +75,40 @@ export default function WorkerSettingsPage() {
     },
   })
 
+  useEffect(() => {
+    if (settingsData?.data) {
+      const worker: Worker = settingsData.data
+      setSkills(worker.skills)
+      setImagePreview(worker.user?.imageUrl || '')
+    }
+  }, [settingsData])
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+      setImageFile(file)
+      setImagePreview(URL.createObjectURL(file))
     }
+  }
+
+  const handleAddSkill = () => {
+    if (newSkill.trim() && !skills.includes(newSkill.trim())) {
+      setSkills([...skills, newSkill.trim()])
+      setNewSkill('')
+    }
+  }
+
+  const handleRemoveSkill = (skillToRemove: string) => {
+    setSkills(skills.filter((skill) => skill !== skillToRemove))
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const form = e.currentTarget
-    const formData = new FormData(form)
+    const formData = new FormData(e.currentTarget)
+    if (imageFile) {
+      formData.append('image', imageFile)
+    }
+    formData.append('skills', JSON.stringify(skills))
     updateSettingsMutation.mutate(formData)
   }
 

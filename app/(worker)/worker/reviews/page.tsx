@@ -1,120 +1,125 @@
-import { Star } from "lucide-react";
+"use client"
 
-const reviews = [
-  {
-    id: "1",
-    customer: "Ahmed Mohamed",
-    rating: 5,
-    comment: "Excellent service! Very professional and thorough with the cleaning.",
-    date: "2025-02-24",
-    service: "Home Cleaning",
-  },
-  {
-    id: "2",
-    customer: "Sara Ahmed",
-    rating: 4,
-    comment: "Good work with the furniture assembly. Just a bit late to arrive.",
-    date: "2025-02-23",
-    service: "Furniture Assembly",
-  },
-  // Add more sample reviews...
-];
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+import useStore from '@/store/useLanguageStore'
+import { Review } from '@/interfaces'
+import { formatDate } from '@/lib/utils'
+import API_ENDPOINTS from '@/lib/apis'
+import axiosInstance from '@/lib/axios'
 
-const stats = [
-  { label: "Total Reviews", value: "150" },
-  { label: "Average Rating", value: "4.8" },
-  { label: "5 Star Reviews", value: "85%" },
-  { label: "Response Rate", value: "98%" },
-];
+const getWorkerReviews = async ({ locale, page, limit }: { locale: string; page: number; limit: number }) => {
+  const url = API_ENDPOINTS.workers.reviews.getAll('me', { lang: locale, page, limit }, false)
+  const res = await axiosInstance.get(url)
+  return res.data
+}
 
-const RatingStars = ({ rating }: { rating: number }) => {
-  return (
-    <div className="flex items-center">
-      {[...Array(5)].map((_, index) => (
-        <Star
-          key={index}
-          className={`w-5 h-5 ${
-            index < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-          }`}
-        />
-      ))}
-    </div>
-  );
-};
+export default function WorkerReviewsPage() {
+  const { locale } = useStore()
+  const t = useTranslations('worker_profile')
+  const [page, setPage] = useState(1)
+  const limit = 10
 
-export default function ReviewsPage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold">Reviews</h2>
-        <select className="rounded-lg border p-2">
-          <option value="all">All Time</option>
-          <option value="month">This Month</option>
-          <option value="week">This Week</option>
-        </select>
+  const { data, isLoading } = useQuery({
+    queryKey: ['worker-reviews', page],
+    queryFn: () => getWorkerReviews({ locale, page, limit }),
+  })
+
+  const reviews: Review[] = data?.data?.reviews || []
+  const totalPages = Math.ceil((data?.data?.total || 0) / limit)
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="animate-pulse space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="bg-white rounded-lg p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                  <div>
+                    <div className="h-4 w-32 bg-gray-200 rounded mb-2" />
+                    <div className="h-3 w-20 bg-gray-200 rounded" />
+                  </div>
+                </div>
+                <div className="h-3 w-24 bg-gray-200 rounded" />
+              </div>
+              <div className="h-16 bg-gray-200 rounded" />
+            </div>
+          ))}
+        </div>
       </div>
+    )
+  }
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-xl bg-white p-6 shadow-sm"
-          >
-            <p className="text-sm text-gray-500">{stat.label}</p>
-            <p className="mt-2 text-3xl font-bold">{stat.value}</p>
-          </div>
-        ))}
-      </div>
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-6">{t('reviews')}</h1>
 
-      {/* Reviews List */}
       <div className="space-y-4">
         {reviews.map((review) => (
-          <div
-            key={review.id}
-            className="rounded-xl bg-white p-6 shadow-sm"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-medium">{review.customer}</h3>
-                <p className="text-sm text-gray-500">{review.service}</p>
+          <div key={review.id} className="bg-white rounded-lg p-6">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="relative w-12 h-12">
+                  <Image
+                    src={review.user.imageUrl || '/imgs/default-avatar.png'}
+                    alt={review.user.name}
+                    fill
+                    className="object-cover rounded-full"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-medium">{review.user.name}</h3>
+                  <div className="flex items-center">
+                    <span className="text-yellow-500">★</span>
+                    <span className="text-sm ml-1">{review.rating}</span>
+                  </div>
+                </div>
               </div>
-              <p className="text-sm text-gray-500">{review.date}</p>
+              <span className="text-gray-500 text-sm">
+                {formatDate(review.createdAt, locale)}
+              </span>
             </div>
-            
-            <div className="mt-2">
-              <RatingStars rating={review.rating} />
-            </div>
-            
-            <p className="mt-4 text-gray-700">{review.comment}</p>
-            
-            <div className="mt-4 flex justify-end">
-              <button className="text-sm text-primary-600 hover:text-primary-800">
-                Reply to Review
-              </button>
-            </div>
+            <p className="text-gray-600">{review.comment}</p>
           </div>
         ))}
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between bg-white px-4 py-3 rounded-lg shadow-sm">
-        <div className="flex items-center">
-          <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">1</span> to{" "}
-            <span className="font-medium">10</span> of{" "}
-            <span className="font-medium">150</span> reviews
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-            Previous
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+          >
+            ←
           </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-            Next
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i + 1)}
+              className={`px-4 py-2 rounded-lg ${
+                page === i + 1
+                  ? 'bg-primary text-white'
+                  : 'bg-gray-100 hover:bg-gray-200'
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+          >
+            →
           </button>
         </div>
-      </div>
+      )}
     </div>
-  );
+  )
 }

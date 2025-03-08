@@ -1,135 +1,189 @@
-import { Clock, Package, CheckCircle, XCircle } from "lucide-react";
+"use client"
 
-const orders = [
-  {
-    id: "1",
-    customer: "Ahmed Mohamed",
-    service: "Home Cleaning",
-    status: "pending",
-    price: 150,
-    date: "2025-02-24",
-    address: "123 Main St, Cairo",
-  },
-  {
-    id: "2",
-    customer: "Sara Ahmed",
-    service: "Furniture Assembly",
-    status: "in_progress",
-    price: 200,
-    date: "2025-02-24",
-    address: "456 Park Ave, Alexandria",
-  },
-  // Add more sample orders...
-];
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+import useStore from '@/store/useLanguageStore'
+import { Order } from '@/interfaces'
+import { formatDate } from '@/lib/utils'
+import API_ENDPOINTS from '@/lib/apis'
+import axiosInstance from '@/lib/axios'
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "pending":
-      return "bg-yellow-100 text-yellow-800";
-    case "in_progress":
-      return "bg-blue-100 text-blue-800";
-    case "completed":
-      return "bg-green-100 text-green-800";
-    case "canceled":
-      return "bg-red-100 text-red-800";
-    default:
-      return "bg-gray-100 text-gray-800";
+type OrderStatus = 'all' | 'pending' | 'in_progress' | 'completed' | 'canceled'
+
+const getWorkerOrders = async ({ locale, status, page, limit }: { locale: string; status: OrderStatus; page: number; limit: number }) => {
+  const url = API_ENDPOINTS.workers.getById('me', { lang: locale, include: 'orders', status: status === 'all' ? undefined : status, page, limit }, false)
+  const res = await axiosInstance.get(url)
+  return res.data
+}
+
+export default function WorkerOrdersPage() {
+  const { locale } = useStore()
+  const t = useTranslations('orders')
+  const [selectedStatus, setSelectedStatus] = useState<OrderStatus>('all')
+  const [page, setPage] = useState(1)
+  const limit = 10
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['worker-orders', selectedStatus, page],
+    queryFn: () => getWorkerOrders({ locale, status: selectedStatus, page, limit }),
+  })
+
+  const orders: Order[] = data?.data?.orders || []
+  const totalPages = Math.ceil((data?.data?.total || 0) / limit)
+
+  const statusTabs: { value: OrderStatus; label: string }[] = [
+    { value: 'all', label: t('all') },
+    { value: 'pending', label: t('pending') },
+    { value: 'in_progress', label: t('in_progress') },
+    { value: 'completed', label: t('completed') },
+    { value: 'canceled', label: t('canceled') },
+  ]
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="animate-pulse space-y-4">
+          {/* Status Tabs Skeleton */}
+          <div className="flex space-x-2 overflow-x-auto pb-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-10 w-24 bg-gray-200 rounded-lg" />
+            ))}
+          </div>
+
+          {/* Orders List Skeleton */}
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="bg-white rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                  <div>
+                    <div className="h-4 w-32 bg-gray-200 rounded mb-2" />
+                    <div className="h-3 w-20 bg-gray-200 rounded" />
+                  </div>
+                </div>
+                <div className="h-8 w-24 bg-gray-200 rounded" />
+              </div>
+              <div className="h-16 bg-gray-200 rounded" />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
   }
-};
 
-const getStatusIcon = (status: string) => {
-  switch (status) {
-    case "pending":
-      return Clock;
-    case "in_progress":
-      return Package;
-    case "completed":
-      return CheckCircle;
-    case "canceled":
-      return XCircle;
-    default:
-      return Package;
-  }
-};
-
-export default function OrdersPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold">Orders</h2>
-        <div className="flex items-center space-x-4">
-          <select className="rounded-lg border p-2">
-            <option value="all">All Orders</option>
-            <option value="pending">Pending</option>
-            <option value="in_progress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="canceled">Canceled</option>
-          </select>
-          <input
-            type="date"
-            className="rounded-lg border p-2"
-          />
-        </div>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
+
+      {/* Status Tabs */}
+      <div className="flex space-x-2 overflow-x-auto pb-4 mb-6 hide-scrollbar">
+        {statusTabs.map((tab) => (
+          <button
+            key={tab.value}
+            onClick={() => setSelectedStatus(tab.value)}
+            className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
+              selectedStatus === tab.value
+                ? 'bg-primary text-white'
+                : 'bg-gray-100 hover:bg-gray-200'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
-      <div className="overflow-x-auto rounded-lg border bg-white">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {orders.map((order) => {
-              const StatusIcon = getStatusIcon(order.status);
-              return (
-                <tr key={order.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{order.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.customer}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.service}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                      <StatusIcon className="w-4 h-4 mr-1" />
-                      {order.status.replace("_", " ").toUpperCase()}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${order.price}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.address}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-primary-600 hover:text-primary-900 mr-3">View</button>
-                    <button className="text-green-600 hover:text-green-900">Update</button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      {/* Orders List */}
+      {orders.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-gray-500">{t('no_orders')}</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {orders.map((order) => (
+            <div key={order.id} className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-4">
+                  {order.service?.imageUrl && (
+                    <div className="relative w-16 h-16">
+                      <Image
+                        src={order.service.imageUrl}
+                        alt={order.service.name}
+                        fill
+                        className="object-cover rounded-lg"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="font-medium">{order.service?.name}</h3>
+                    <p className="text-sm text-gray-500">
+                      {order.user?.name} • {formatDate(order.scheduledTime, locale)}
+                    </p>
+                    {order.description && (
+                      <p className="text-sm text-gray-600 mt-2">{order.description}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full text-sm ${
+                      order.status === 'completed'
+                        ? 'bg-green-100 text-green-800'
+                        : order.status === 'canceled'
+                        ? 'bg-red-100 text-red-800'
+                        : order.status === 'in_progress'
+                        ? 'bg-blue-100 text-blue-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}
+                  >
+                    {t(`status.${order.status}`)}
+                  </span>
+                  <p className="font-medium mt-2">${order.totalAmount.toFixed(2)}</p>
+                </div>
+              </div>
+              {order.notes && (
+                <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">{order.notes}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
-      <div className="flex items-center justify-between bg-white px-4 py-3 rounded-lg border">
-        <div className="flex items-center">
-          <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">1</span> to <span className="font-medium">10</span> of{" "}
-            <span className="font-medium">20</span> results
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-            Previous
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+          >
+            ←
           </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-            Next
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i + 1)}
+              className={`px-4 py-2 rounded-lg ${
+                page === i + 1
+                  ? 'bg-primary text-white'
+                  : 'bg-gray-100 hover:bg-gray-200'
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+          >
+            →
           </button>
         </div>
-      </div>
+      )}
     </div>
-  );
+  )
 }
