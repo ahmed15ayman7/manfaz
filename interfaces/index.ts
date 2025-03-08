@@ -118,6 +118,7 @@ export interface Store {
     categoryId?: string;
     category?: Category;
     rating: number; // التقييم
+    priceDriver?: number;
     reviewsCount: number; // عدد التقييمات
     isActive: boolean; // حالة المتجر
     status: "active" | "inactive" | "closed"; // حالة المتجر
@@ -357,6 +358,11 @@ export interface StoreCategory {
     name: string; // اسم التصنيف
     description?: string;
     image?: string;
+    isActive: boolean;
+    sortOrder: number;
+    products: Product[];
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 // المنتج داخل المتجر
@@ -366,11 +372,17 @@ export interface Product {
     description?: string;
     price: number; // سعر المنتج
     discountPrice?: number; // السعر بعد الخصم
+    salePrice?: number; // السعر بعد التخفيض
+    storeId: string; // المتجر التابع له المنتج
+    store?: Store;
     images: string[]; // صور المنتج
     categoryId: string; // التصنيف التابع له المنتج
+    category?: StoreCategory;
     stock: number; // الكمية المتاحة
     isAvailable: boolean; // متاح أم لا
-    rating: number; // التقييم
+    ingredients?: string[]; // المكونات
+    extras?: string[]; // الإضافات
+
     reviewsCount: number; // عدد التقييمات
     createdAt: Date;
     updatedAt: Date;

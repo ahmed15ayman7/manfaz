@@ -1,0 +1,30 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://manfaz.com
+
+# Sitemaps
+Sitemap: https://manfaz.com/sitemap.xml
+Sitemap: https://manfaz.com/ar/sitemap.xml
+Sitemap: https://manfaz.com/en/sitemap.xml
+Sitemap: https://manfaz.com/ur/sitemap.xml
+
+# Disallow
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /private/
+Disallow: /*?*
+Disallow: /*?
+Disallow: /*&
+Disallow: /*#
+Disallow: /*/search
+Disallow: /*/login
+Disallow: /*/register
+Disallow: /*/reset-password
+Disallow: /*/verify-email
+
+# Crawl-delay
+Crawl-delay: 10 

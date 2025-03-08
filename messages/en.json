@@ -180,7 +180,21 @@
     "coupons": "Coupons",
     "km_away": "km",
     "opens_at": "Opens at {time}",
-    "discounts_available": "Discounts Available"
+    "discounts_available": "Discounts Available",
+    "store_not_found": "Store Not Found",
+    "store_not_found_description": "Sorry, we couldn't find the requested store",
+    "contact_info": "Contact Information",
+    "working_hours": "Working Hours",
+    "delivery_info": "Delivery Information",
+    "min_order": "Minimum Order",
+    "delivery_fee": "Delivery Fee",
+    "products": "Products",
+    "gift_cards": "Gift Cards",
+    "reviews": "Reviews",
+    "closed": "Closed",
+    "valid_until": "Valid Until",
+    "off": "Off",
+    "expires": "Expires"
   },
   "location": {
     "add_location": "Add Location",

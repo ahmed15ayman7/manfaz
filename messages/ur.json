@@ -329,5 +329,28 @@
             "paid": "ادا شدہ",
             "failed": "ناکام"
         }
+    },
+    "stores": {
+        "available_stores": "دستیاب دکانیں",
+        "offers": "آفرز",
+        "discounts": "رعایتیں",
+        "coupons": "کوپنز",
+        "km_away": "کلومیٹر",
+        "opens_at": "{time} پر کھلتا ہے",
+        "discounts_available": "رعایتیں دستیاب ہیں",
+        "store_not_found": "دکان نہیں ملی",
+        "store_not_found_description": "معذرت، ہم مطلوبہ دکان نہیں ڈھونڈ سکے",
+        "contact_info": "رابطے کی معلومات",
+        "working_hours": "کام کے اوقات",
+        "delivery_info": "ڈیلیوری کی معلومات",
+        "min_order": "کم از کم آرڈر",
+        "delivery_fee": "ڈیلیوری فیس",
+        "products": "مصنوعات",
+        "gift_cards": "گفٹ کارڈز",
+        "reviews": "جائزے",
+        "closed": "بند",
+        "valid_until": "تک درست",
+        "off": "چھوٹ",
+        "expires": "میعاد ختم"
     }
 }

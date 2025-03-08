@@ -59,6 +59,7 @@ const CategoryPage = ({ params, searchParams }: { params: Promise<{ id: string }
         addItem({
             id: service.id,
             type: service.type as 'service' | 'delivery',
+            quantity: 1
         })
         // setShowCart(true)
         service && router.push('/checkout')

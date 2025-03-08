@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# منفذ - منصة الخدمات المتكاملة في المملكة العربية السعودية 🌟
 
-## Getting Started
+## عن المنصة
+منفذ هي المنصة الرائدة في المملكة العربية السعودية التي تجمع بين مقدمي الخدمات والعملاء في مكان واحد. نوفر حلولاً متكاملة تشمل:
 
-First, run the development server:
+### 🚚 خدمات التوصيل
+- توصيل من نقطة إلى نقطة
+- توصيل الطلبات من المتاجر
+- خدمات الشحن السريع
+- تتبع الطلبات مباشرة
 
-```bash
+### 🏪 المتاجر
+- متاجر المواد الغذائية
+- السوبر ماركت
+- المطاعم والمقاهي
+- متاجر الملابس والإكسسوارات
+- الصيدليات
+
+### 👨‍🔧 الخدمات المهنية
+- السباكة والكهرباء
+- صيانة السيارات
+- النجارة والحدادة
+- التكييف والتبريد
+- خدمات النظافة
+- الصيانة المنزلية
+
+## لماذا منفذ؟
+- ✅ خدمات موثوقة ومضمونة
+- 🏃 سرعة في التنفيذ
+- 💰 أسعار تنافسية
+- 👥 مقدمي خدمات معتمدين
+- 📱 تطبيق سهل الاستخدام
+- 🔒 دفع آمن
+- 📍 تغطية جغرافية واسعة
+
+## المميزات التقنية
+- 🌐 دعم متعدد اللغات (العربية، الإنجليزية، الأردو)
+- 🎨 واجهة مستخدم عصرية
+- 📱 تصميم متجاوب
+- 🔒 نظام مصادقة آمن
+- 🛍️ نظام متاجر متكامل
+- 📦 إدارة الطلبات المتقدمة
+- 💳 نظام دفع متعدد الخيارات
+- 📍 تتبع مباشر للطلبات
+- 📊 لوحات تحكم متخصصة
+
+## التقنيات المستخدمة
+\`\`\`
+Frontend:
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- React Query
+- Zustand
+- Material-UI
+
+Backend:
+- Node.js
+- Express
+- MongoDB
+- Redis
+- Socket.IO
+
+DevOps:
+- Docker
+- AWS
+- CI/CD
+- Monitoring
+\`\`\`
+
+## للمستخدمين
+1. **العملاء**
+   - تصفح الخدمات والمتاجر
+   - طلب الخدمات بسهولة
+   - تتبع الطلبات مباشرة
+   - تقييم مقدمي الخدمات
+   - محفظة إلكترونية
+
+2. **مقدمي الخدمات**
+   - لوحة تحكم احترافية
+   - إدارة الطلبات
+   - جدولة المواعيد
+   - تقارير وإحصائيات
+   - نظام تقييم شفاف
+
+3. **المتاجر**
+   - إدارة المنتجات
+   - إدارة المخزون
+   - العروض والخصومات
+   - تقارير المبيعات
+   - إدارة التوصيل
+
+## التثبيت والإعداد
+\`\`\`bash
+# استنساخ المشروع
+git clone https://github.com/ahmed15ayman7/manfaz.git
+cd manfaz
+
+# تثبيت الاعتمادات
+npm install
+
+# إعداد البيئة
+cp .env.example .env.local
+
+# تشغيل المشروع للتطوير
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## المساهمة
+نرحب بمساهماتكم! يرجى قراءة [دليل المساهمة](./CONTRIBUTING.md).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## الترخيص
+هذا المشروع مرخص بموجب [MIT License](./LICENSE).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## التواصل والدعم
+- 📧 البريد: support@manfaz.com
+- 🌐 الموقع: https://manfaz.com
+- 📞 الهاتف: +966-XX-XXXXXXX
+- 📱 التطبيق: متوفر على App Store و Google Play
