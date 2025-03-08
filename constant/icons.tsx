@@ -3,7 +3,7 @@ import { Home, Calendar, ClipboardList, Star, Settings, Wallet } from "lucide-re
 export const SidebarLinks = [
     {
       icon: <IconHome size={24} />,
-      route: "/",
+      route: "/home",
       label: "home",
     },
     {

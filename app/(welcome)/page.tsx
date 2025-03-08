@@ -30,7 +30,7 @@ const useCategoriesQuery = () => {
   })
 }
 
-export default async function WelcomePage() {
+export default  function WelcomePage() {
   const t = useTranslations()
   const { data: services } = useServicesQuery()
   const { data: stores } = useStoresQuery()

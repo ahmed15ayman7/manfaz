@@ -7,6 +7,22 @@ const nextConfig = {
     locales: ['ar', 'en', "ur"],
     localeDetection: false
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.freepik.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.vox-cdn.com',
+      },
+    ],
+  },
   webpack: (config, { isServer }) => {
     // تجاهل تحذير punycode
     config.ignoreWarnings = [

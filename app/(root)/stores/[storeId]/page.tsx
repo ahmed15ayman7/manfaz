@@ -16,8 +16,8 @@ import { calculateDistance, formatDate } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { Button, Input, Tabs } from '@mui/material'
 import {useUser} from '@/hooks/useUser'
-const getStoreDetails = async ({ id, locale }: { id: string; locale: string }) => {
-  const url = API_ENDPOINTS.stores.getById(id, { lang: locale }, false)
+const getStoreDetails = async ({ storeId, locale }: { storeId: string; locale: string }) => {
+  const url = API_ENDPOINTS.stores.getById(storeId, { lang: locale }, false)
   const res = await axiosInstance.get(url)
   return res.data
 }
@@ -36,7 +36,7 @@ export default function StoreDetailsPage() {
   let { user,status } = useUser()
   const { data: storeData, isLoading } = useQuery({
     queryKey: ['store', params.id],
-    queryFn: () => getStoreDetails({ id: params.id as string, locale }),
+    queryFn: () => getStoreDetails({ storeId: params.storeId as string, locale }),
   })
 
   const store: Store = storeData?.data

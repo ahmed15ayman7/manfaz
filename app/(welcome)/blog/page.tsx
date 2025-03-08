@@ -15,7 +15,7 @@ import {
   Share2
 } from 'lucide-react'
 import AnimatedSection from '../components/AnimatedSection'
-import { Input } from '@/components/ui/input'
+import { TextField } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -210,7 +210,7 @@ export default function BlogPage() {
             <div className="max-w-2xl mx-auto">
               <div className="relative">
                 <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
+                <TextField
                   type="text"
                   placeholder={t('blog.search_placeholder')}
                   value={searchQuery}
@@ -278,7 +278,7 @@ export default function BlogPage() {
                 {t('blog.newsletter.description')}
               </p>
               <div className="space-y-4">
-                <Input
+                <TextField
                   type="email"
                   placeholder={t('blog.newsletter.placeholder')}
                   className="w-full"

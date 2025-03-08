@@ -1,3 +1,4 @@
+"use client"
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -21,11 +22,11 @@ export default function Header() {
   const t = useTranslations()
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2">
+    <header className="sticky top-0 px-3 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="w-full flex h-16 items-center justify-between">
+        <Link href="/" className="flex items-center space-x-4 rtl:space-x-reverse">
           <Image src="/logo.svg" alt="Manfaz" width={32} height={32} />
-          <span className="text-xl font-bold">منفذ</span>
+          <span className="text-xl font-bold">{t("manfaz")}</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -46,7 +47,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <LanguageToggle />
           
           <div className="hidden md:flex items-center space-x-2">
@@ -65,7 +66,7 @@ export default function Header() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
+            <SheetContent  side="right">
               <nav className="flex flex-col space-y-4 mt-6">
                 {navItems.map((item) => (
                   <Link

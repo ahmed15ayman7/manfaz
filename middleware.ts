@@ -4,7 +4,7 @@ export const config = {
   matcher: [
     // حماية كل المسارات
 
-    "/",
+    // "/",
     "/categories/:path*",
     "/worker/:path*",
     "/stores/:path*",

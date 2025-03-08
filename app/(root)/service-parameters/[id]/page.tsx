@@ -54,7 +54,8 @@ useEffect(() => {
     
     addItem({
       id: parameter.id,
-      type: 'service'
+      type: 'service',
+      quantity: 1
     })
     router.push('/checkout')
   }

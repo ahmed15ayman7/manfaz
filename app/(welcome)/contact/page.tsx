@@ -17,10 +17,10 @@ import {
   ArrowRight
 } from 'lucide-react'
 import AnimatedSection from '../components/AnimatedSection'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
+import { Input } from '@mui/material'
+import { Button } from '@mui/material'
 import Link from 'next/link'
+import { Textarea } from '@headlessui/react'
 
 const contactInfo = [
   {

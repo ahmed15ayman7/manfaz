@@ -179,7 +179,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      <div className="container py-12">
+      <div className="container relative py-12  mx-auto">
         {/* الإحصائيات */}
         <AnimatedSection className="relative -mt-24 mb-12 z-20">
           <div className="bg-card shadow-xl rounded-xl p-6">

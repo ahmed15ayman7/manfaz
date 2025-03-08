@@ -15,7 +15,7 @@ import {
   Mail
 } from 'lucide-react'
 import AnimatedSection from '../components/AnimatedSection'
-import { Input } from '@/components/ui/input'
+import { TextField } from '@mui/material'
 import Link from 'next/link'
 
 const categories = [
@@ -171,7 +171,7 @@ export default function FAQPage() {
             <div className="max-w-2xl mx-auto">
               <div className="relative">
                 <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
+                <TextField
                   type="text"
                   placeholder={t('faq.search_placeholder')}
                   value={searchQuery}
