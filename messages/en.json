@@ -241,5 +241,60 @@
     "experience": "Experience",
     "reviews": "Reviews",
     "view_all": "View All"
+  },
+  "worker_dashboard": {
+    "welcome": "Welcome {name}",
+    "status_available": "Available",
+    "status_unavailable": "Unavailable",
+    "status_available_success": "Your status has been updated to available",
+    "status_unavailable_success": "Your status has been updated to unavailable",
+    "status_update_error": "Error updating status",
+    "total_orders": "Total Orders",
+    "success_rate": "Success Rate",
+    "total_earnings": "Total Earnings",
+    "rating": "Rating",
+    "earnings_overview": "Earnings Overview",
+    "earnings": "Earnings",
+    "recent_orders": "Recent Orders",
+    "recent_reviews": "Recent Reviews",
+    "no_orders": "No orders found",
+    "no_reviews": "No reviews found",
+    "view_all": "View All",
+    "view": "View",
+    "new_order_notification": "You have a new order",
+    "new_review_notification": "You have a new review",
+    "earnings_updated_notification": "Your earnings have been updated",
+    "status": {
+      "pending": "Pending",
+      "in_progress": "In Progress",
+      "completed": "Completed",
+      "canceled": "Canceled"
+    }
+  },
+  "worker_settings": {
+    "title": "Settings",
+    "profile_image": "Profile Image",
+    "change_image": "Change Image",
+    "personal_info": "Personal Information",
+    "name": "Name",
+    "title": "Title",
+    "email": "Email",
+    "phone": "Phone",
+    "skills": "Skills",
+    "add_skill": "Add Skill",
+    "language": "Language",
+    "save_changes": "Save Changes",
+    "saving": "Saving...",
+    "settings_updated": "Settings updated successfully",
+    "settings_update_error": "Error updating settings"
+  },
+  "worker_schedule": {
+    "title": "Schedule",
+    "schedule_for": "Schedule for",
+    "schedule_updated": "Schedule updated successfully",
+    "schedule_update_error": "Error updating schedule",
+    "schedule_changed": "Schedule has been changed",
+    "no_appointments": "No appointments for this day",
+    "drag_to_reschedule": "Drag to reschedule appointment"
   }
 }

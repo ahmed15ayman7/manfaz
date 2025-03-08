@@ -242,5 +242,60 @@
     "experience": "الخبرات",
     "reviews": "التقييمات",
     "view_all": "عرض الكل"
+  },
+  "worker_dashboard": {
+    "welcome": "مرحباً {name}",
+    "status_available": "متاح",
+    "status_unavailable": "غير متاح",
+    "status_available_success": "تم تحديث حالتك إلى متاح",
+    "status_unavailable_success": "تم تحديث حالتك إلى غير متاح",
+    "status_update_error": "حدث خطأ أثناء تحديث الحالة",
+    "total_orders": "إجمالي الطلبات",
+    "success_rate": "معدل النجاح",
+    "total_earnings": "إجمالي الأرباح",
+    "rating": "التقييم",
+    "earnings_overview": "نظرة عامة على الأرباح",
+    "earnings": "الأرباح",
+    "recent_orders": "آخر الطلبات",
+    "recent_reviews": "آخر التقييمات",
+    "no_orders": "لا توجد طلبات",
+    "no_reviews": "لا توجد تقييمات",
+    "view_all": "عرض الكل",
+    "view": "عرض",
+    "new_order_notification": "لديك طلب جديد",
+    "new_review_notification": "لديك تقييم جديد",
+    "earnings_updated_notification": "تم تحديث أرباحك",
+    "status": {
+      "pending": "قيد الانتظار",
+      "in_progress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "canceled": "ملغي"
+    }
+  },
+  "worker_settings": {
+    "title": "الإعدادات",
+    "profile_image": "الصورة الشخصية",
+    "change_image": "تغيير الصورة",
+    "personal_info": "المعلومات الشخصية",
+    "name": "الاسم",
+    "title": "المسمى الوظيفي",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الجوال",
+    "skills": "المهارات",
+    "add_skill": "إضافة مهارة",
+    "language": "اللغة",
+    "save_changes": "حفظ التغييرات",
+    "saving": "جاري الحفظ...",
+    "settings_updated": "تم تحديث الإعدادات بنجاح",
+    "settings_update_error": "حدث خطأ أثناء تحديث الإعدادات"
+  },
+  "worker_schedule": {
+    "title": "جدول المواعيد",
+    "schedule_for": "جدول",
+    "schedule_updated": "تم تحديث الجدول بنجاح",
+    "schedule_update_error": "حدث خطأ أثناء تحديث الجدول",
+    "schedule_changed": "تم تغيير الجدول",
+    "no_appointments": "لا توجد مواعيد لهذا اليوم",
+    "drag_to_reschedule": "اسحب لإعادة جدولة الموعد"
   }
 }

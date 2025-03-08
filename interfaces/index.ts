@@ -135,7 +135,7 @@ export interface Store {
     rewards: Reward[]; // المكافآت
 }
 export interface Order {
-    id?: string;
+    id: string;
     userId: string;
     user?: User;
     serviceId: string;
@@ -158,6 +158,7 @@ export interface Order {
     updatedAt?: Date;
     storeId?: string;
     store?: Store;
+    scheduledTime: string;
 }
 export type OrderStatus = "pending" | "in_progress" | "completed" | "canceled";
 
@@ -184,9 +185,13 @@ export interface Worker {
     experiences: WorkExperience[];
     reviews: Review[];
     orders: Order[];
-  }
+    earnings: {
+        date: string;
+        amount: number;
+    }[];
+}
   
-  export interface WorkExperience {
+export interface WorkExperience {
     id: string;
     workerId: string;
     worker: Worker;
@@ -196,9 +201,9 @@ export interface Worker {
     description: string;
     createdAt: Date;
     updatedAt: Date;
-  }
+}
   
-  export interface Review {
+export interface Review {
     id: string;
     workerId: string;
     worker: Worker;
@@ -208,7 +213,7 @@ export interface Worker {
     comment: string;
     createdAt: Date;
     updatedAt: Date;
-  }
+}
 export interface DeliveryDriver {
     id: string;
     userId: string;

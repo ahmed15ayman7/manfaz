@@ -232,5 +232,60 @@
         "experience": "تجربہ",
         "reviews": "جائزے",
         "view_all": "سب دیکھیں"
+    },
+    "worker_dashboard": {
+        "welcome": "خوش آمدید {name}",
+        "status_available": "دستیاب",
+        "status_unavailable": "غیر دستیاب",
+        "status_available_success": "آپ کی حیثیت دستیاب میں تبدیل کر دی گئی ہے",
+        "status_unavailable_success": "آپ کی حیثیت غیر دستیاب میں تبدیل کر دی گئی ہے",
+        "status_update_error": "حیثیت کی تجدید میں خرابی",
+        "total_orders": "کل آرڈرز",
+        "success_rate": "کامیابی کی شرح",
+        "total_earnings": "کل آمدنی",
+        "rating": "درجہ بندی",
+        "earnings_overview": "آمدنی کا جائزہ",
+        "earnings": "آمدنی",
+        "recent_orders": "حالیہ آرڈرز",
+        "recent_reviews": "حالیہ جائزے",
+        "no_orders": "کوئی آرڈر نہیں ملا",
+        "no_reviews": "کوئی جائزہ نہیں ملا",
+        "view_all": "سب دیکھیں",
+        "view": "دیکھیں",
+        "new_order_notification": "آپ کو ایک نیا آرڈر ملا ہے",
+        "new_review_notification": "آپ کو ایک نیا جائزہ ملا ہے",
+        "earnings_updated_notification": "آپ کی آمدنی اپ ڈیٹ کر دی گئی ہے",
+        "status": {
+            "pending": "زیر التواء",
+            "in_progress": "جاری ہے",
+            "completed": "مکمل",
+            "canceled": "منسوخ"
+        }
+    },
+    "worker_settings": {
+        "title": "ترتیبات",
+        "profile_image": "پروفائل تصویر",
+        "change_image": "تصویر تبدیل کریں",
+        "personal_info": "ذاتی معلومات",
+        "name": "نام",
+        "title": "عہدہ",
+        "email": "ای میل",
+        "phone": "فون",
+        "skills": "مہارتیں",
+        "add_skill": "مہارت شامل کریں",
+        "language": "زبان",
+        "save_changes": "تبدیلیاں محفوظ کریں",
+        "saving": "محفوظ کیا جا رہا ہے...",
+        "settings_updated": "ترتیبات کامیابی سے اپ ڈیٹ ہو گئیں",
+        "settings_update_error": "ترتیبات اپ ڈیٹ کرنے میں خرابی"
+    },
+    "worker_schedule": {
+        "title": "شیڈول",
+        "schedule_for": "شیڈول برائے",
+        "schedule_updated": "شیڈول کامیابی سے اپ ڈیٹ ہو گیا",
+        "schedule_update_error": "شیڈول اپ ڈیٹ کرنے میں خرابی",
+        "schedule_changed": "شیڈول تبدیل ہو گیا ہے",
+        "no_appointments": "اس دن کے لیے کوئی اپوائنٹمنٹ نہیں",
+        "drag_to_reschedule": "دوبارہ شیڈول کرنے کے لیے کھینچیں"
     }
 }

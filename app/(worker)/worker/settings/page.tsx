@@ -1,6 +1,15 @@
 "use client";
 import { useState } from "react";
 import { User, Lock, Bell, Globe, CreditCard } from "lucide-react";
+import { useQuery, useMutation } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
+import axios from 'axios'
+import Image from 'next/image'
+import { toast } from 'react-toastify'
+import { apiUrl } from '@/constant'
+import useStore from '@/store/useLanguageStore'
+import { Worker } from '@/interfaces'
+import SettingsSkeleton from '@/components/skeletons/SettingsSkeleton'
 
 const settingsTabs = [
   {
@@ -30,8 +39,59 @@ const settingsTabs = [
   },
 ];
 
-export default function SettingsPage() {
+const getWorkerSettings = async ({ locale }: { locale: string }) => {
+  const res = await axios.get(`${apiUrl}/workers/settings?lang=${locale}`)
+  return res.data
+}
+
+export default function WorkerSettingsPage() {
+  const { locale, setLocale } = useStore()
+  const t = useTranslations('worker_settings')
   const [activeTab, setActiveTab] = useState("profile");
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+
+  const { data: settingsData, isLoading, refetch } = useQuery({
+    queryKey: ['worker-settings'],
+    queryFn: () => getWorkerSettings({ locale }),
+  })
+
+  const updateSettingsMutation = useMutation({
+    mutationFn: (data: FormData) =>
+      axios.patch(`${apiUrl}/workers/settings`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }),
+    onSuccess: () => {
+      toast.success(t('settings_updated'))
+      refetch()
+    },
+    onError: () => {
+      toast.error(t('settings_update_error'))
+    },
+  })
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    updateSettingsMutation.mutate(formData)
+  }
+
+  if (isLoading) {
+    return <SettingsSkeleton />
+  }
+
+  const worker: Worker = settingsData?.data
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -39,48 +99,72 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div className="flex items-center space-x-4">
-              <div className="h-24 w-24 rounded-full bg-gray-200">
-                <img
-                  src="/assets/default-avatar.png"
-                  alt="Profile"
-                  className="h-full w-full rounded-full object-cover"
+              <div className="relative w-24 h-24">
+                <Image
+                  src={imagePreview || worker.user?.imageUrl || '/imgs/default-avatar.png'}
+                  alt={worker.user?.name || ''}
+                  fill
+                  className="object-cover rounded-full"
                 />
               </div>
-              <button className="btn-primary">Change Photo</button>
+              <div>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className="bg-primary text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-primary-600 transition-colors"
+                >
+                  {t('change_image')}
+                </label>
+              </div>
             </div>
 
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                  <label className="block text-sm font-medium text-gray-700">{t('name')}</label>
                   <input
                     type="text"
+                    name="name"
+                    defaultValue={worker.user?.name}
                     className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-                    placeholder="John Doe"
+                    required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Email</label>
+                  <label className="block text-sm font-medium text-gray-700">{t('title')}</label>
+                  <input
+                    type="text"
+                    name="title"
+                    defaultValue={worker.title}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">{t('email')}</label>
                   <input
                     type="email"
+                    name="email"
+                    defaultValue={worker.user?.email}
                     className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-                    placeholder="john@example.com"
+                    required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Phone</label>
+                  <label className="block text-sm font-medium text-gray-700">{t('phone')}</label>
                   <input
                     type="tel"
+                    name="phone"
+                    defaultValue={worker.user?.phone}
                     className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-                    placeholder="+1 234 567 890"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Location</label>
-                  <input
-                    type="text"
-                    className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-                    placeholder="City, Country"
+                    required
                   />
                 </div>
               </div>
@@ -94,7 +178,7 @@ export default function SettingsPage() {
               </div>
               <div className="flex justify-end">
                 <button type="submit" className="btn-primary">
-                  Save Changes
+                  {t('save_changes')}
                 </button>
               </div>
             </form>
@@ -169,11 +253,14 @@ export default function SettingsPage() {
           <div className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">Select Language</label>
-              <select className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2">
+              <select
+                value={locale}
+                onChange={(e) => setLocale(e.target.value)}
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
+              >
+                <option value="ar">العربية</option>
                 <option value="en">English</option>
-                <option value="ar">Arabic</option>
-                <option value="fr">French</option>
-                <option value="es">Spanish</option>
+                <option value="ur">اردو</option>
               </select>
             </div>
           </div>
@@ -211,7 +298,7 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6 bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-3xl font-bold">Settings</h2>
+      <h2 className="text-3xl font-bold">{t('title')}</h2>
 
       <div className="space-y-6">
         {/* Horizontal Tabs */}

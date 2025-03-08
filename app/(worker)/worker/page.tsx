@@ -1,207 +1,165 @@
 "use client";
-import { Briefcase, Star, TrendingUp, Users, Clock, MapPin, CheckCircle } from "lucide-react";
-import Link from "next/link";
+import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
+import axios from 'axios'
+import Image from 'next/image'
+import { toast } from 'react-toastify'
+import { io } from 'socket.io-client'
+import { apiUrl } from '@/constant'
+import useStore from '@/store/useLanguageStore'
+import { Worker } from '@/interfaces'
+import DashboardSkeleton from '@/components/skeletons/DashboardSkeleton'
+import StatsCard from '@/components/worker/StatsCard'
+import RecentOrdersCard from '@/components/worker/RecentOrdersCard'
+import RecentReviewsCard from '@/components/worker/RecentReviewsCard'
+import EarningsChart from '@/components/worker/EarningsChart'
 
-const stats = [
-  {
-    title: "Total Orders",
-    value: "150",
-    icon: Briefcase,
-    change: "+12%",
-    description: "vs. previous month",
-  },
-  {
-    title: "Rating",
-    value: "4.8",
-    icon: Star,
-    change: "+0.2",
-    description: "vs. previous month",
-  },
-  {
-    title: "Earnings",
-    value: "$2,450",
-    icon: TrendingUp,
-    change: "+18%",
-    description: "vs. previous month",
-  },
-  {
-    title: "Active Clients",
-    value: "45",
-    icon: Users,
-    change: "+5",
-    description: "vs. previous month",
-  },
-];
+const getWorkerDashboard = async ({ locale }: { locale: string }) => {
+  const res = await axios.get(`${apiUrl}/workers/dashboard?lang=${locale}`)
+  return res.data
+}
 
-const recentOrders = [
-  {
-    id: "1",
-    customer: "Ahmed Mohamed",
-    service: "Home Cleaning",
-    status: "pending",
-    time: "2 hours ago",
-  },
-  {
-    id: "2",
-    customer: "Sara Ahmed",
-    service: "Furniture Assembly",
-    status: "in_progress",
-    time: "5 hours ago",
-  },
-  {
-    id: "3",
-    customer: "Mohamed Ali",
-    service: "Plumbing",
-    status: "completed",
-    time: "1 day ago",
-  },
-];
+export default function WorkerDashboardPage() {
+  const { locale } = useStore()
+  const t = useTranslations('worker_dashboard')
 
-const upcomingSchedule = [
-  {
-    id: "1",
-    service: "Home Cleaning",
-    customer: "Fatima Hassan",
-    time: "09:00 AM - 11:00 AM",
-    location: "123 Main St, Cairo",
-  },
-  {
-    id: "2",
-    service: "Furniture Assembly",
-    customer: "Omar Khaled",
-    time: "02:00 PM - 04:00 PM",
-    location: "456 Park Ave, Alexandria",
-  },
-];
+  const { data: dashboardData, isLoading, refetch } = useQuery({
+    queryKey: ['worker-dashboard'],
+    queryFn: () => getWorkerDashboard({ locale }),
+  })
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "pending":
-      return "bg-yellow-100 text-yellow-800";
-    case "in_progress":
-      return "bg-blue-100 text-blue-800";
-    case "completed":
-      return "bg-green-100 text-green-800";
-    default:
-      return "bg-gray-100 text-gray-800";
+  useEffect(() => {
+    refetch()
+
+    // Socket.io setup
+    const socket = io(apiUrl)
+
+    socket.on('orderUpdated', () => {
+      refetch()
+      toast.info(t('new_order_notification'))
+    })
+
+    socket.on('newReview', () => {
+      refetch()
+      toast.info(t('new_review_notification'))
+    })
+
+    socket.on('earningsUpdated', () => {
+      refetch()
+      toast.success(t('earnings_updated_notification'))
+    })
+
+    // Request notification permission
+    if ('Notification' in window) {
+      Notification.requestPermission()
+    }
+
+    return () => {
+      socket.disconnect()
+    }
+  }, [locale])
+
+  if (isLoading) {
+    return <DashboardSkeleton />
   }
-};
 
-export default function WorkerDashboard() {
+  const worker: Worker = dashboardData?.data
+
+  const handleAvailabilityToggle = async () => {
+    try {
+      await axios.patch(`${apiUrl}/workers/${worker.id}/availability`, {
+        isAvailable: !worker.isAvailable,
+      })
+      refetch()
+      toast.success(
+        worker.isAvailable ? t('status_unavailable_success') : t('status_available_success')
+      )
+    } catch (error) {
+      toast.error(t('status_update_error'))
+    }
+  }
+
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold">Dashboard Overview</h2>
-        <div className="flex items-center space-x-4">
-          <Link href="/worker/orders" className="btn-primary">
-            New Orders
-          </Link>
-          <Link href="/worker/schedule" className="btn-secondary">
-            View Schedule
-          </Link>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
-          return (
+    <div className="container mx-auto p-4">
+      {/* Header Section */}
+      <div className="bg-white rounded-lg p-6 mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="relative w-16 h-16">
+            <Image
+              src={worker.user?.imageUrl || '/imgs/default-avatar.png'}
+              alt={worker.user?.name || ''}
+              fill
+              className="object-cover rounded-full"
+            />
             <div
-              key={stat.title}
-              className="rounded-xl bg-white p-6 shadow-sm transition-all hover:shadow-md"
-            >
-              <div className="flex items-center justify-between">
+              className={`absolute bottom-0 right-0 w-4 h-4 border-2 border-white rounded-full ${
+                worker.isAvailable ? 'bg-green-500' : 'bg-gray-400'
+              }`}
+            />
+          </div>
                 <div>
-                  <p className="text-sm text-gray-500">{stat.title}</p>
-                  <p className="mt-2 text-3xl font-bold">{stat.value}</p>
-                </div>
-                <div className="rounded-full bg-primary-50 p-3">
-                  <Icon className="h-6 w-6 text-primary-500" />
+            <h1 className="text-xl font-semibold">{t('welcome', { name: worker.user?.name })}</h1>
+            <p className="text-gray-600">{worker.title}</p>
                 </div>
               </div>
-              <div className="mt-4 flex items-center space-x-2">
-                <span className="text-sm font-medium text-green-500">
-                  {stat.change}
-                </span>
-                <span className="text-sm text-gray-500">{stat.description}</span>
-              </div>
-            </div>
-          );
-        })}
+        <button
+          onClick={handleAvailabilityToggle}
+          className={`px-4 py-2 rounded-lg font-medium ${
+            worker.isAvailable
+              ? 'bg-green-100 text-green-700 hover:bg-green-200'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          {worker.isAvailable ? t('status_available') : t('status_unavailable')}
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-xl bg-white p-6 shadow-sm">
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-xl font-semibold">Recent Orders</h3>
-            <Link href="/worker/orders" className="text-sm text-primary-600 hover:text-primary-700">
-              View All
-            </Link>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <StatsCard
+          title={t('total_orders')}
+          value={worker.orders?.length || 0}
+          trend={5}
+          icon="📦"
+        />
+        <StatsCard
+          title={t('success_rate')}
+          value={`${worker.jobSuccessRate}%`}
+          trend={2}
+          icon="📈"
+        />
+        <StatsCard
+          title={t('total_earnings')}
+          value={`$${worker.totalEarned}`}
+          trend={8}
+          icon="💰"
+        />
+        <StatsCard
+          title={t('rating')}
+          value={worker.rating.toFixed(1)}
+          subValue={`(${worker.reviewsCount})`}
+          trend={0}
+          icon="⭐"
+        />
           </div>
           
-          <div className="space-y-4">
-            {recentOrders.map((order) => (
-              <div
-                key={order.id}
-                className="flex items-center justify-between rounded-lg border p-4 hover:border-primary-500 transition-colors"
-              >
-                <div>
-                  <h4 className="font-medium">{order.service}</h4>
-                  <p className="text-sm text-gray-500">{order.customer}</p>
-                  <span className="text-xs text-gray-400">{order.time}</span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                    {order.status}
-                  </span>
-                  <button className="text-primary-600 hover:text-primary-700">
-                    View
-                  </button>
-                </div>
-              </div>
-            ))}
+      {/* Charts and Recent Activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Earnings Chart */}
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-lg p-6">
+            <h2 className="text-lg font-semibold mb-4">{t('earnings_overview')}</h2>
+            <EarningsChart data={worker.earnings} />
           </div>
         </div>
 
-        <div className="rounded-xl bg-white p-6 shadow-sm">
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-xl font-semibold">Upcoming Schedule</h3>
-            <Link href="/worker/schedule" className="text-sm text-primary-600 hover:text-primary-700">
-              View All
-            </Link>
-          </div>
-          
-          <div className="space-y-4">
-            {upcomingSchedule.map((schedule) => (
-              <div
-                key={schedule.id}
-                className="rounded-lg border p-4 hover:border-primary-500 transition-colors"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium">{schedule.service}</h4>
-                    <p className="text-sm text-gray-500">{schedule.customer}</p>
-                  </div>
-                  <span className="flex items-center text-xs text-primary-600">
-                    <CheckCircle className="h-4 w-4 mr-1" />
-                    Confirmed
-                  </span>
-                </div>
-                <div className="mt-3 space-y-2">
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Clock className="h-4 w-4 mr-2" />
-                    {schedule.time}
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <MapPin className="h-4 w-4 mr-2" />
-                    {schedule.location}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Recent Orders */}
+        <div className="space-y-6">
+          <RecentOrdersCard orders={worker.orders?.slice(0, 5)} />
+          <RecentReviewsCard reviews={worker.reviews?.slice(0, 3)} />
         </div>
       </div>
     </div>
-  );
+  )
 }

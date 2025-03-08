@@ -1,3 +1,6 @@
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
 export function calculateDistance(
   lat1: number,
   lon1: number,
@@ -26,4 +29,8 @@ export function formatDate(date: Date | string, locale: string): string {
     month: 'short',
     day: 'numeric',
   }).format(d)
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 } 
