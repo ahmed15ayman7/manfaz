@@ -287,5 +287,47 @@
         "schedule_changed": "شیڈول تبدیل ہو گیا ہے",
         "no_appointments": "اس دن کے لیے کوئی اپوائنٹمنٹ نہیں",
         "drag_to_reschedule": "دوبارہ شیڈول کرنے کے لیے کھینچیں"
+    },
+    "worker_orders": {
+        "order_details": "آرڈر کی تفصیلات",
+        "basic_info": "بنیادی معلومات",
+        "service_id": "سروس آئی ڈی",
+        "order_date": "آرڈر کی تاریخ",
+        "scheduled_time": "شیڈول کا وقت",
+        "price": "قیمت",
+        "duration": "دورانیہ",
+        "minutes": "منٹ",
+        "customer_info": "کسٹمر کی معلومات",
+        "phone": "فون",
+        "location": "مقام",
+        "additional_details": "اضافی تفصیلات",
+        "description": "تفصیل",
+        "notes": "نوٹس",
+        "no_description": "کوئی تفصیل دستیاب نہیں",
+        "no_notes": "کوئی نوٹس دستیاب نہیں",
+        "attached_image": "منسلک تصویر",
+        "order_image": "آرڈر کی تصویر",
+        "status_and_actions": "حالت اور کارروائیاں",
+        "order_status": "آرڈر کی حالت",
+        "payment_status": "ادائیگی کی حالت",
+        "accept": "قبول کریں",
+        "reject": "مسترد کریں",
+        "mark_as_completed": "مکمل شدہ نشان زد کریں",
+        "status_updated": "آرڈر کی حالت کامیابی سے اپ ڈیٹ ہو گئی",
+        "status_update_error": "آرڈر کی حالت اپ ڈیٹ کرنے میں خرابی",
+        "order_not_found": "آرڈر نہیں ملا",
+        "order_not_found_description": "معذرت، ہم مطلوبہ آرڈر نہیں ڈھونڈ سکے",
+        "go_back": "واپس جائیں",
+        "status": {
+            "pending": "زیر التواء",
+            "in_progress": "جاری ہے",
+            "completed": "مکمل",
+            "canceled": "منسوخ"
+        },
+        "payment_status": {
+            "pending": "زیر التواء",
+            "paid": "ادا شدہ",
+            "failed": "ناکام"
+        }
     }
 }

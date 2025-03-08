@@ -297,5 +297,47 @@
     "schedule_changed": "تم تغيير الجدول",
     "no_appointments": "لا توجد مواعيد لهذا اليوم",
     "drag_to_reschedule": "اسحب لإعادة جدولة الموعد"
+  },
+  "worker_orders": {
+    "order_details": "تفاصيل الطلب",
+    "basic_info": "المعلومات الأساسية",
+    "service_id": "رقم الخدمة",
+    "order_date": "تاريخ الطلب",
+    "scheduled_time": "موعد التنفيذ",
+    "price": "السعر",
+    "duration": "المدة",
+    "minutes": "دقيقة",
+    "customer_info": "معلومات العميل",
+    "phone": "رقم الجوال",
+    "location": "الموقع",
+    "additional_details": "تفاصيل إضافية",
+    "description": "الوصف",
+    "notes": "الملاحظات",
+    "no_description": "لا يوجد وصف",
+    "no_notes": "لا توجد ملاحظات",
+    "attached_image": "الصورة المرفقة",
+    "order_image": "صورة الطلب",
+    "status_and_actions": "الحالة والإجراءات",
+    "order_status": "حالة الطلب",
+    "payment_status": "حالة الدفع",
+    "accept": "قبول",
+    "reject": "رفض",
+    "mark_as_completed": "تحديد كمكتمل",
+    "status_updated": "تم تحديث حالة الطلب بنجاح",
+    "status_update_error": "حدث خطأ أثناء تحديث حالة الطلب",
+    "order_not_found": "الطلب غير موجود",
+    "order_not_found_description": "عذراً، لم نتمكن من العثور على الطلب المطلوب",
+    "go_back": "العودة للخلف",
+    "status": {
+      "pending": "قيد الانتظار",
+      "in_progress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "canceled": "ملغي"
+    },
+    "payment_status": {
+      "pending": "قيد الانتظار",
+      "paid": "مدفوع",
+      "failed": "فشل الدفع"
+    }
   }
 }
