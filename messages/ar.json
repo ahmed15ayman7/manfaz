@@ -230,5 +230,17 @@
     "order_now": "اطلب الآن",
     "not_available": "غير متاح",
     "loading": "جاري التحميل..."
+  },
+  "worker_profile": {
+    "location": "المملكة العربية السعودية",
+    "not_available": "غير متاح",
+    "job_success": "معدل النجاح",
+    "earned": "الأرباح",
+    "jobs_done": "المهام المنجزة",
+    "about": "نبذة عني",
+    "skills": "المهارات",
+    "experience": "الخبرات",
+    "reviews": "التقييمات",
+    "view_all": "عرض الكل"
   }
 }

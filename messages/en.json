@@ -229,5 +229,17 @@
     "order_now": "Order Now",
     "not_available": "Not Available",
     "loading": "Loading..."
+  },
+  "worker_profile": {
+    "location": "Saudi Arabia",
+    "not_available": "Not Available",
+    "job_success": "Job Success",
+    "earned": "Earned",
+    "jobs_done": "Jobs Done",
+    "about": "About",
+    "skills": "Skills",
+    "experience": "Experience",
+    "reviews": "Reviews",
+    "view_all": "View All"
   }
 }

@@ -220,5 +220,17 @@
         "order_now": "ابھی آرڈر کریں",
         "not_available": "دستیاب نہیں",
         "loading": "لوڈ ہو رہا ہے..."
+    },
+    "worker_profile": {
+        "location": "سعودی عرب",
+        "not_available": "دستیاب نہیں",
+        "job_success": "کام کی کامیابی",
+        "earned": "کمائی",
+        "jobs_done": "مکمل کام",
+        "about": "تعارف",
+        "skills": "مہارتیں",
+        "experience": "تجربہ",
+        "reviews": "جائزے",
+        "view_all": "سب دیکھیں"
     }
 }

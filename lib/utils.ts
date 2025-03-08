@@ -17,4 +17,13 @@ export function calculateDistance(
 
 function deg2rad(deg: number): number {
   return deg * (Math.PI / 180)
+}
+
+export function formatDate(date: Date | string, locale: string): string {
+  const d = new Date(date)
+  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : locale === 'ur' ? 'ur-PK' : 'en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(d)
 } 
