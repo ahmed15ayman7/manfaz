@@ -220,5 +220,14 @@
     "canceled": "Canceled",
     "error": "Error loading orders",
     "no_orders": "No orders"
+  },
+  "workers": {
+    "available_workers": "Available Workers",
+    "success_rate": "Success Rate",
+    "earned": "Earned",
+    "show_profile": "Show Profile",
+    "order_now": "Order Now",
+    "not_available": "Not Available",
+    "loading": "Loading..."
   }
 }

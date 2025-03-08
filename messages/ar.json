@@ -221,5 +221,14 @@
     "canceled": "ملغي",
     "error": "حدث خطأ في تحميل الطلبات",
     "no_orders": "لا توجد طلبات"
+  },
+  "workers": {
+    "available_workers": "العمال المتاحون",
+    "success_rate": "معدل النجاح",
+    "earned": "الأرباح",
+    "show_profile": "عرض الملف",
+    "order_now": "اطلب الآن",
+    "not_available": "غير متاح",
+    "loading": "جاري التحميل..."
   }
 }

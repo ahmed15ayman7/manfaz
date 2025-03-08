@@ -71,12 +71,11 @@ export default function ServicePage() {
     refetch()
   }, [locale])
   const handleAddToCart = (parameter?: ServiceParameter) => {
-    addItem({
-      id: parameter?.id || service.id,
-      type: service.type as 'service' | 'delivery',
-    })
-    // setShowCart(true)
-   parameter && router.push('/checkout')
+    if (parameter) {
+      router.push(`/service-workers/${service.id}?parameterId=${parameter.id}`)
+    } else {
+      router.push(`/service-workers/${service.id}`)
+    }
   }
 
   if (isLoading) {

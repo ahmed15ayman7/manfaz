@@ -211,5 +211,14 @@
         "canceled": "منسوخ",
         "error": "آرڈرز لوڈ کرنے میں خرابی",
         "no_orders": "آرڈرز نہیں ملی"
+    },
+    "workers": {
+        "available_workers": "دستیاب کارکنان",
+        "success_rate": "کامیابی کی شرح",
+        "earned": "کمائی",
+        "show_profile": "پروفائل دکھائیں",
+        "order_now": "ابھی آرڈر کریں",
+        "not_available": "دستیاب نہیں",
+        "loading": "لوڈ ہو رہا ہے..."
     }
 }
