@@ -226,9 +226,9 @@ export default function WorkerSchedulePage() {
                             />
                           )}
                         </AnimatePresence>
-                      </div>
+              </div>
                     )}
-                  </div>
+            </div>
                 )
               }
             }}
@@ -277,7 +277,7 @@ export default function WorkerSchedulePage() {
             </motion.div>
           </div>
         </motion.div>
-      </div>
+        </div>
 
       {/* Dialog لعرض طلبات اليوم */}
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
@@ -320,7 +320,7 @@ export default function WorkerSchedulePage() {
                           <p className="text-sm text-gray-500">
                             {new Date(order.scheduleOrder?.schedule.scheduledTime || '').toLocaleTimeString(locale)}
                           </p>
-                        </div>
+                    </div>
                         <span
                           className={`inline-block px-2 py-1 rounded-full text-xs ${
                             order.status === 'completed'
@@ -334,7 +334,7 @@ export default function WorkerSchedulePage() {
                         >
                           {t(`status.${order.status}`)}
                         </span>
-                      </div>
+                    </div>
                       {order.notes && (
                         <p className="text-sm text-gray-600 mt-2 line-clamp-2">
                           {order.notes}
@@ -364,7 +364,7 @@ export default function WorkerSchedulePage() {
                           >
                             {t('reject')}
                           </motion.button>
-                        </div>
+                  </div>
                       )}
                     </Link>
                   </motion.div>

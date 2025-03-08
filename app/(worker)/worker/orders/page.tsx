@@ -42,7 +42,7 @@ export default function WorkerOrdersPage() {
   ]
 
   if (isLoading) {
-    return (
+  return (
       <div className="container mx-auto p-4">
         <div className="animate-pulse space-y-4">
           {/* Status Tabs Skeleton */}
@@ -73,7 +73,7 @@ export default function WorkerOrdersPage() {
     )
   }
 
-  return (
+              return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
 

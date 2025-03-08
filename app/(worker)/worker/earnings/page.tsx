@@ -106,9 +106,9 @@ export default function WorkerEarningsPage() {
           className="p-2 border rounded-lg"
         >
           <option value="week">This Week</option>
-          <option value="month">This Month</option>
+            <option value="month">This Month</option>
           <option value="year">This Year</option>
-        </select>
+          </select>
       </div>
 
       {/* Stats Grid */}
@@ -142,7 +142,7 @@ export default function WorkerEarningsPage() {
               key={item.id}
               className="flex justify-between items-center p-4 border rounded-lg"
             >
-              <div>
+                <div>
                 <p className="font-medium">
                   {item.type === 'order'
                     ? `Order: ${item.order?.service?.name}`
