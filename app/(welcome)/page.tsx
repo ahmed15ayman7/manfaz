@@ -7,30 +7,29 @@ import StoreCard from './components/StoreCard'
 import CategoryCard from './components/CategoryCard'
 
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-
+import axiosInstance from '@/lib/axios'
 const useServicesQuery = () => {
   return useQuery({
     queryKey: ['services'],
-    queryFn: () => axios.get(API_ENDPOINTS.services.getAll({limit:6}))
+    queryFn: () => axiosInstance.get(API_ENDPOINTS.services.getAll({ limit: 6 }, false))
   })
 }
 
 const useStoresQuery = () => {
   return useQuery({
-    queryKey: ['stores'], 
-    queryFn: () => axios.get(API_ENDPOINTS.stores.getAll({limit:6}))
+    queryKey: ['stores'],
+    queryFn: () => axiosInstance.get(API_ENDPOINTS.stores.getAll({ limit: 6 }, false))
   })
 }
 
 const useCategoriesQuery = () => {
   return useQuery({
     queryKey: ['categories'],
-    queryFn: () => axios.get(API_ENDPOINTS.categories.getAll({limit:6}))
+    queryFn: () => axiosInstance.get(API_ENDPOINTS.categories.getAll({ limit: 6 }, false))
   })
 }
 
-export default  function WelcomePage() {
+export default function WelcomePage() {
   const t = useTranslations()
   const { data: services } = useServicesQuery()
   const { data: stores } = useStoresQuery()
@@ -55,7 +54,7 @@ export default  function WelcomePage() {
           <p className="mt-2 text-muted-foreground">{t('services.description')}</p>
         </AnimatedSection>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services?.data?.data?.map((service:any, index:any) => (
+          {services?.data?.data?.map((service: any, index: any) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
         </div>
@@ -70,7 +69,7 @@ export default  function WelcomePage() {
           </p>
         </AnimatedSection>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {categories?.data?.data?.map((category:any, index:any) => (
+          {categories?.data?.data?.map((category: any, index: any) => (
             <CategoryCard key={category.id} category={category} index={index} />
           ))}
         </div>
@@ -83,7 +82,7 @@ export default  function WelcomePage() {
           <p className="mt-2 text-muted-foreground">{t('stores.description')}</p>
         </AnimatedSection>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {stores?.data?.data?.map((store:any, index:any) => (
+          {stores?.data?.data?.map((store: any, index: any) => (
             <StoreCard key={store.id} store={store} index={index} />
           ))}
         </div>
