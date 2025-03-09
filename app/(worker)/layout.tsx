@@ -6,6 +6,7 @@ import Bottombar from "@/components/shared/Bottombar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import Topbar from "@/components/shared/Topbar";
 import  useStore  from '@/store/useLanguageStore';
+import { WorkerSocketHandler } from './components/WorkerSocketHandler';
 
 // export const metadata: Metadata = {
 //   title: "Worker Dashboard",
@@ -26,6 +27,7 @@ export default function RootLayout({
       <LeftSidebar isWorker/>
       <section className="main-container relative">
       <div className=" w-full " style={{direction:locale === 'en' ? 'ltr' : 'rtl'}}>
+      <WorkerSocketHandler />
       {children}
       </div>
       </section>

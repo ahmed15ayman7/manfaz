@@ -5,6 +5,8 @@ import useStore from '@/store/useLanguageStore';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SessionProvider } from "next-auth/react";
+import { SocketProvider } from '@/components/providers/SocketProvider';
+import { Toaster } from 'sonner';
 
 
 
@@ -41,11 +43,18 @@ export default function RootLayout({
         dir={locale === 'en' ? 'ltr' : 'rtl'}
       >
         <SessionProvider>
-          <LocaleProvider>
-            {children}
-          </LocaleProvider>
+          <SocketProvider>
+            <LocaleProvider>
+              {children}
+            </LocaleProvider>
+          </SocketProvider>
         </SessionProvider>
-        <ToastContainer />
+        <Toaster 
+          position={locale === 'en' ? 'bottom-right' : 'bottom-left'}
+          dir={locale === 'en' ? 'ltr' : 'rtl'}
+          richColors
+          closeButton
+        />
       </body>
     </html>
   );

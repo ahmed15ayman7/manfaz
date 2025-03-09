@@ -5,6 +5,7 @@ import LeftSidebar from "@/components/shared/LeftSidebar";
 import RightSidebar from "@/components/shared/RightSidebar";
 import Topbar from "@/components/shared/Topbar";
 import  useStore  from '@/store/useLanguageStore';
+import { UserSocketHandler } from './components/UserSocketHandler';
 
 export default function RootLayout({
   children,
@@ -20,6 +21,7 @@ export default function RootLayout({
         <LeftSidebar/>
         <section className="main-container relative">
         <div className=" w-full " style={{direction:locale === 'en' ? 'ltr' : 'rtl'}}>
+        <UserSocketHandler />
         {children}
         </div>
         </section>
