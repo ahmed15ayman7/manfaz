@@ -351,328 +351,304 @@
       "pending": "Pending",
       "paid": "Paid",
       "failed": "Failed"
-    },
-      "hero": {
-        "title": "The Integrated Services Platform in Saudi Arabia",
-        "description": "We provide you with the best services and stores in one place. Order your service now with ease and security."
-      },
-      "our_services": "Our Services",
-      "services": {
-        "description": "We offer a wide range of services to meet your daily needs."
-      },
-      "browse_categories": "Browse Categories",
-      "categories": {
-        "description": "Discover a variety of available categories."
-      },
-      "featured_stores": "Featured Stores",
-      "stores": {
-        "description": "Shop from the best local stores."
-      },
-      "cta": {
-        "title": "Get the App Now",
-        "description": "Download the Manfadh app and enjoy a smooth and secure shopping experience."
-      },
-      "footer": {
-        "description": "The Integrated Services Platform in Saudi Arabia",
-        "company": "Company",
-        "services": "Services",
-        "legal": "Legal",
-        "about": "About Manfadh",
-        "contact": "Contact Us",
-        "careers": "Careers",
-        "delivery": "Delivery Services",
-        "home_services": "Home Services",
-        "car_maintenance": "Car Maintenance",
-        "terms": "Terms & Conditions",
-        "privacy": "Privacy Policy",
-        "cookies": "Cookie Policy",
-        "copyright": "All rights reserved to Manfadh platform."
-      },
-      "learn_more": "Learn More",
-      "view_store": "View Store",
-      "register": "Create an Account",
-      "contact": {
-        "title": "Contact Us",
-        "description": "We are here to assist you and answer all your inquiries.",
-    
-        "phone": {
-          "title": "Call Us",
-          "content": "We are available to answer your calls 24/7.",
-          "action": "Call Now"
-        },
-    
-        "email": {
-          "title": "Email Us",
-          "content": "We will respond to your messages as soon as possible.",
-          "action": "Send Email"
-        },
-    
-        "address": {
-          "title": "Our Location",
-          "content": "Riyadh, Saudi Arabia",
-          "action": "Get Directions"
-        },
-    
-        "hours": {
-          "title": "Working Hours",
-          "content": "We operate 24/7 all week long.",
-          "action": "Learn More"
-        },
-    
-        "topics": {
-          "general": "General Inquiry",
-          "technical": "Technical Support",
-          "partnership": "Business Partnership"
-        },
-    
-        "form": {
-          "title": "Send a Message",
-          "name": "Name",
-          "name_placeholder": "Enter your full name",
-          "email": "Email",
-          "email_placeholder": "Enter your email",
-          "subject": "Subject",
-          "subject_placeholder": "Message subject",
-          "message": "Message",
-          "message_placeholder": "Write your message here...",
-          "submit": "Send Message"
-        },
-    
-        "faq": {
-          "title": "FAQs",
-          "description": "Browse frequently asked questions to get quick answers to your inquiries.",
-          "view_all": "View All Questions"
-        },
-    
-        "support": {
-          "title": "Need Help?",
-          "description": "Our customer service team is available to assist you 24/7.",
-          "phone": "+966500000000",
-          "call": "Call Support",
-          "chat": "Chat with Us"
-        }
-      },
-      "blog": {
-        "title": "Blog",
-        "description": "The latest news and articles about Manfadh and our services.",
-        "search_placeholder": "Search for an article...",
-        "minutes": "Minutes",
-        "no_results": {
-          "title": "No Results Found",
-          "description": "Try searching with different keywords or browse the sections below."
-        },
-    
-        "categories": {
-          "title": "Categories",
-          "all": "All",
-          "news": "News",
-          "tips": "Tips",
-          "guides": "Guides",
-          "updates": "Updates"
-        },
-    
-        "tags": {
-          "title": "Tags",
-          "delivery": "Delivery",
-          "restaurants": "Restaurants",
-          "offers": "Offers",
-          "app": "App",
-          "service": "Service",
-          "stores": "Stores",
-          "payment": "Payment",
-          "features": "Features"
-        },
-    
-        "newsletter": {
-          "title": "Newsletter",
-          "description": "Subscribe to our newsletter to receive the latest news and updates.",
-          "placeholder": "Enter your email",
-          "subscribe": "Subscribe Now"
-        },
-    
-        "authors": {
-          "team": "Manfadh Team",
-          "support": "Support Team",
-          "marketing": "Marketing Team"
-        },
-    
-        "posts": {
-          "latest_features": {
-            "title": "New Features in the Manfadh App",
-            "excerpt": "Discover the latest features we've added to enhance your experience with the Manfadh app."
-          },
-          "delivery_tips": {
-            "title": "Tips for the Best Delivery Experience",
-            "excerpt": "Here are some useful tips to ensure your order arrives quickly and easily."
-          },
-          "new_stores": {
-            "title": "New Stores Joined Manfadh",
-            "excerpt": "We welcome the latest stores that have joined our growing Manfadh network."
-          }
-        }
-      },
-    "faq": {
-  "title": "Frequently Asked Questions",
-  "description": "Answers to the most common questions",
-  "search_placeholder": "Search for a question...",
-  "no_results": {
-    "title": "No results found",
-    "description": "Try searching with different keywords or browse the sections below"
+    }
   },
-  "need_help": {
-    "title": "Can't find what you're looking for?",
-    "description": "Our customer service team is ready to assist you"
+  "hero": {
+    "title": "The Integrated Services Platform in Saudi Arabia",
+    "description": "We provide you with the best services and stores in one place. Order your service now with ease and security."
   },
-  "contact_us": "Contact Us",
-  "call_support": "Call Support",
-  "support_phone": "+966500000000",
-
+  "our_services": "Our Services",
+  "services": {
+    "description": "We offer a wide range of services to meet your daily needs."
+  },
+  "browse_categories": "Browse Categories",
   "categories": {
-    "general": "General",
-    "orders": "Orders",
-    "delivery": "Delivery",
-    "payment": "Payment",
-    "account": "Account"
+    "description": "Discover a variety of available categories."
   },
-
-  "general": {
-    "q1": "What is Manfaz?",
-    "a1": "Manfaz is a comprehensive delivery platform connecting stores with users, providing fast and reliable delivery services for all your needs.",
-    "q2": "How can I use Manfaz?",
-    "a2": "You can use Manfaz through our website or mobile app. Simply create an account, select a store, add products to your cart, and complete your order.",
-    "q3": "In which areas is Manfaz available?",
-    "a3": "We offer our services in several major cities in Saudi Arabia and are working on expanding to new areas.",
-    "q4": "What are Manfaz's operating hours?",
-    "a4": "We operate 24/7, but store hours may vary.",
-    "q5": "Can I track my order?",
-    "a5": "Yes, you can track your order in real-time through the app or website."
+  "featured_stores": "Featured Stores",
+  "stores": {
+    "description": "Shop from the best local stores."
   },
-
-  "orders": {
-    "q1": "How can I place an order?",
-    "a1": "Select the store you want to order from, add products to your cart, review your order, choose a payment method, and confirm your order.",
-    "q2": "Can I cancel my order?",
-    "a2": "You can cancel your order before the store starts preparing it. Once preparation begins, cancellation is not possible.",
-    "q3": "What if there is an issue with my order?",
-    "a3": "You can contact customer service directly through the app or website, and we will help resolve any issue.",
-    "q4": "Can I modify my order after confirmation?",
-    "a4": "Orders cannot be modified after confirmation. If you need to make changes, please cancel the order and place a new one.",
-    "q5": "How can I check my order status?",
-    "a5": "You can check your order status in the 'My Orders' section of the app or website."
+  "cta": {
+    "title": "Get the App Now",
+    "description": "Download the Manfadh app and enjoy a smooth and secure shopping experience."
   },
-
-  "delivery": {
-    "q1": "How long does delivery take?",
-    "a1": "Delivery time depends on your location and the store. Typically, it takes between 30 to 45 minutes.",
-    "q2": "What are the delivery charges?",
-    "a2": "Delivery fees vary based on the distance between your location and the store. You can check the delivery fee before confirming your order.",
-    "q3": "Can I track the delivery agent?",
-    "a3": "Yes, once the agent accepts your order, you can track their location in real time on the map in the app.",
-    "q4": "What if the delivery agent can't find my address?",
-    "a4": "The agent will call you if they have trouble finding your location. Please ensure you provide accurate details and landmarks in your address.",
-    "q5": "Can I schedule a delivery time?",
-    "a5": "Currently, we only offer instant delivery. We are working on adding a scheduled delivery feature in the future."
+  "footer": {
+    "description": "The Integrated Services Platform in Saudi Arabia",
+    "company": "Company",
+    "services": "Services",
+    "legal": "Legal",
+    "about": "About Manfadh",
+    "contact": "Contact Us",
+    "careers": "Careers",
+    "delivery": "Delivery Services",
+    "home_services": "Home Services",
+    "car_maintenance": "Car Maintenance",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "cookies": "Cookie Policy",
+    "copyright": "All rights reserved to Manfadh platform."
   },
-
-  "payment": {
-    "q1": "What payment methods are available?",
-    "a1": "We accept credit cards, Mada, Apple Pay, and cash on delivery in some areas.",
-    "q2": "Is online payment secure?",
-    "a2": "Yes, we use the latest encryption technologies and secure payment systems to protect your financial information.",
-    "q3": "How can I get an invoice?",
-    "a3": "An invoice is automatically sent to your email after completing your order. You can also find all invoices in the 'My Orders' section.",
-    "q4": "What is the refund policy?",
-    "a4": "We offer a full refund if an order is canceled before preparation begins. In other cases, refunds are evaluated on a case-by-case basis.",
-    "q5": "Is there a minimum order amount?",
-    "a5": "The minimum order amount varies by store. You can check the minimum order before completing your purchase."
+  "learn_more": "Learn More",
+  "view_store": "View Store",
+  "register": "Create an Account",
+  "contact": {
+    "title": "Contact Us",
+    "description": "We are here to assist you and answer all your inquiries.",
+    "phone": {
+      "title": "Call Us",
+      "content": "We are available to answer your calls 24/7.",
+      "action": "Call Now"
+    },
+    "email": {
+      "title": "Email Us",
+      "content": "We will respond to your messages as soon as possible.",
+      "action": "Send Email"
+    },
+    "address": {
+      "title": "Our Location",
+      "content": "Riyadh, Saudi Arabia",
+      "action": "Get Directions"
+    },
+    "hours": {
+      "title": "Working Hours",
+      "content": "We operate 24/7 all week long.",
+      "action": "Learn More"
+    },
+    "topics": {
+      "general": "General Inquiry",
+      "technical": "Technical Support",
+      "partnership": "Business Partnership"
+    },
+    "form": {
+      "title": "Send a Message",
+      "name": "Name",
+      "name_placeholder": "Enter your full name",
+      "email": "Email",
+      "email_placeholder": "Enter your email",
+      "subject": "Subject",
+      "subject_placeholder": "Message subject",
+      "message": "Message",
+      "message_placeholder": "Write your message here...",
+      "submit": "Send Message"
+    },
+    "faq": {
+      "title": "FAQs",
+      "description": "Browse frequently asked questions to get quick answers to your inquiries.",
+      "view_all": "View All Questions"
+    },
+    "support": {
+      "title": "Need Help?",
+      "description": "Our customer service team is available to assist you 24/7.",
+      "phone": "+966500000000",
+      "call": "Call Support",
+      "chat": "Chat with Us"
+    }
   },
-
-  "account": {
-    "q1": "How can I create an account?",
-    "a1": "You can create an account easily by entering your phone number and verifying it, then completing your personal details.",
-    "q2": "How can I update my account information?",
-    "a2": "You can edit your account details by going to 'Settings' and then 'Edit Profile'.",
-    "q3": "What if I forget my password?",
-    "a3": "Click 'Forgot Password' on the login page, and we will send you a link to reset your password.",
-    "q4": "How can I add a new address?",
-    "a4": "Go to 'My Addresses' in the settings menu, then click 'Add New Address' and follow the steps.",
-    "q5": "Can I delete my account?",
-    "a5": "Yes, you can request account deletion by contacting customer service. All your data will be permanently deleted."
-  }
-},
-"terms": {
-  "title": "Terms and Conditions",
-  "description": "Please read these terms and conditions carefully before using our services.",
-  "last_updated": "Last Updated",
-  "questions": "Have any questions?",
-  "contact_us": "Contact Us",
-  "support": "Technical Support",
-  "support_phone": "+966500000000",
-  "view_privacy": "Privacy Policy",
-  "contact_support": "Contact Support",
-
-  "agreement": {
-    "title": "Your Agreement to the Terms",
-    "description": "By using our services, you agree to these terms and conditions. If you have any questions, please contact us."
+  "blog": {
+    "title": "Blog",
+    "description": "The latest news and articles about Manfadh and our services.",
+    "search_placeholder": "Search for an article...",
+    "minutes": "Minutes",
+    "no_results": {
+      "title": "No Results Found",
+      "description": "Try searching with different keywords or browse the sections below."
+    },
+    "categories": {
+      "title": "Categories",
+      "all": "All",
+      "news": "News",
+      "tips": "Tips",
+      "guides": "Guides",
+      "updates": "Updates"
+    },
+    "tags": {
+      "title": "Tags",
+      "delivery": "Delivery",
+      "restaurants": "Restaurants",
+      "offers": "Offers",
+      "app": "App",
+      "service": "Service",
+      "stores": "Stores",
+      "payment": "Payment",
+      "features": "Features"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Subscribe to our newsletter to receive the latest news and updates.",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe Now"
+    },
+    "authors": {
+      "team": "Manfadh Team",
+      "support": "Support Team",
+      "marketing": "Marketing Team"
+    },
+    "posts": {
+      "latest_features": {
+        "title": "New Features in the Manfadh App",
+        "excerpt": "Discover the latest features we've added to enhance your experience with the Manfadh app."
+      },
+      "delivery_tips": {
+        "title": "Tips for the Best Delivery Experience",
+        "excerpt": "Here are some useful tips to ensure your order arrives quickly and easily."
+      },
+      "new_stores": {
+        "title": "New Stores Joined Manfadh",
+        "excerpt": "We welcome the latest stores that have joined our growing Manfadh network."
+      }
+    }
   },
-
-  "introduction": {
-    "title": "Introduction",
-    "content": "Welcome to Manfaz. These terms and conditions govern your use of our platform and services. By using our services, you agree to comply with these terms."
-  },
-
-  "user_agreement": {
-    "title": "User Agreement",
-    "content": "This agreement defines the relationship between you and Manfaz and outlines your rights and responsibilities as a user.",
-    "eligibility": {
-      "title": "Eligibility",
-      "content": "You must be at least 18 years old to use our services. If you represent a company, you must be authorized to act on its behalf."
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "description": "Answers to the most common questions",
+    "search_placeholder": "Search for a question...",
+    "no_results": {
+      "title": "No results found",
+      "description": "Try searching with different keywords or browse the sections below"
+    },
+    "need_help": {
+      "title": "Can't find what you're looking for?",
+      "description": "Our customer service team is ready to assist you"
+    },
+    "contact_us": "Contact Us",
+    "call_support": "Call Support",
+    "support_phone": "+966500000000",
+    "categories": {
+      "general": "General",
+      "orders": "Orders",
+      "delivery": "Delivery",
+      "payment": "Payment",
+      "account": "Account"
+    },
+    "general": {
+      "q1": "What is Manfaz?",
+      "a1": "Manfaz is a comprehensive delivery platform connecting stores with users, providing fast and reliable delivery services for all your needs.",
+      "q2": "How can I use Manfaz?",
+      "a2": "You can use Manfaz through our website or mobile app. Simply create an account, select a store, add products to your cart, and complete your order.",
+      "q3": "In which areas is Manfaz available?",
+      "a3": "We offer our services in several major cities in Saudi Arabia and are working on expanding to new areas.",
+      "q4": "What are Manfaz's operating hours?",
+      "a4": "We operate 24/7, but store hours may vary.",
+      "q5": "Can I track my order?",
+      "a5": "Yes, you can track your order in real-time through the app or website."
+    },
+    "orders": {
+      "q1": "How can I place an order?",
+      "a1": "Select the store you want to order from, add products to your cart, review your order, choose a payment method, and confirm your order.",
+      "q2": "Can I cancel my order?",
+      "a2": "You can cancel your order before the store starts preparing it. Once preparation begins, cancellation is not possible.",
+      "q3": "What if there is an issue with my order?",
+      "a3": "You can contact customer service directly through the app or website, and we will help resolve any issue.",
+      "q4": "Can I modify my order after confirmation?",
+      "a4": "Orders cannot be modified after confirmation. If you need to make changes, please cancel the order and place a new one.",
+      "q5": "How can I check my order status?",
+      "a5": "You can check your order status in the 'My Orders' section of the app or website."
+    },
+    "delivery": {
+      "q1": "How long does delivery take?",
+      "a1": "Delivery time depends on your location and the store. Typically, it takes between 30 to 45 minutes.",
+      "q2": "What are the delivery charges?",
+      "a2": "Delivery fees vary based on the distance between your location and the store. You can check the delivery fee before confirming your order.",
+      "q3": "Can I track the delivery agent?",
+      "a3": "Yes, once the agent accepts your order, you can track their location in real time on the map in the app.",
+      "q4": "What if the delivery agent can't find my address?",
+      "a4": "The agent will call you if they have trouble finding your location. Please ensure you provide accurate details and landmarks in your address.",
+      "q5": "Can I schedule a delivery time?",
+      "a5": "Currently, we only offer instant delivery. We are working on adding a scheduled delivery feature in the future."
+    },
+    "payment": {
+      "q1": "What payment methods are available?",
+      "a1": "We accept credit cards, Mada, Apple Pay, and cash on delivery in some areas.",
+      "q2": "Is online payment secure?",
+      "a2": "Yes, we use the latest encryption technologies and secure payment systems to protect your financial information.",
+      "q3": "How can I get an invoice?",
+      "a3": "An invoice is automatically sent to your email after completing your order. You can also find all invoices in the 'My Orders' section.",
+      "q4": "What is the refund policy?",
+      "a4": "We offer a full refund if an order is canceled before preparation begins. In other cases, refunds are evaluated on a case-by-case basis.",
+      "q5": "Is there a minimum order amount?",
+      "a5": "The minimum order amount varies by store. You can check the minimum order before completing your purchase."
     },
     "account": {
-      "title": "Account",
-      "content": "You are responsible for maintaining the confidentiality of your account information and password. You must notify us immediately of any unauthorized use."
+      "q1": "How can I create an account?",
+      "a1": "You can create an account easily by entering your phone number and verifying it, then completing your personal details.",
+      "q2": "How can I update my account information?",
+      "a2": "You can edit your account details by going to 'Settings' and then 'Edit Profile'.",
+      "q3": "What if I forget my password?",
+      "a3": "Click 'Forgot Password' on the login page, and we will send you a link to reset your password.",
+      "q4": "How can I add a new address?",
+      "a4": "Go to 'My Addresses' in the settings menu, then click 'Add New Address' and follow the steps.",
+      "q5": "Can I delete my account?",
+      "a5": "Yes, you can request account deletion by contacting customer service. All your data will be permanently deleted."
     },
-    "responsibilities": {
-      "title": "Responsibilities",
-      "content": "You must use the service legally and ethically, without violating others' rights or applicable laws."
-    }
-  },
-
-  "privacy": {
-    "title": "Privacy",
-    "content": "We respect your privacy and are committed to protecting your personal data in accordance with our privacy policy.",
-    "data_collection": {
-      "title": "Data Collection",
-      "content": "We collect certain information to provide our services and improve your experience."
+    "terms": {
+      "title": "Terms and Conditions",
+      "description": "Please read these terms and conditions carefully before using our services.",
+      "last_updated": "Last Updated",
+      "questions": "Have any questions?",
+      "contact_us": "Contact Us",
+      "support": "Technical Support",
+      "support_phone": "+966500000000",
+      "view_privacy": "Privacy Policy",
+      "contact_support": "Contact Support",
+      "agreement": {
+        "title": "Your Agreement to the Terms",
+        "description": "By using our services, you agree to these terms and conditions. If you have any questions, please contact us."
+      },
+      "introduction": {
+        "title": "Introduction",
+        "content": "Welcome to Manfaz. These terms and conditions govern your use of our platform and services. By using our services, you agree to comply with these terms."
+      },
+      "user_agreement": {
+        "title": "User Agreement",
+        "content": "This agreement defines the relationship between you and Manfaz and outlines your rights and responsibilities as a user.",
+        "eligibility": {
+          "title": "Eligibility",
+          "content": "You must be at least 18 years old to use our services. If you represent a company, you must be authorized to act on its behalf."
+        },
+        "account": {
+          "title": "Account",
+          "content": "You are responsible for maintaining the confidentiality of your account information and password. You must notify us immediately of any unauthorized use."
+        },
+        "responsibilities": {
+          "title": "Responsibilities",
+          "content": "You must use the service legally and ethically, without violating others' rights or applicable laws."
+        }
+      },
+      "privacy": {
+        "title": "Privacy",
+        "content": "We respect your privacy and are committed to protecting your personal data in accordance with our privacy policy.",
+        "data_collection": {
+          "title": "Data Collection",
+          "content": "We collect certain information to provide our services and improve your experience."
+        },
+        "data_usage": {
+          "title": "Data Usage",
+          "content": "We use your data to deliver and enhance our services in accordance with our privacy policy."
+        },
+        "data_protection": {
+          "title": "Data Protection",
+          "content": "We take appropriate security measures to protect your data from unauthorized access."
+        }
+      },
+      "payment": {
+        "title": "Payment",
+        "content": "We offer multiple secure payment methods to facilitate your transactions.",
+        "methods": {
+          "title": "Payment Methods",
+          "content": "We accept credit cards, Mada, and other electronic payment methods."
+        },
+        "fees": {
+          "title": "Fees",
+          "content": "Service or delivery fees may apply. You will be informed of all charges before completing your order."
+        },
+        "refunds": {
+          "title": "Refund Policy",
+          "content": "We apply a fair refund policy based on..."
+        }
+      }
     },
-    "data_usage": {
-      "title": "Data Usage",
-      "content": "We use your data to deliver and enhance our services in accordance with our privacy policy."
-    },
-    "data_protection": {
-      "title": "Data Protection",
-      "content": "We take appropriate security measures to protect your data from unauthorized access."
-    }
-  },
-
-  "payment": {
-    "title": "Payment",
-    "content": "We offer multiple secure payment methods to facilitate your transactions.",
-    "methods": {
-      "title": "Payment Methods",
-      "content": "We accept credit cards, Mada, and other electronic payment methods."
-    },
-    "fees": {
-      "title": "Fees",
-      "content": "Service or delivery fees may apply. You will be informed of all charges before completing your order."
-    },
-    "refunds": {
-      "title": "Refund Policy",
-      "content": "We apply a fair refund policy based on..."
-    }
-  }
-}
-,"delivery": {
+    "delivery": {
       "title": "Delivery",
       "content": "We strive to provide fast and reliable delivery services for all your requests.",
       "process": {
@@ -688,7 +664,6 @@
         "content": "We are responsible for delivering your request in good condition and on time."
       }
     },
-
     "prohibited": {
       "title": "Prohibited",
       "content": "There are some activities and behaviors prohibited when using our platform.",
@@ -705,7 +680,6 @@
         "content": "Violating these terms may result in account suspension or termination."
       }
     },
-
     "liability": {
       "title": "Legal Liability",
       "content": "We clarify our legal liability and disclaimers for certain cases.",
@@ -733,7 +707,6 @@
     "contact_us": "Contact Us",
     "contact_support": "Contact Support",
     "view_terms": "Terms and Conditions",
-
     "security": {
       "title": "We protect your data",
       "encryption": {
@@ -753,7 +726,6 @@
         "description": "We comply with the highest data protection standards"
       }
     },
-
     "introduction": {
       "title": "Introduction",
       "content": "We are committed to protecting your privacy and ensuring the security of your personal data. This policy explains how we collect, use, and protect your data."
@@ -778,7 +750,6 @@
         "content": "Your geographical location for delivery services"
       }
     },
-
     "data_usage": {
       "title": "Data Usage",
       "content": "We use your data to improve our services and your experience.",
@@ -799,7 +770,6 @@
         "content": "To secure your account and protect your data"
       }
     },
-
     "data_protection": {
       "title": "Data Protection",
       "content": "We take strict security measures to protect your data.",
@@ -820,7 +790,6 @@
         "content": "Regular backups to ensure data safety"
       }
     },
-
     "data_sharing": {
       "title": "Data Sharing",
       "content": "We share your data only when necessary and with trusted parties.",
@@ -837,7 +806,6 @@
         "content": "In case of merger, acquisition, or sale of assets"
       }
     },
-
     "cookies": {
       "title": "Cookies",
       "content": "We use cookies to improve your experience.",
@@ -854,7 +822,6 @@
         "content": "To provide personalized advertisements"
       }
     },
-
     "user_rights": {
       "title": "User Rights",
       "content": "You have certain rights regarding your personal data.",
@@ -875,12 +842,10 @@
         "content": "The right to transfer your data"
       }
     },
-
     "changes": {
       "title": "Changes",
       "content": "We may update this policy from time to time. We will notify you of any significant changes."
     },
-
     "commitment": {
       "title": "Commitment",
       "description": "We are committed to protecting your privacy and ensuring the security of your personal data. If you have any questions or concerns, please contact us."
@@ -889,24 +854,20 @@
   "about": {
     "title": "About Us",
     "description": "We are committed to changing the concept of delivery in the Kingdom of Saudi Arabia",
-
     "stats": {
       "stores": "Stores",
       "users": "Users",
       "drivers": "Drivers",
       "cities": "Cities"
     },
-
     "vision": {
       "title": "Our Vision",
       "content": "To be the first and best choice in the field of delivery services in the Kingdom of Saudi Arabia, through providing an exceptional experience that combines speed, quality, and reliability."
     },
-
     "mission": {
       "title": "Our Mission",
       "content": "Empowering stores and users through a comprehensive platform that offers innovative solutions for delivery, focusing on customer satisfaction and continuously improving our services."
     },
-
     "values": {
       "title": "Our Values",
       "excellence": {
@@ -922,7 +883,6 @@
         "description": "We invest in the latest technologies and develop innovative solutions to meet market needs"
       }
     },
-
     "milestones": {
       "title": "Milestones",
       "launch": {
@@ -942,7 +902,6 @@
         "description": "We reached more than 20 cities in the Kingdom"
       }
     },
-
     "features": {
       "title": "Features",
       "speed": {
@@ -958,7 +917,6 @@
         "description": "A dedicated support team available 24/7 to assist you"
       }
     },
-
     "contact": {
       "title": "Contact Us",
       "description": "We are here to help you and answer all your questions",
@@ -974,20 +932,16 @@
     "stores": "Stores",
     "drivers": "Drivers",
     "users": "Users",
-    
     "no_results": {
       "title": "No results found",
       "description": "Try searching with different words"
     },
-
     "expansion": {
       "title": "Expanding to reach you",
       "description": "We are expanding to new cities to provide our services to the largest number of users"
     },
-
     "suggest_city": "Suggest a city",
     "learn_more": "Learn more",
-
     "riyadh": {
       "name": "Riyadh",
       "description": "The capital city, with a wide range of unique stores and restaurants"
@@ -1012,8 +966,6 @@
       "name": "Khobar",
       "description": "The city of progress and development, with a wide range of stores and restaurants"
     }
-  
-    
   },
   "navbar": {
     "home": "Home",
