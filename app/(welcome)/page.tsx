@@ -8,6 +8,7 @@ import CategoryCard from './components/CategoryCard'
 
 import { useQuery } from '@tanstack/react-query'
 import axiosInstance from '@/lib/axios'
+import { Skeleton } from '@mui/material'
 const useServicesQuery = () => {
   return useQuery({
     queryKey: ['services'],
@@ -31,12 +32,12 @@ const useCategoriesQuery = () => {
 
 export default function WelcomePage() {
   const t = useTranslations()
-  const { data: services } = useServicesQuery()
-  const { data: stores } = useStoresQuery()
-  const { data: categories } = useCategoriesQuery()
+  const { data: services, isLoading: servicesLoading } = useServicesQuery()
+  const { data: stores, isLoading: storesLoading } = useStoresQuery()
+  const { data: categories, isLoading: categoriesLoading } = useCategoriesQuery()
 
   return (
-    <div className="space-y-20 py-10">
+    <div className="space-y-20 py-10 flex flex-col items-center">
       {/* Hero Section */}
       <AnimatedSection className="container text-center space-y-4">
         <h1 className="text-4xl font-bold sm:text-5xl md:text-6xl">
@@ -54,7 +55,9 @@ export default function WelcomePage() {
           <p className="mt-2 text-muted-foreground">{t('services.description')}</p>
         </AnimatedSection>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services?.data?.data?.map((service: any, index: any) => (
+          {servicesLoading ? Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} className="w-full h-[30vh]" />
+          )) : services?.data?.data?.map((service: any, index: any) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
         </div>
@@ -69,7 +72,9 @@ export default function WelcomePage() {
           </p>
         </AnimatedSection>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {categories?.data?.data?.map((category: any, index: any) => (
+          {categoriesLoading ? Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} className="w-full h-[30vh]" />
+          )) : categories?.data?.data?.categories?.map((category: any, index: any) => (
             <CategoryCard key={category.id} category={category} index={index} />
           ))}
         </div>
@@ -82,7 +87,9 @@ export default function WelcomePage() {
           <p className="mt-2 text-muted-foreground">{t('stores.description')}</p>
         </AnimatedSection>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {stores?.data?.data?.map((store: any, index: any) => (
+          {storesLoading ? Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} className="w-full h-[30vh]" />
+          )) : stores?.data?.data?.stores.map((store: any, index: any) => (
             <StoreCard key={store.id} store={store} index={index} />
           ))}
         </div>
@@ -102,9 +109,9 @@ export default function WelcomePage() {
             className="inline-block"
           >
             <img
-              src="/google-play-badge.png"
+              src="/google-play-badge.svg"
               alt="Get it on Google Play"
-              className="h-16"
+              className="h-32"
             />
           </a>
           <a
@@ -114,9 +121,9 @@ export default function WelcomePage() {
             className="inline-block ml-4"
           >
             <img
-              src="/app-store-badge.png"
+              src="/app-store-badge.svg"
               alt="Download on the App Store"
-              className="h-16"
+              className="h-32"
             />
           </a>
         </div>

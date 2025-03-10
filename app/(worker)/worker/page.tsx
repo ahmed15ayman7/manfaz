@@ -17,8 +17,8 @@ import EarningsChart from '@/components/worker/EarningsChart'
 import axiosInstance from '@/lib/axios';
 
 const getWorkerDashboard = async ({ locale }: { locale: string }) => {
-  const res = await axiosInstance.get(`${apiUrl}/workers/dashboard?lang=${locale}`)
-  return res.data
+  const res = await axiosInstance.get(`/workers?lang=${locale}`)
+  return res.data.data
 }
 
 export default function WorkerDashboardPage() {
@@ -88,29 +88,27 @@ export default function WorkerDashboardPage() {
         <div className="flex items-center gap-4">
           <div className="relative w-16 h-16">
             <Image
-              src={worker.user?.imageUrl || '/imgs/default-avatar.png'}
-              alt={worker.user?.name || ''}
+              src={worker?.user?.imageUrl || '/imgs/default-avatar.png'}
+              alt={worker?.user?.name || ''}
               fill
               className="object-cover rounded-full"
             />
             <div
-              className={`absolute bottom-0 right-0 w-4 h-4 border-2 border-white rounded-full ${
-                worker.isAvailable ? 'bg-green-500' : 'bg-gray-400'
-              }`}
+              className={`absolute bottom-0 right-0 w-4 h-4 border-2 border-white rounded-full ${worker.isAvailable ? 'bg-green-500' : 'bg-gray-400'
+                }`}
             />
           </div>
-                <div>
+          <div>
             <h1 className="text-xl font-semibold">{t('welcome', { name: worker.user?.name })}</h1>
             <p className="text-gray-600">{worker.title}</p>
-                </div>
-              </div>
+          </div>
+        </div>
         <button
           onClick={handleAvailabilityToggle}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            worker.isAvailable
-              ? 'bg-green-100 text-green-700 hover:bg-green-200'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
+          className={`px-4 py-2 rounded-lg font-medium ${worker.isAvailable
+            ? 'bg-green-100 text-green-700 hover:bg-green-200'
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
         >
           {worker.isAvailable ? t('status_available') : t('status_unavailable')}
         </button>
@@ -143,8 +141,8 @@ export default function WorkerDashboardPage() {
           trend={0}
           icon="⭐"
         />
-          </div>
-          
+      </div>
+
       {/* Charts and Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Earnings Chart */}

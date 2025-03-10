@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SessionProvider } from "next-auth/react";
 import { SocketProvider } from '@/components/providers/SocketProvider';
 import { Toaster } from 'sonner';
-
+import LanguageToggle from "@/components/ui/LanguageToggle";
 
 
 export default function RootLayout({
@@ -46,10 +46,11 @@ export default function RootLayout({
           <SocketProvider>
             <LocaleProvider>
               {children}
+              <LanguageToggle />
             </LocaleProvider>
           </SocketProvider>
         </SessionProvider>
-        <Toaster 
+        <Toaster
           position={locale === 'en' ? 'bottom-right' : 'bottom-left'}
           dir={locale === 'en' ? 'ltr' : 'rtl'}
           richColors

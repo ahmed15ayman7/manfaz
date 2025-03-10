@@ -104,7 +104,7 @@ const LoginView: React.FC = () => {
               autoClose: 3000,
               closeButton: true
             });
-            router.push(result.url);
+            router.push(result.url.includes("worker") && role === "worker" ? "/worker" : result.url.includes("store") && role === "store" ? "/store" : "/home");
           }
         }
       }
@@ -143,6 +143,7 @@ const LoginView: React.FC = () => {
         <div className="relative min-w-[300px]">
           {!isPhoneInput ? (
             <CusTextFormField
+              name="email"
               ref={emailInputRef}
               fillColor="bg-white"
               hintText={t('email_or_phone')}

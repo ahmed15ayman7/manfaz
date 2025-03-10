@@ -4,6 +4,7 @@ import React, { useState, forwardRef } from "react";
 import useStore from '@/store/useLanguageStore';
 
 interface CusTextFormFieldProps {
+  name?: string; // Tailwind CSS padding class
   contentPadding?: string; // Tailwind CSS padding class
   focusedBorder?: string; // Tailwind CSS class for focused border
   enabledBorder?: string; // Tailwind CSS class for enabled border
@@ -30,6 +31,7 @@ const CusTextFormField = forwardRef<HTMLInputElement, CusTextFormFieldProps>(({
   fillColor = "bg-white", // Default fill color
   controller,
   validator,
+  name,
   handelShowPassword
 }, ref) => {
   const [value, setValue] = useState<string>("");
@@ -53,6 +55,7 @@ const CusTextFormField = forwardRef<HTMLInputElement, CusTextFormFieldProps>(({
     <div className={`relative ${fillColor} rounded-[16px]`}>
       <input
         ref={ref}
+        name={name}
         type={isObscureText ? "password" : "text"}
         className={`block w-full min-w-[300px] ${contentPadding} border ${error ? "border-red-500" : enabledBorder
           } focus:outline-none focus:ring-2 ${focusedBorder} rounded-[16px]`}
