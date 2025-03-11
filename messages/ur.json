@@ -40,22 +40,35 @@
     "good_morning": "صبح بخیر",
     "no_services_found": "خدمات نہیں ملی",
     "search_placeholder": "آپ کیا تلاش کر رہے ہیں؟",
-    "popular_services": "مشہور خدمات",
-    "quick_actions": "منسوخ کردیے گئے خدمات",
-    "not_available_service": "منسوخ کردیے گئے خدمات",
-    "food_and_drinks": "خوراک اور مشروبات",
-    "restaurant_coffee_drinks": "ریستوران - کافی - مشروبات",
-    "price_range": "20.00 - 50.00$",
-    "categories": "اقسام",
-    "beauty_health": "خوبصورتی اور صحت",
-    "best_seller": "سب سے زیادہ فروخت",
-    "location": "مقام",
-    "city_country": "النَجاح، سعودی عرب",
-    "greeting": "صبح بخیر احمد",
-    "search_hint": "آپ کیا تلاش کر رہے ہیں؟",
-    "choose_service": "سروس منتخب کریں",
+    "no_suggestions_found": "کوئی تجاویز نہیں ملیں",
+    "category_types": {
+      "service": "خدمت",
+      "delivery": "ترسیل",
+      "delivery_service": "ترسیل کی خدمت",
+      "delivery_product": "ترسیل کا سامان"
+    },
+    "get_user_location_view": {
+      "confirm_location": "مقام کی تصدیق کریں",
+      "choose": "منتخب کریں"
+    },
+    "services": "خدمات",
+    "delivery": "ترسیل",
+    "products": "مصنوعات",
+    "services_description": "اپنی ضروریات کے لیے پیشہ ورانہ خدمات تلاش کریں",
+    "delivery_description": "تیز اور قابل اعتماد ترسیل کی خدمات",
+    "products_description": "ہمارے پارٹنر اسٹورز سے خریداری کریں",
+    "quick_actions": "فوری اقدامات",
+    "popular_services": "مقبول خدمات",
     "see_all": "سب دیکھیں",
-    "daily_solutions": "روزمرہ کے حل"
+    "categories": "زمرہ جات",
+    "loading": "لوڈ ہو رہا ہے...",
+    "request_service": "خدمت کی درخواست",
+    "help": "مدد",
+    "map": {
+      "select_start": "شروع کا مقام منتخب کریں",
+      "select_end": "منزل منتخب کریں",
+      "confirm_locations": "مقامات کی تصدیق کریں"
+    }
   },
   "bottom_nav": {
     "home": "ہوم",

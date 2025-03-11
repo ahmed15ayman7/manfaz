@@ -39,23 +39,36 @@
   "home": {
     "good_morning": "صباح الخير",
     "no_services_found": "لا يوجد خدمات متاحة",
-    "search_placeholder": "ماذا تبحث عنه؟",
+    "search_placeholder": "عن ماذا تبحث؟",
+    "no_suggestions_found": "لم يتم العثور على نتائج",
+    "category_types": {
+      "service": "خدمة",
+      "delivery": "توصيل",
+      "delivery_service": "خدمة توصيل",
+      "delivery_product": "منتج توصيل"
+    },
+    "services": "الخدمات",
+    "delivery": "التوصيل",
+    "products": "المنتجات",
+    "services_description": "اعثر على خدمات احترافية لتلبية احتياجاتك",
+    "delivery_description": "خدمات توصيل سريعة وموثوقة",
+    "products_description": "تسوق من متاجرنا الشريكة",
     "quick_actions": "الإجراءات السريعة",
-    "not_available_service": "خدمة غير متاحة",
-    "popular_services": "الخدمات الشعبية",
-    "food_and_drinks": "طعام وشراب",
-    "restaurant_coffee_drinks": "مطاعم - مقاهي - مشروبات",
-    "price_range": "٢٠٫٠٠$ - ٥٠٫٠٠$",
-    "categories": "الفئة",
-    "beauty_health": "الجمال والصحة",
-    "best_seller": "الأكثر مبيعًا",
-    "location": "الموقع",
-    "city_country": "النجف، السعودية",
-    "greeting": "صباح الخير أحمد",
-    "search_hint": "ما الذي تبحث عنه؟",
-    "choose_service": "اختر خدمتك",
+    "popular_services": "الخدمات الشائعة",
     "see_all": "عرض الكل",
-    "daily_solutions": "حلولك اليومية"
+    "categories": "الفئات",
+    "loading": "جاري التحميل...",
+    "request_service": "طلب خدمة",
+    "get_user_location_view": {
+      "confirm_location": "تاكيد موقعك",
+      "choose": "اختر"
+    },
+    "help": "المساعدة",
+    "map": {
+      "select_start": "اختر موقع البداية",
+      "select_end": "اختر الوجهة",
+      "confirm_locations": "تأكيد المواقع"
+    }
   },
   "bottom_nav": {
     "home": "الرئيسية",

@@ -55,7 +55,32 @@
     "search_hint": "What are you looking for?",
     "choose_service": "Choose a service",
     "see_all": "See All",
-    "daily_solutions": "Daily Solutions"
+    "daily_solutions": "Daily Solutions",
+    "no_suggestions_found": "No suggestions found",
+    "get_user_location_view": {
+      "confirm_location": "Confirm Location",
+      "choose": "Choose"
+    },
+    "category_types": {
+      "service": "Service",
+      "delivery": "Delivery",
+      "delivery_service": "Delivery Service",
+      "delivery_product": "Delivery Product"
+    },
+    "services": "Services",
+    "delivery": "Delivery",
+    "products": "Products",
+    "services_description": "Find professional services for your needs",
+    "delivery_description": "Fast and reliable delivery services",
+    "products_description": "Shop from our partner stores",
+    "loading": "Loading...",
+    "request_service": "Request Service",
+    "help": "Help",
+    "map": {
+      "select_start": "Select start location",
+      "select_end": "Select destination",
+      "confirm_locations": "Confirm Locations"
+    }
   },
   "bottom_nav": {
     "home": "Home",
