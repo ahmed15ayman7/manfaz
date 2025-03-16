@@ -182,8 +182,7 @@ export interface Order {
     paymentStatus: PaymentStatus;
     createdAt?: Date;
     updatedAt?: Date;
-    storeId?: string;
-    store?: Store;
+    store?: OrdersStore[];
     scheduleOrder?: ScheduleOrder
 }
 export type OrderStatus = "pending" | "in_progress" | "completed" | "canceled";
