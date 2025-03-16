@@ -24,7 +24,7 @@ export const getOrders = async (
         const response = await axios.get(
             `${apiUrl}/orders?userId=${userId}&role=${role}&limit=${limit}&page=${page}&search=${search}&status=${status}&paymentStatus=${paymentStatus}`
         );
-        return response.data;
+        return response.data.data;
     } catch (error) {
         console.log(error);
         return {

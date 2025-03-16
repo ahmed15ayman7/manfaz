@@ -5,7 +5,12 @@ interface OrderCardProps {
   order?: Order;
   loading?: boolean;
 }
-
+let orderStatusColors = {
+  "pending": "warning",
+  "in_progress": "info",
+  "completed": "success",
+  "canceled": "error",
+}
 const OrderCard = ({ order, loading }: OrderCardProps) => {
   if (loading) {
     return (
@@ -36,9 +41,7 @@ const OrderCard = ({ order, loading }: OrderCardProps) => {
         <Typography variant="subtitle1" className="font-bold">
           {order.id}
         </Typography>
-        <Badge color="primary" badgeContent={order.status}>
-          <span></span>
-        </Badge>
+        <Badge color={orderStatusColors[order.status as keyof typeof orderStatusColors] as "warning" | "default" | "primary" | "secondary" | "error" | "info" | "success"} badgeContent={order.status}><span></span></Badge>
       </div>
 
       <Typography variant="body1" className="mt-2">

@@ -66,26 +66,25 @@ export default function WorkerDashboardPage() {
     return <DashboardSkeleton />
   }
 
-  const { totalOrders, totalReviews, totalEarnings, ...user } = dashboardData as User & {
+  const { totalOrders, totalReviews, totalEarnings, ...user } =( dashboardData as User & {
     totalOrders: number
     totalReviews: number
     totalEarnings: number
-  }
+  }) || {}
 
   const handleAvailabilityToggle = async () => {
     try {
-      await axios.put(`${apiUrl}/workers/${user.Worker[0]?.id}/availability`, {
-        isAvailable: !user.Worker[0]?.isAvailable,
+      await axios.put(`${apiUrl}/workers/${user.Worker?.[0]?.id}/availability`, {
+        isAvailable: !user?.Worker?.[0]?.isAvailable,
       })
       refetch()
       toast.success(
-        user.Worker[0]?.isAvailable ? t('status_unavailable_success') : t('status_available_success')
+        user?.Worker?.[0]?.isAvailable ? t('status_unavailable_success') : t('status_available_success')
       )
     } catch (error) {
       toast.error(t('status_update_error'))
     }
   }
-  console.log(user)
   return (
     <div className="container mx-auto p-4">
       {/* Header Section */}
@@ -99,23 +98,23 @@ export default function WorkerDashboardPage() {
               className="object-cover rounded-full"
             />
             <div
-              className={`absolute bottom-0 right-0 w-4 h-4 border-2 border-white rounded-full ${user?.Worker[0]?.isAvailable ? 'bg-green-500' : 'bg-gray-400'
+              className={`absolute bottom-0 right-0 w-4 h-4 border-2 border-white rounded-full ${user?.Worker?.[0]?.isAvailable ? 'bg-green-500' : 'bg-gray-400'
                 }`}
             />
           </div>
           <div>
             <h1 className="text-xl font-semibold">{t('welcome', { name: user?.name })}</h1>
-            <p className="text-gray-600">{user?.Worker[0]?.title}</p>
+            <p className="text-gray-600">{user?.Worker?.[0]?.title}</p>
           </div>
         </div>
         <button
           onClick={handleAvailabilityToggle}
-          className={`px-4 py-2 rounded-lg font-medium ${user?.Worker[0]?.isAvailable
+          className={`px-4 py-2 rounded-lg font-medium ${user?.Worker?.[0]?.isAvailable
             ? 'bg-green-100 text-green-700 hover:bg-green-200'
             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
         >
-          {user?.Worker[0]?.isAvailable ? t('status_available') : t('status_unavailable')}
+          {user?.Worker?.[0]?.isAvailable ? t('status_available') : t('status_unavailable')}
         </button>
       </div>
 
@@ -129,7 +128,7 @@ export default function WorkerDashboardPage() {
         />
         <StatsCard
           title={t('success_rate')}
-          value={`${user?.Worker[0]?.jobSuccessRate}%`}
+          value={`${user?.Worker?.[0]?.jobSuccessRate}%`}
           trend={2}
           icon="📈"
         />
@@ -141,7 +140,7 @@ export default function WorkerDashboardPage() {
         />
         <StatsCard
           title={t('rating')}
-          value={user?.Worker[0]?.rating.toFixed(1)}
+          value={user?.Worker?.[0]?.rating.toFixed(1)}
           subValue={`(${totalReviews})`}
           trend={0}
           icon="⭐"
@@ -154,14 +153,14 @@ export default function WorkerDashboardPage() {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-lg p-6">
             <h2 className="text-lg font-semibold mb-4">{t('earnings_overview')}</h2>
-            <EarningsChart data={user?.Worker[0]?.earnings} />
+            <EarningsChart data={user?.Worker?.[0]?.earnings} />
           </div>
         </div>
 
         {/* Recent Orders */}
         <div className="space-y-6">
-          <RecentOrdersCard orders={user?.Worker[0]?.Order?.slice(0, 5)} />
-          <RecentReviewsCard reviews={user?.Worker[0]?.reviews?.slice(0, 3)} />
+          <RecentOrdersCard orders={user?.Worker?.[0]?.Order?.slice(0, 5)} />
+          <RecentReviewsCard reviews={user?.Worker?.[0]?.reviews?.slice(0, 3)} />
         </div>
       </div>
     </div>

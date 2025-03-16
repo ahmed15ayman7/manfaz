@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
@@ -10,6 +10,7 @@ import LanguageToggle from '@/components/ui/LanguageToggle'
 import { useTranslations } from 'next-intl'
 import { useUser } from '@/hooks/useUser'
 import { ProfilePopover } from '@/components/shared/profile-popover'
+import { redirect } from 'next/navigation';
 const navItems = [
   { href: '/services', label: 'navbar.services' },
   { href: '/stores', label: 'navbar.stores' },
@@ -33,7 +34,12 @@ export default function Header() {
     setAnchorEl(null);
     setIsProfileOpen(false);
   };
+  useEffect(() => {
+    if (status !== "loading") {
+      user?.role === "user" ? redirect("/home") : user?.role === "worker" ? redirect("/worker") : null
+    }
 
+  }, [user])
   return (
     <header className="sticky top-0 px-3 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="w-full flex h-16 items-center justify-between">
