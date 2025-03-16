@@ -1,32 +1,10 @@
-import { withAuth } from 'next-auth/middleware'
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-
-export default withAuth(
-  function middleware(request: NextRequest) {
-    let locale = request.cookies.get('locale')
-    if (!locale) {
-      // If no locale cookie exists, set default to 'en'
-      const response = NextResponse.next()
-      response.cookies.set('locale', 'en')
-      return response
-    }
-    
-    // Update html lang and dir attributes
-    const response = NextResponse.next()
-    response.headers.set('x-locale', locale.value)
-    return response
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => !!token
-    },
-  }
-)
+export { default } from "next-auth/middleware"
 
 export const config = {
   matcher: [
-    // حماية المسارات المطلوبة فقط
+    // حماية كل المسارات
+
+    // "/",
     "/categories/:path*",
     "/worker/:path*",
     "/stores/:path*",
@@ -39,5 +17,11 @@ export const config = {
     "/services/:path*",
     "/user-location/:path*",
     "/api/:path*",
+    "/_next/:path*",
+    "/_next/static/:path*",
+    "/_next/image/:path*",
+    "/favicon.ico",
+    "/sitemap.xml",
+    "/robots.txt",
   ]
 }
