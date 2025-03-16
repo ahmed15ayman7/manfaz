@@ -30,7 +30,7 @@ export const SidebarLinks = [
 export const sidebarLinksWorkers = [
   {
     icon: <Home size={24} />,
-    route: "/worker/",
+    route: "/worker",
     label: "home",
   },
   {

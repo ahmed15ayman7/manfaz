@@ -50,6 +50,7 @@ export default function RootLayout({
             </LocaleProvider>
           </SocketProvider>
         </SessionProvider>
+        <ToastContainer/>
         <Toaster
           position={locale === 'en' ? 'bottom-right' : 'bottom-left'}
           dir={locale === 'en' ? 'ltr' : 'rtl'}

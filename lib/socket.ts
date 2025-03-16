@@ -1,6 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 import { create } from 'zustand';
 import { UserEvents, WorkerEvents } from '@/types/socket';
+import { BASE_URL } from './config';
 
 type UserType = 'user' | 'worker' | 'store' | 'admin';
 
@@ -19,7 +20,7 @@ export const useSocketStore = create<SocketStore>((set) => ({
   userId: null,
   userType: null,
   connect: (token: string, userId: string, type: UserType) => {
-    const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3003', {
+    const socket = io(BASE_URL || 'http://localhost:3003', {
       auth: { token },
       reconnection: true,
       reconnectionAttempts: 5,

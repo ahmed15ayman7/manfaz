@@ -11,9 +11,9 @@ export interface User {
     createdAt?: Date;
     updatedAt?: Date;
     Worker: Worker[];
-    deliveryDrivers: DeliveryDriver[];
-    orders: Order[];
-    wallet?: Wallet;
+    DeliveryDriver: DeliveryDriver[];
+    Order: Order[];
+    Wallet?: Wallet;
     locations: UserLocation[];
 }
 
@@ -74,10 +74,17 @@ export interface Category {
     sortOrder: number;
     createdAt: Date;
     updatedAt: Date;
-    services: Service[]; // Array of related services
-    stores: Store[]; // Array of related stores
+    Service: Service[]; // Array of related services
+    Store: Store[]; // Array of related stores
+    WorkerCategory:WorkerCategory[]
 }
-
+export interface WorkerCategory {
+    id: string;
+    worker: Worker; // Array of related services
+    category: Category; // Array of related stores
+    workerId: string;
+    categoryId: string;
+  }
 export interface Service {
     id: string;
     name: string;
@@ -134,8 +141,25 @@ export interface Store {
     Reward: Reward[]; // المكاف
     Discount: Discount[];
     GiftCard: GiftCard[]
+    OrdersStore: OrdersStore[]
 
 }
+export interface OrdersStore {
+    id: string;
+    orderId: string;
+    order: Order;
+    storeId: string;
+    store: Store;
+    products: ProductsOrder[]
+  }
+  export interface ProductsOrder{
+    id: string;
+    orderId: string;
+    orders: OrdersStore;
+    productId: string;
+    product: Product;
+    quantity : number
+  }
 export interface Order {
     id: string;
     userId: string;
@@ -187,13 +211,19 @@ export interface Worker {
     about?: string;
     experiences: WorkExperience[];
     reviews: Review[];
-    orders: Order[];
-    earnings: {
-        date: string;
-        amount: number;
-    }[];
-    schedules: Schedule[];
+    Order: Order[];
+    earnings: Earning[];
+    schedule: Schedule[];
+    WorkerCategory:WorkerCategory[]
 }
+export interface Earning {
+    id          : string;
+    amount      : number;
+    createdAt   : Date;
+    updatedAt   : Date;
+    worker      : Worker;
+    workerId    : string;
+  }
 // Enums
 export enum StatusEnum {
     SCHEDULED = "SCHEDULED",
@@ -382,13 +412,16 @@ export interface Product {
     stock: number; // الكمية المتاحة
     isAvailable: boolean; // متاح أم لا
     ingredients?: string[]; // المكونات
-    extras?: string[]; // الإضافات
+    extras?: Json; // الإضافات
+    ProductsOrder: ProductsOrder[]
     rating: number; // التقييم
     reviewsCount: number; // عدد التقييمات
     createdAt: Date;
     updatedAt: Date;
 }
-
+type Json = {
+    [key: string]: Json|Json[]
+}
 // الكوبونات (كود خصم)
 export interface Coupon {
     id: string;

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 import { io } from 'socket.io-client'
 import { apiUrl } from '@/constant'
 import useStore from '@/store/useLanguageStore'
-import { Worker } from '@/interfaces'
+import { User, Worker } from '@/interfaces'
 import DashboardSkeleton from '@/components/skeletons/DashboardSkeleton'
 import StatsCard from '@/components/worker/StatsCard'
 import RecentOrdersCard from '@/components/worker/RecentOrdersCard'
@@ -25,10 +25,10 @@ const getWorkerDashboard = async ({ locale, id, role }: { locale: string, id: st
 export default function WorkerDashboardPage() {
   const { locale } = useStore()
   const t = useTranslations('worker_dashboard')
-  let { user, status } = useUser()
+  let { user:user2, status } = useUser()
   const { data: dashboardData, isLoading, refetch } = useQuery({
-    queryKey: ['worker-dashboard', user?.id],
-    queryFn: () => getWorkerDashboard({ locale, id: user?.id || "", role: user?.role || "" }),
+    queryKey: ['worker-dashboard', user2?.id],
+    queryFn: () => getWorkerDashboard({ locale, id: user2?.id || "", role: user2?.role || "" }),
   })
 
   useEffect(() => {
@@ -60,28 +60,32 @@ export default function WorkerDashboardPage() {
     return () => {
       socket.disconnect()
     }
-  }, [locale, user])
+  }, [locale, user2])
 
   if (isLoading) {
     return <DashboardSkeleton />
   }
 
-  const worker: Worker = dashboardData
+  const { totalOrders, totalReviews, totalEarnings, ...user } = dashboardData as User & {
+    totalOrders: number
+    totalReviews: number
+    totalEarnings: number
+  }
 
   const handleAvailabilityToggle = async () => {
     try {
-      await axios.patch(`${apiUrl}/workers/${worker.id}/availability`, {
-        isAvailable: !worker.isAvailable,
+      await axios.put(`${apiUrl}/workers/${user.Worker[0]?.id}/availability`, {
+        isAvailable: !user.Worker[0]?.isAvailable,
       })
       refetch()
       toast.success(
-        worker.isAvailable ? t('status_unavailable_success') : t('status_available_success')
+        user.Worker[0]?.isAvailable ? t('status_unavailable_success') : t('status_available_success')
       )
     } catch (error) {
       toast.error(t('status_update_error'))
     }
   }
-  console.log(worker)
+  console.log(user)
   return (
     <div className="container mx-auto p-4">
       {/* Header Section */}
@@ -89,29 +93,29 @@ export default function WorkerDashboardPage() {
         <div className="flex items-center gap-4">
           <div className="relative w-16 h-16">
             <Image
-              src={worker?.user?.imageUrl || '/imgs/default-avatar.png'}
-              alt={worker?.user?.name || ''}
+              src={user?.imageUrl || '/imgs/default-avatar.png'}
+              alt={user?.name || ''}
               fill
               className="object-cover rounded-full"
             />
             <div
-              className={`absolute bottom-0 right-0 w-4 h-4 border-2 border-white rounded-full ${worker?.isAvailable ? 'bg-green-500' : 'bg-gray-400'
+              className={`absolute bottom-0 right-0 w-4 h-4 border-2 border-white rounded-full ${user?.Worker[0]?.isAvailable ? 'bg-green-500' : 'bg-gray-400'
                 }`}
             />
           </div>
           <div>
-            <h1 className="text-xl font-semibold">{t('welcome', { name: worker.user?.name })}</h1>
-            <p className="text-gray-600">{worker.title}</p>
+            <h1 className="text-xl font-semibold">{t('welcome', { name: user?.name })}</h1>
+            <p className="text-gray-600">{user?.Worker[0]?.title}</p>
           </div>
         </div>
         <button
           onClick={handleAvailabilityToggle}
-          className={`px-4 py-2 rounded-lg font-medium ${worker.isAvailable
+          className={`px-4 py-2 rounded-lg font-medium ${user?.Worker[0]?.isAvailable
             ? 'bg-green-100 text-green-700 hover:bg-green-200'
             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
         >
-          {worker.isAvailable ? t('status_available') : t('status_unavailable')}
+          {user?.Worker[0]?.isAvailable ? t('status_available') : t('status_unavailable')}
         </button>
       </div>
 
@@ -119,26 +123,26 @@ export default function WorkerDashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <StatsCard
           title={t('total_orders')}
-          value={worker.orders?.length || 0}
+          value={totalOrders || 0}
           trend={5}
           icon="📦"
         />
         <StatsCard
           title={t('success_rate')}
-          value={`${worker.jobSuccessRate}%`}
+          value={`${user?.Worker[0]?.jobSuccessRate}%`}
           trend={2}
           icon="📈"
         />
         <StatsCard
           title={t('total_earnings')}
-          value={`$${worker.totalEarned}`}
+          value={`$${totalEarnings}`}
           trend={8}
           icon="💰"
         />
         <StatsCard
           title={t('rating')}
-          value={worker.rating.toFixed(1)}
-          subValue={`(${worker.reviewsCount})`}
+          value={user?.Worker[0]?.rating.toFixed(1)}
+          subValue={`(${totalReviews})`}
           trend={0}
           icon="⭐"
         />
@@ -150,14 +154,14 @@ export default function WorkerDashboardPage() {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-lg p-6">
             <h2 className="text-lg font-semibold mb-4">{t('earnings_overview')}</h2>
-            <EarningsChart data={worker.earnings} />
+            <EarningsChart data={user?.Worker[0]?.earnings} />
           </div>
         </div>
 
         {/* Recent Orders */}
         <div className="space-y-6">
-          <RecentOrdersCard orders={worker.orders?.slice(0, 5)} />
-          <RecentReviewsCard reviews={worker.reviews?.slice(0, 3)} />
+          <RecentOrdersCard orders={user?.Worker[0]?.Order?.slice(0, 5)} />
+          <RecentReviewsCard reviews={user?.Worker[0]?.reviews?.slice(0, 3)} />
         </div>
       </div>
     </div>

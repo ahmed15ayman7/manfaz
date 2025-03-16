@@ -10,23 +10,21 @@ import {
   Legend,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
+import { Earning } from '@/interfaces'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-interface EarningsData {
-  date: string
-  amount: number
-}
+
 
 interface EarningsChartProps {
-  data: EarningsData[]
+  data: Earning[]
 }
 
 export default function EarningsChart({ data = [] }: EarningsChartProps) {
   const t = useTranslations('worker_dashboard')
 
   const chartData = {
-    labels: data.map((item) => item.date),
+    labels: data.map((item) => item.createdAt.toDateString()),
     datasets: [
       {
         label: t('earnings'),
