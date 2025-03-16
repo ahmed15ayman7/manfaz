@@ -15,19 +15,20 @@ import RecentOrdersCard from '@/components/worker/RecentOrdersCard'
 import RecentReviewsCard from '@/components/worker/RecentReviewsCard'
 import EarningsChart from '@/components/worker/EarningsChart'
 import axiosInstance from '@/lib/axios';
+import { useUser } from '@/hooks/useUser';
 
-const getWorkerDashboard = async ({ locale }: { locale: string }) => {
-  const res = await axiosInstance.get(`/workers?lang=${locale}`)
+const getWorkerDashboard = async ({ locale, id, role }: { locale: string, id: string, role: string }) => {
+  const res = await axiosInstance.get(`/users/${id}?lang=${locale}&role=${role}`)
   return res.data.data
 }
 
 export default function WorkerDashboardPage() {
   const { locale } = useStore()
   const t = useTranslations('worker_dashboard')
-
+  let { user, status } = useUser()
   const { data: dashboardData, isLoading, refetch } = useQuery({
-    queryKey: ['worker-dashboard'],
-    queryFn: () => getWorkerDashboard({ locale }),
+    queryKey: ['worker-dashboard', user?.id],
+    queryFn: () => getWorkerDashboard({ locale, id: user?.id || "", role: user?.role || "" }),
   })
 
   useEffect(() => {
@@ -59,13 +60,13 @@ export default function WorkerDashboardPage() {
     return () => {
       socket.disconnect()
     }
-  }, [locale])
+  }, [locale, user])
 
   if (isLoading) {
     return <DashboardSkeleton />
   }
 
-  const worker: Worker = dashboardData?.data
+  const worker: Worker = dashboardData
 
   const handleAvailabilityToggle = async () => {
     try {
@@ -80,7 +81,7 @@ export default function WorkerDashboardPage() {
       toast.error(t('status_update_error'))
     }
   }
-
+  console.log(worker)
   return (
     <div className="container mx-auto p-4">
       {/* Header Section */}
@@ -94,7 +95,7 @@ export default function WorkerDashboardPage() {
               className="object-cover rounded-full"
             />
             <div
-              className={`absolute bottom-0 right-0 w-4 h-4 border-2 border-white rounded-full ${worker.isAvailable ? 'bg-green-500' : 'bg-gray-400'
+              className={`absolute bottom-0 right-0 w-4 h-4 border-2 border-white rounded-full ${worker?.isAvailable ? 'bg-green-500' : 'bg-gray-400'
                 }`}
             />
           </div>

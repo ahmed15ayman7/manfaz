@@ -1,10 +1,33 @@
-
+"use client"
 import Image from 'next/image'
 import Link from 'next/link'
 import LanguageToggle from '../ui/LanguageToggle'
 import { useTranslations } from 'next-intl';
+import { Avatar } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useUser } from '@/hooks/useUser';
+import { ProfilePopover } from './profile-popover';
+import { redirect } from 'next/navigation';
 const Topbar = ({ isWorker }: { isWorker?: boolean }) => {
   let t = useTranslations();
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const { user, status } = useUser()
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setIsProfileOpen(true);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setIsProfileOpen(false);
+  };
+  useEffect(() => {
+    if (status !== "loading") {
+      // isWorker && user?.role === "user" ? redirect("/home") : user?.role === "worker" ? redirect("/worker") : redirect("/")
+    }
+
+  }, [user])
   return (
     <section className='topbar'>
       <div className='w-full px-5'>
@@ -16,6 +39,26 @@ const Topbar = ({ isWorker }: { isWorker?: boolean }) => {
               {isWorker && <p className='text-xs max-xl:text-xs text-primary-dark absolute right-0 bottom-0 -translate-x-100 translate-y-100'>{t('worker')}</p>}
             </div>
           </Link>
+          {status !== "loading" && user?.role && user && <Avatar
+            onClick={handleClick}
+            src={user?.imageUrl}
+            alt={user?.name}
+            sx={{
+              width: 48,
+              cursor: 'pointer',
+              height: 48,
+              bgcolor: 'primary.dark',
+              border: '2px solid',
+              borderColor: 'primary.light',
+              transition: 'transform 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'scale(1.1)',
+              },
+            }}
+          >
+            {user?.name?.[0]}
+          </Avatar>}
+          <ProfilePopover open={isProfileOpen} anchorEl={anchorEl} onClose={handleClose} user={user} />
           {/* <LanguageToggle /> */}
         </div>
       </div>

@@ -77,7 +77,7 @@ const Categories = () => {
   return (
     <div className="px-4 mt-4">
       <h2 className="text-lg font-semibold mb-4">{t('categories')}</h2>
-      
+
       <Tab.Group onChange={setSelectedTab}>
         <Tab.List className="flex space-x-4 mb-6 p-1 bg-gray-100 rounded-xl">
           <Tab className={({ selected }) =>
@@ -86,12 +86,12 @@ const Categories = () => {
           }>
             {t('services')}
           </Tab>
-          <Tab className={({ selected }) =>
+          {/* <Tab className={({ selected }) =>
             `w-full py-2.5 text-sm font-medium leading-5 rounded-lg transition-all duration-300
              ${selected ? 'bg-white shadow text-primary' : 'text-gray-500 hover:text-primary'}`
           }>
             {t('delivery')}
-          </Tab>
+          </Tab> */}
         </Tab.List>
 
         <Tab.Panels>

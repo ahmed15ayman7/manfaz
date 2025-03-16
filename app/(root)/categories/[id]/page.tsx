@@ -31,9 +31,9 @@ const getServices = async (id: string, locale: string, type: string, page: numbe
     return res.data;
 }
 
-const CategoryPage = ({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) => {
-    const { id } = use(params);
-    const { type, type2 } = use(searchParams);
+const CategoryPage = ({ params, searchParams }: { params: { id: string }, searchParams: { [key: string]: string | string[] | undefined } }) => {
+    const { id } = params;
+    const { type, type2 } = searchParams;
     const t = useTranslations();
     const router = useRouter();
     const { locale } = useStore();
@@ -173,7 +173,7 @@ const CategoryPage = ({ params, searchParams }: { params: Promise<{ id: string }
                     <Grid item xs={12} sm={6} md={4} key={e}>
                         <StoreCardSkeleton key={e} />
                     </Grid>
-                ) : stores?.data?.map((store: any) => (
+                ) : stores?.data?.stores.map((store: any) => (
                     <Grid item xs={12} sm={6} md={4} key={store.id}>
                         <StoreCard store={store} />
                     </Grid>
@@ -250,7 +250,7 @@ let ShowAllCategories = ({ locale, onFilterChange, selectedFilter }: { locale: s
             >
 
                 {isLoading ? Array(7).map(e => <Skeleton key={e} width={100} height={30} variant="rounded" />) : [
-                    ...categories?.data?.map((category: any, index: number) => (
+                    ...categories?.data?.categories.map((category: any, index: number) => (
                         <Chip
                             key={category.id}
                             icon={

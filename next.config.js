@@ -21,6 +21,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'cdn.vox-cdn.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'encrypted-tbn0.gstatic.com',
+      },
     ],
   },
   webpack: (config, { isServer }) => {

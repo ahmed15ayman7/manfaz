@@ -11,11 +11,11 @@ import { MapPin, Phone, Mail, Clock, Star, Tag, Gift, Ticket, ArrowLeft, Search 
 import useStore from '@/store/useLanguageStore'
 import API_ENDPOINTS from '@/lib/apis'
 import axiosInstance from '@/lib/axios'
-import { Store, Product, StoreOffer,UserLocation } from '@/interfaces'
+import { Store, Product, StoreOffer, UserLocation } from '@/interfaces'
 import { calculateDistance, formatDate } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { Button, Input, Tabs } from '@mui/material'
-import {useUser} from '@/hooks/useUser'
+import { useUser } from '@/hooks/useUser'
 const getStoreDetails = async ({ storeId, locale }: { storeId: string; locale: string }) => {
   const url = API_ENDPOINTS.stores.getById(storeId, { lang: locale }, false)
   const res = await axiosInstance.get(url)
@@ -33,12 +33,15 @@ export default function StoreDetailsPage() {
   const [isHeaderSticky, setIsHeaderSticky] = useState(false)
   const headerRef = useRef<HTMLDivElement>(null)
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
-  let { user,status } = useUser()
-  const { data: storeData, isLoading } = useQuery({
-    queryKey: ['store', params.id],
+  let { user, status } = useUser()
+  const { data: storeData, isLoading,refetch } = useQuery({
+    queryKey: ['store', params.storeId],
     queryFn: () => getStoreDetails({ storeId: params.storeId as string, locale }),
   })
 
+  useEffect(() => {
+    refetch()
+  }, [locale])
   const store: Store = storeData?.data
 
   useEffect(() => {
@@ -58,7 +61,7 @@ export default function StoreDetailsPage() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-  let [locations,setLocations] = useState<UserLocation[]>([])
+  let [locations, setLocations] = useState<UserLocation[]>([])
   useEffect(() => {
     if (status !== 'loading') {
       setLocations(user?.locations || [])
@@ -119,23 +122,23 @@ export default function StoreDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 rounded-3xl">
       {/* صورة الغلاف */}
-      <div className="relative h-48 md:h-64">
+      <div className="relative h-48 md:h-64 rounded-t-3xl">
         <Image
           src={store.coverImage || '/imgs/default-cover.jpg'}
           alt={store.name}
           fill
-          className="object-cover"
+          className="object-cover rounded-t-3xl"
         />
-        <div className="absolute inset-0 bg-black/20" />
-        <Button
+        <div className="absolute inset-0 bg-black/20 rounded-3xl" />
+        {/* <Button
           variant="outlined"
           className="absolute top-4 right-4 text-white"
           onClick={() => router.back()}
         >
           <ArrowLeft className="h-6 w-6" />
-        </Button>
+        </Button> */}
       </div>
 
       {/* معلومات المتجر */}
@@ -214,17 +217,19 @@ export default function StoreDetailsPage() {
             onChange={(event, value) => scrollToCategory(value)}
             className="mt-4"
           >
-            <TabList className="w-full overflow-x-auto">
-              {store.categories.map((category) => (
-                <Tab
-                  key={category.id}
-                  value={category.id}
-                  className="px-4 py-2"
-                >
-                  {category.name}
-                </Tab>
-              ))}
-            </TabList>
+            <Tab.Group >
+              <TabList className="w-full overflow-x-auto">
+                {store.categories.map((category) => (
+                  <Tab
+                    key={category.id}
+                    value={category.id}
+                    className="px-4 py-2"
+                  >
+                    {category.name}
+                  </Tab>
+                ))}
+              </TabList>
+            </Tab.Group >
           </Tabs>
         </div>
       </div>
@@ -365,7 +370,7 @@ export default function StoreDetailsPage() {
                 </h3>
                 <div className="space-y-4">
                   <AnimatePresence>
-                    {store.coupons.map((coupon, index) => (
+                    {store.Coupon.map((coupon, index) => (
                       <motion.div
                         key={coupon.id}
                         initial={{ opacity: 0, x: -20 }}
@@ -378,7 +383,7 @@ export default function StoreDetailsPage() {
                           <div>
                             <span className="font-medium">{coupon.code}</span>
                             <p className="text-sm text-gray-500 mt-1">
-                              {coupon.discountPercentage 
+                              {coupon.discountPercentage
                                 ? `${coupon.discountPercentage}% ${t('off')}`
                                 : `${coupon.discountAmount} SAR ${t('off')}`
                               }
@@ -404,7 +409,7 @@ export default function StoreDetailsPage() {
                 </h3>
                 <div className="space-y-4">
                   <AnimatePresence>
-                    {store.giftCards.map((card, index) => (
+                    {store.GiftCard.map((card, index) => (
                       <motion.div
                         key={card.id}
                         initial={{ opacity: 0, x: 20 }}

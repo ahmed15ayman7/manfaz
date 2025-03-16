@@ -10,7 +10,7 @@ export interface User {
     verificationCode?: number;
     createdAt?: Date;
     updatedAt?: Date;
-    workers: Worker[];
+    Worker: Worker[];
     deliveryDrivers: DeliveryDriver[];
     orders: Order[];
     wallet?: Wallet;
@@ -130,10 +130,11 @@ export interface Store {
     orders: Order[]; // الطلبات
     createdAt: Date; // تاريخ الإنشاء
     updatedAt: Date; // آخر تحديث
-    coupons: Coupon[]; // الكوبونات
-    discounts: Discount[]; // الخصومات
-    giftCards: GiftCard[]; // بطاقات الهدايا
-    rewards: Reward[]; // المكافآت
+    Coupon: Coupon[]; // الكوبونات
+    Reward: Reward[]; // المكاف
+    Discount: Discount[];
+    GiftCard: GiftCard[]
+
 }
 export interface Order {
     id: string;
@@ -148,8 +149,8 @@ export interface Order {
     description?: string;
     imageUrl?: string;
     locationId: string;
-    location?:UserLocation;
-    notes:string;
+    location?: UserLocation;
+    notes: string;
     price?: number;
     duration?: number;
     status: OrderStatus;
@@ -159,7 +160,7 @@ export interface Order {
     updatedAt?: Date;
     storeId?: string;
     store?: Store;
-    scheduleOrder?:ScheduleOrder
+    scheduleOrder?: ScheduleOrder
 }
 export type OrderStatus = "pending" | "in_progress" | "completed" | "canceled";
 
@@ -199,28 +200,28 @@ export enum StatusEnum {
     IN_PROGRESS = "IN_PROGRESS",
     COMPLETED = "COMPLETED",
     CANCELED = "CANCELED",
-  }
-  
-  export enum ShiftEnum {
+}
+
+export enum ShiftEnum {
     MORNING = "MORNING",
     EVENING = "EVENING",
     NIGHT = "NIGHT",
-  }
-  
-  export enum WorkerTypeEnum {
+}
+
+export enum WorkerTypeEnum {
     DRIVER = "DRIVER",
     TECHNICIAN = "TECHNICIAN",
     ELECTRICIAN = "ELECTRICIAN",
     PLUMBER = "PLUMBER",
     OTHER = "OTHER",
-  }
-  
-  export enum PriorityEnum {
+}
+
+export enum PriorityEnum {
     LOW = "LOW",
     MEDIUM = "MEDIUM",
     HIGH = "HIGH",
-  }
-  export interface ScheduleOrder {
+}
+export interface ScheduleOrder {
     id: string;
     scheduleId: string;
     orderId: string;
@@ -228,10 +229,10 @@ export enum StatusEnum {
     schedule: Schedule;
     createdAt: Date;
     updatedAt: Date;
-  }
-  
-  // Schedule Interface
-  export interface Schedule {
+}
+
+// Schedule Interface
+export interface Schedule {
     id: string;
     workerId: string;
     scheduledTime: Date;
@@ -249,8 +250,8 @@ export enum StatusEnum {
     notes?: string;
     createdAt: Date;
     updatedAt: Date;
-  }
-  
+}
+
 export interface WorkExperience {
     id: string;
     workerId: string;
@@ -262,7 +263,7 @@ export interface WorkExperience {
     createdAt: Date;
     updatedAt: Date;
 }
-  
+
 export interface Review {
     id: string;
     workerId: string;

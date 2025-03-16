@@ -7,6 +7,7 @@ import { Store } from '@/interfaces';
 import { useLocationStore } from '@/store/useLocationStore';
 import { useMemo } from 'react';
 import StoreCardSkeleton from './StoreCardSkeleton';
+import { useRouter } from 'next/navigation';
 
 interface StoreCardProps {
     store: Store;
@@ -16,7 +17,7 @@ interface StoreCardProps {
 const StoreCard = ({ store, isLoading = false }: StoreCardProps) => {
     const t = useTranslations();
     const calculateDistance = useLocationStore((state) => state.calculateDistance);
-
+    const router = useRouter();
     // حساب المسافة للفرع الأقرب
     const nearestLocation = useMemo(() => {
         if (!store.locations || store.locations.length === 0) return null;
@@ -79,12 +80,12 @@ const StoreCard = ({ store, isLoading = false }: StoreCardProps) => {
     // التحقق من وجود خصومات نشطة
     const hasActiveDiscounts = useMemo(() => {
         const now = new Date();
-        return store.discounts?.some(discount =>
+        return store.Discount?.some(discount =>
             discount.isActive &&
             new Date(discount.startDate) <= now &&
             new Date(discount.endDate) >= now
         ) || false;
-    }, [store.discounts]);
+    }, [store.Discount]);
 
     // في حالة التحميل، نعرض مكون الـ Skeleton
     if (isLoading) {
@@ -103,7 +104,11 @@ const StoreCard = ({ store, isLoading = false }: StoreCardProps) => {
                     '&:hover': {
                         transform: 'translateY(-4px)',
                         transition: 'transform 0.2s ease-in-out'
-                    }
+                    },
+                    cursor: isOpen ? "pointer" : "ne-resize"
+                }}
+                onClick={() => {
+                    router.push(`/stores/${store.id}`)
                 }}
             >
                 <Box sx={{ position: 'relative' }}>
