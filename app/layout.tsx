@@ -8,35 +8,45 @@ import { SessionProvider } from "next-auth/react";
 import { SocketProvider } from '@/components/providers/SocketProvider';
 import { Toaster } from 'sonner';
 import LanguageToggle from "@/components/ui/LanguageToggle";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { locale } = useStore();
-  const [mounted, setMounted] = useState(false);
+  const { locale, isClient } = useStore();
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    document.documentElement.dir = locale === 'en' ? 'ltr' : 'rtl';
+    document.documentElement.lang = locale;
+  }, [locale]);
 
-  useEffect(() => {
-    if (mounted) {
-      document.documentElement.dir = locale === 'en' ? 'ltr' : 'rtl';
-      document.documentElement.lang = locale;
-    }
-  }, [locale, mounted]);
-
-  if (!mounted) {
-    return null;
-  }
+  // Only render content when we're sure we're on the client
+  const content = isClient ? (
+    <>
+      <SessionProvider>
+        <SocketProvider>
+          <LocaleProvider>
+            {children}
+            <LanguageToggle />
+          </LocaleProvider>
+        </SocketProvider>
+      </SessionProvider>
+      <ToastContainer/>
+      <Toaster
+        position={locale === 'en' ? 'bottom-right' : 'bottom-left'}
+        dir={locale === 'en' ? 'ltr' : 'rtl'}
+        richColors
+        closeButton
+      />
+    </>
+  ) : null;
 
   return (
     <html suppressHydrationWarning>
       <head>
-        <title suppressHydrationWarning>{locale === 'en' ? "Manfaz - Home Services Connection Platform" : locale === 'ur' ? "منفز - گھر کی خدمات کا پلیٹ فارم" : "منفز - منصة ربط خدمات المنازل"}</title>
+        <title>{locale === 'en' ? "Manfaz - Home Services Connection Platform" : locale === 'ur' ? "منفز - گھر کی خدمات کا پلیٹ فارم" : "منفز - منصة ربط خدمات المنازل"}</title>
         <meta name="description" content={locale === 'en' ? "Manfaz is an innovative digital platform designed to connect customers with home service providers." : locale === 'ur' ? "منصہ منفز ایک جدید ڈیجیٹل پلیٹ فارم ہے جو صارفین کو گھریلو خدمات فراہم کرنے والوں سے جوڑتا ہے." : "منصة منفز الرقمية تهدف إلى ربط العملاء بمقدمي خدمات المنازل."} />
         <meta name="keywords" content={locale === 'en' ? "home services, plumbing, carpentry" : locale === 'ur' ? "گھریلو خدمات, پلمبنگ, لکڑی کا کام" : "خدمات المنازل, سباكة, نجارة"} />
         <meta name="language" content={locale} />
@@ -56,21 +66,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
-        <SessionProvider>
-          <SocketProvider>
-            <LocaleProvider>
-              {children}
-              <LanguageToggle />
-            </LocaleProvider>
-          </SocketProvider>
-        </SessionProvider>
-        <ToastContainer />
-        <Toaster
-          position={locale === 'en' ? 'bottom-right' : 'bottom-left'}
-          dir={locale === 'en' ? 'ltr' : 'rtl'}
-          richColors
-          closeButton
-        />
+        {content}
       </body>
     </html>
   );
