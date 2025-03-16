@@ -8,7 +8,7 @@ import { SessionProvider } from "next-auth/react";
 import { SocketProvider } from '@/components/providers/SocketProvider';
 import { Toaster } from 'sonner';
 import LanguageToggle from "@/components/ui/LanguageToggle";
-
+import { useEffect } from 'react';
 
 export default function RootLayout({
   children,
@@ -16,8 +16,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   let { locale } = useStore();
+
+  useEffect(() => {
+    document.documentElement.dir = locale === 'en' ? 'ltr' : 'rtl';
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   return (
-    <html lang={locale}>
+    <html suppressHydrationWarning>
       <head>
         <title>{locale === 'en' ? "Manfaz - Home Services Connection Platform" : locale === 'ur' ? "منفز - گھر کی خدمات کا پلیٹ فارم" : "منفز - منصة ربط خدمات المنازل"}</title>
         <meta name="description" content={locale === 'en' ? "Manfaz is an innovative digital platform designed to connect customers with home service providers." : locale === 'ur' ? "منصہ منفز ایک جدید ڈیجیٹل پلیٹ فارم ہے جو صارفین کو گھریلو خدمات فراہم کرنے والوں سے جوڑتا ہے." : "منصة منفز الرقمية تهدف إلى ربط العملاء بمقدمي خدمات المنازل."} />
@@ -40,7 +46,6 @@ export default function RootLayout({
       </head>
       <body
         className={`antialiased`}
-        dir={locale === 'en' ? 'ltr' : 'rtl'}
       >
         <SessionProvider>
           <SocketProvider>
