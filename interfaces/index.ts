@@ -383,7 +383,7 @@ export interface Product {
     isAvailable: boolean; // متاح أم لا
     ingredients?: string[]; // المكونات
     extras?: string[]; // الإضافات
-
+    rating: number; // التقييم
     reviewsCount: number; // عدد التقييمات
     createdAt: Date;
     updatedAt: Date;

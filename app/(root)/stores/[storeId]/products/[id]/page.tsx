@@ -12,14 +12,28 @@ import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Minus, Plus, ShoppingCart, Star, Clock, Package2 } from 'lucide-react'
+import { 
+  ArrowLeft, 
+  Minus, 
+  Plus, 
+  ShoppingCart, 
+  Star, 
+  Clock, 
+  Package2,
+  Share2,
+  Heart,
+  Truck,
+  Shield,
+  Store,
+  BarChart3
+} from 'lucide-react'
 import useStore from '@/store/useLanguageStore'
 import useCartStore from '@/store/useCartStore'
 import API_ENDPOINTS from '@/lib/apis'
-import { Product } from '@/interfaces'
-import { Button } from '@mui/material'
+import { Product, Store as StoreType } from '@/interfaces'
+import { Button, Rating, Tooltip, Divider } from '@mui/material'
 import { toast } from 'react-toastify'
-
+import axiosInstance from '@/lib/axios'
 /**
  * جلب تفاصيل المنتج من الخادم
  * @param id - معرف المنتج
@@ -33,9 +47,8 @@ const getProductDetails = async ({ id, storeId, locale }: {
   locale: string 
 }) => {
   const url = API_ENDPOINTS.stores.products(storeId, { id, lang: locale }, false)
-  const res = await fetch(url)
-  if (!res.ok) throw new Error('Failed to fetch product details')
-  return res.json()
+  const res = await axiosInstance.get(url)
+  return res.data.data
 }
 
 /**
@@ -44,17 +57,18 @@ const getProductDetails = async ({ id, storeId, locale }: {
  * يتيح التحكم في الكمية وإضافة المنتج للسلة
  */
 export default function ProductDetailsPage() {
-  // Hooks وحالة المكون
+  // Hooks and state
   const params = useParams()
   const router = useRouter()
   const { locale } = useStore()
-  const t = useTranslations()
+  const t = useTranslations('stores.product_details')
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const { addItem, getItemQuantity } = useCartStore()
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
 
-  // مراقبة حدث التمرير لتحديث شكل الهيدر
+  // Scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
@@ -63,7 +77,7 @@ export default function ProductDetailsPage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // جلب بيانات المنتج باستخدام React Query
+  // Fetch product data
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', params.id],
     queryFn: () => getProductDetails({ 
@@ -73,10 +87,23 @@ export default function ProductDetailsPage() {
     }),
   })
 
-  /**
-   * التحكم في تغيير الكمية
-   * @param delta - قيمة التغيير (1 أو -1)
-   */
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  }
+
+  // Handle quantity change
   const handleQuantityChange = (delta: number) => {
     const newQuantity = quantity + delta
     if (newQuantity >= 1 && newQuantity <= (product?.stock || 1)) {
@@ -84,9 +111,7 @@ export default function ProductDetailsPage() {
     }
   }
 
-  /**
-   * إضافة المنتج للسلة مع الكمية المحددة
-   */
+  // Handle add to cart
   const handleAddToCart = () => {
     if (!product) return
 
@@ -97,13 +122,13 @@ export default function ProductDetailsPage() {
       product
     })
 
-    toast.success(t('cart.added_to_cart'), {
+    toast.success(t('added_to_cart'), {
       position: locale === 'ar' ? 'top-left' : 'top-right',
       autoClose: 2000,
     })
   }
 
-  // عرض حالة التحميل
+  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -128,7 +153,7 @@ export default function ProductDetailsPage() {
     )
   }
 
-  // عرض رسالة في حالة عدم وجود المنتج
+  // Product not found state
   if (!product) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -137,8 +162,8 @@ export default function ProductDetailsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center p-4"
         >
-          <h1 className="text-2xl font-bold text-gray-800">{t('stores.product_not_found')}</h1>
-          <p className="text-gray-600 mt-2">{t('stores.product_not_found_description')}</p>
+          <h1 className="text-2xl font-bold text-gray-800">{t('product_not_found')}</h1>
+          <p className="text-gray-600 mt-2">{t('product_not_found_description')}</p>
           <Button onClick={() => router.back()} className="mt-4">
             {t('common.go_back')}
           </Button>
@@ -147,10 +172,9 @@ export default function ProductDetailsPage() {
     )
   }
 
-  // عرض صفحة المنتج
   return (
     <div className="min-h-screen bg-gray-50" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
-      {/* الهيدر الثابت مع تأثير الضبابية */}
+      {/* Sticky header */}
       <motion.div
         initial={false}
         animate={{ 
@@ -167,172 +191,230 @@ export default function ProductDetailsPage() {
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-      </motion.div>
-
-      {/* الصورة الرئيسية للمنتج */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="relative aspect-square"
-      >
-        <Image
-          src={product.images[selectedImage] || '/imgs/default-product.jpg'}
-          alt={product.name}
-          fill
-          className="object-cover"
-          priority
-        />
-      </motion.div>
-
-      {/* معرض الصور المصغر */}
-      <div className="bg-white p-4">
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-          {product.images.map((image: string, index: number) => (
-            <motion.button
-              key={index}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedImage(index)}
-              className={`relative h-20 w-20 flex-shrink-0 rounded-lg overflow-hidden ${
-                selectedImage === index ? 'ring-2 ring-primary' : ''
-              }`}
+        <div className="flex gap-2">
+          <Tooltip title={t('share_product')}>
+            <Button
+              variant="outlined"
+              size="small"
+              className="rounded-full bg-white/80"
+              onClick={() => {
+                // Share functionality
+              }}
             >
-              <Image
-                src={image}
-                alt={`${product.name} ${index + 1}`}
-                fill
-                className="object-cover"
-              />
-            </motion.button>
-          ))}
+              <Share2 className="h-5 w-5" />
+            </Button>
+          </Tooltip>
+          <Tooltip title={isFavorite ? t('remove_from_favorites') : t('add_to_favorites')}>
+            <Button
+              variant="outlined"
+              size="small"
+              className="rounded-full bg-white/80"
+              onClick={() => setIsFavorite(!isFavorite)}
+            >
+              <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+            </Button>
+          </Tooltip>
         </div>
-      </div>
+      </motion.div>
 
-      {/* تفاصيل المنتج */}
+      {/* Main content */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="p-4 bg-white mt-2"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
       >
-        <h1 className="text-2xl font-bold">{product.name}</h1>
-        <p className="text-gray-600 mt-2">{product.description}</p>
+        {/* Product images */}
+        <motion.div variants={itemVariants} className="relative aspect-square">
+          <Image
+            src={product.images[selectedImage] || '/imgs/default-product.jpg'}
+            alt={product.name}
+            fill
+            className="object-cover"
+            priority
+          />
+        </motion.div>
 
-        {/* السعر والتقييم */}
-        <div className="flex items-center gap-4 mt-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-primary">
-                {product.discountPrice || product.price} {t('common.currency')}
-              </span>
+        {/* Thumbnail gallery */}
+        <motion.div variants={itemVariants} className="bg-white p-4">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+            {product.images.map((image: string, index: number) => (
+              <motion.button
+                key={index}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedImage(index)}
+                className={`relative h-20 w-20 flex-shrink-0 rounded-lg overflow-hidden ${
+                  selectedImage === index ? 'ring-2 ring-primary' : ''
+                }`}
+              >
+                <Image
+                  src={image}
+                  alt={`${product.name} ${index + 1}`}
+                  fill
+                  className="object-cover"
+                />
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Product details */}
+        <motion.div variants={itemVariants} className="p-4 bg-white mt-2">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-2xl font-bold">{product.name}</h1>
+              <div className="flex items-center gap-2 mt-1">
+                <Rating value={product.rating || 0} readOnly size="small" />
+                <span className="text-sm text-gray-500">({product.reviewsCount || 0})</span>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold text-primary">
+                  {product.discountPrice || product.price} {t('common.currency')}
+                </span>
+                {product.discountPrice && (
+                  <span className="text-lg text-gray-500 line-through">
+                    {product.price} {t('common.currency')}
+                  </span>
+                )}
+              </div>
               {product.discountPrice && (
-                <span className="text-lg text-gray-500 line-through">
-                  {product.price} {t('common.currency')}
+                <span className="text-sm text-green-600">
+                  {Math.round(((product.price - product.discountPrice) / product.price) * 100)}% {t('off')}
                 </span>
               )}
             </div>
-            {product.discountPrice && (
-              <span className="text-sm text-green-600">
-                {Math.round(((product.price - product.discountPrice) / product.price) * 100)}% {t('stores.off')}
-              </span>
-            )}
           </div>
-          <div className="flex items-center gap-1 text-yellow-500">
-            <Star className="h-5 w-5 fill-current" />
-            <span className="font-medium">{product.rating || 0}</span>
-          </div>
-        </div>
 
-        {/* معلومات المخزون والتوصيل */}
-        <div className="flex items-center gap-4 mt-4 text-sm">
-          <div className="flex items-center gap-1">
-            <Package2 className="h-4 w-4" />
-            <span>{product.stock} {t('stores.in_stock')}</span>
-          </div>
-          {product.deliveryTime && (
-            <div className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              <span>{product.deliveryTime} {t('stores.delivery_time')}</span>
+          <Divider className="my-4" />
+
+          {/* Product stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg">
+              <Package2 className="h-6 w-6 text-primary mb-2" />
+              <span className="text-sm font-medium">{product.stock} {t('in_stock')}</span>
             </div>
+            <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg">
+              <BarChart3 className="h-6 w-6 text-primary mb-2" />
+              <span className="text-sm font-medium">{product.totalOrders || 0} {t('total_orders')}</span>
+            </div>
+            <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg">
+              <Clock className="h-6 w-6 text-primary mb-2" />
+              <span className="text-sm font-medium">{product.deliveryTime} {t('delivery_time')}</span>
+            </div>
+            <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg">
+              <Store className="h-6 w-6 text-primary mb-2" />
+              <span className="text-sm font-medium">{t('seller_info')}</span>
+            </div>
+          </div>
+
+          <Divider className="my-4" />
+
+          {/* Product description */}
+          <div className="mt-4">
+            <h2 className="text-lg font-semibold mb-2">{t('product_description')}</h2>
+            <p className="text-gray-600">{product.description}</p>
+          </div>
+
+          {/* Ingredients */}
+          {product.ingredients && product.ingredients.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="mt-6"
+            >
+              <h2 className="text-lg font-semibold mb-2">{t('ingredients')}</h2>
+              <div className="flex flex-wrap gap-2">
+                {product.ingredients.map((ingredient: string, index: number) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                  >
+                    {ingredient}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
           )}
-        </div>
 
-        {/* المكونات */}
-        {product.ingredients && product.ingredients.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6"
-          >
-            <h2 className="text-lg font-semibold mb-2">{t('stores.ingredients')}</h2>
-            <div className="flex flex-wrap gap-2">
-              {product.ingredients.map((ingredient: string, index: number) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-gray-100 rounded-full text-sm"
-                >
-                  {ingredient}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* الإضافات */}
-        {product.extras && product.extras.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6"
-          >
-            <h2 className="text-lg font-semibold mb-2">{t('stores.extras')}</h2>
-            <div className="flex flex-wrap gap-2">
-              {product.extras.map((extra: string, index: number) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-gray-100 rounded-full text-sm"
-                >
-                  {extra}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </motion.div>
-
-      {/* شريط إضافة للسلة */}
-      <motion.div
-        initial={{ y: 100 }}
-        animate={{ y: 0 }}
-        className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t"
-      >
-        <div className="flex items-center justify-between max-w-md mx-auto">
-          <div className="flex items-center gap-4">
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleQuantityChange(-1)}
-              className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
-              disabled={quantity <= 1}
+          {/* Extras */}
+          {product.extras && product.extras.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="mt-6"
             >
-              <Minus className="h-5 w-5" />
-            </motion.button>
-            <span className="text-lg font-medium">{quantity}</span>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleQuantityChange(1)}
-              className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
-              disabled={quantity >= (product.stock || 1)}
-            >
-              <Plus className="h-5 w-5" />
-            </motion.button>
+              <h2 className="text-lg font-semibold mb-2">{t('extras')}</h2>
+              <div className="flex flex-wrap gap-2">
+                {product.extras.map((extra: string, index: number) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                  >
+                    {extra}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Shipping and warranty info */}
+          <div className="mt-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <Truck className="h-5 w-5 text-primary" />
+              <div>
+                <h3 className="font-medium">{t('shipping_info')}</h3>
+                <p className="text-sm text-gray-600">Free shipping on orders over $50</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Shield className="h-5 w-5 text-primary" />
+              <div>
+                <h3 className="font-medium">{t('warranty')}</h3>
+                <p className="text-sm text-gray-600">1 year warranty</p>
+              </div>
+            </div>
           </div>
-          <Button
-            onClick={handleAddToCart}
-            className="flex-1 ml-4"
-            disabled={!product.isAvailable || product.stock === 0}
-          >
-            <ShoppingCart className="h-5 w-5 mr-2" />
-            {t('cart.add_to_cart')}
-          </Button>
-        </div>
+        </motion.div>
+
+        {/* Add to cart bar */}
+        <motion.div
+          initial={{ y: 100 }}
+          animate={{ y: 0 }}
+          className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t"
+        >
+          <div className="flex items-center justify-between max-w-md mx-auto">
+            <div className="flex items-center gap-4">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleQuantityChange(-1)}
+                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
+                disabled={quantity <= 1}
+              >
+                <Minus className="h-5 w-5" />
+              </motion.button>
+              <span className="text-lg font-medium">{quantity}</span>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleQuantityChange(1)}
+                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
+                disabled={quantity >= (product.stock || 1)}
+              >
+                <Plus className="h-5 w-5" />
+              </motion.button>
+            </div>
+            <Button
+              onClick={handleAddToCart}
+              className="flex-1 ml-4"
+              disabled={!product.isAvailable || product.stock === 0}
+              variant="contained"
+              color="primary"
+            >
+              <ShoppingCart className="h-5 w-5 mr-2" />
+              {t('cart.add_to_cart')}
+            </Button>
+          </div>
+        </motion.div>
       </motion.div>
     </div>
   )
