@@ -22,7 +22,7 @@ export default function ProfilePage() {
   const { data: user, isLoading, error } = useQuery({
     queryKey: ["user", userId],
     queryFn: async () => {
-      const response = await axios.get(API_ENDPOINTS.users.getById(userId || ""));
+      const response = await axios.get(API_ENDPOINTS.users.getById(userId || "",{}));
       return response.data as User;
     },
     enabled: !!userId,

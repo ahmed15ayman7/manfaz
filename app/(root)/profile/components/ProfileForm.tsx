@@ -50,7 +50,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   const { mutate: updateProfile, isPending } = useMutation({
     mutationFn: async (data: ProfileFormData) => {
       const response = await axios.patch(
-        API_ENDPOINTS.users.update(user?.id || ""),
+        API_ENDPOINTS.users.update(user?.id || "",{}),
         data
       );
       return response.data;

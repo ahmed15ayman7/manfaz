@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Box, Typography, Avatar, IconButton, Tooltip } from "@mui/material";
-import { Edit as EditIcon } from "@mui/icons-material";
+import {  IconEdit } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import ImageUploadModal from "./ImageUploadModal";
 import { User } from "@/interfaces";
@@ -48,7 +48,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
                 },
               }}
             >
-              <EditIcon />
+              <IconEdit />
             </IconButton>
           </Tooltip>
         </Box>
