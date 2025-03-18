@@ -1,3 +1,4 @@
+"use client"
 import { Order } from "@/interfaces";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";

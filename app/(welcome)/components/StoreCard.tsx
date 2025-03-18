@@ -44,7 +44,7 @@ export default function StoreCard({ store, index }: StoreCardProps) {
             <h3 className="font-semibold">{store.name}</h3>
             <div className="flex items-center text-sm text-muted-foreground">
               <MapPin className="h-4 w-4 mr-1" />
-              <span>{store.locations[0].address}</span>
+              <span>{store.locations[0]?.address}</span>
             </div>
           </div>
         </div>
