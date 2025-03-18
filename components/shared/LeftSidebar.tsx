@@ -10,13 +10,11 @@ import { SidebarLinks,sidebarLinksWorkers } from '@/constant/icons'
 import useCartStore from '@/store/useCartStore'
 import { Badge } from '@mui/material'
 import { signOut } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 const LeftSidebar = ({isWorker}:{isWorker?:boolean}) => {
   let pathname = usePathname();
   let router = useRouter();
-  let { data: userData, isLoading } = useQuery({
-    queryKey: ['user'],
-    queryFn: () => getUserData(),
-  })
+  let { user:userData, status:isLoading } = useUser();
   let t = useTranslations('');
   let { items } = useCartStore();
   let [items2, setItems2] = React.useState(items);
@@ -29,7 +27,7 @@ const LeftSidebar = ({isWorker}:{isWorker?:boolean}) => {
       <div className=" flex flex-col gap-2 px-6 mb-auto">
         {sidebarLinks.map((link, index) => {
           let isActive = (pathname.includes(link.label) && link.route.length > 1) || pathname === link.route;
-          if (link.route === '/profile') link.route = `/profile${!isLoading ? `?id=${userData?.id}` : ""}`
+          if (link.route === '/profile') link.route = `/profile${isLoading!=="loading" ? `?id=${userData?.id}` : ""}`
           return (
             <Link key={index} href={link.route} className={`relative leftsidebar_link ${isActive && ' bg-primary text-white'}`}>
               {link.icon}
