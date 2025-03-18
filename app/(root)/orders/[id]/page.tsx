@@ -24,45 +24,38 @@ import {
   TimelineContent,
   TimelineDot,
 } from "@mui/lab";
-import { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
   const t = useTranslations("orders");
-  const [loading, setLoading] = useState(false);
   const [cancelDialog, setCancelDialog] = useState(false);
   const router = useRouter();
 
-  const [order, setOrder] = useState<Order | null>(null);
-  const [loadingOrder, setLoadingOrder] = useState(true);
+  // استخدام useQuery لجلب بيانات الطلب
+  const { data: order, isLoading: loadingOrder } = useQuery<Order>({
+    queryKey: ["order", params.id],
+    queryFn: async () => {
+      const response = await axios.get(`/api/orders/${params.id}`);
+      return response.data;
+    },
+  });
 
-  // Fetch order data
-  useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        // TODO: Implement API call to fetch order details
-        // For now, using setTimeout to simulate API call
-        setTimeout(() => {
-          setLoadingOrder(false);
-          // TODO: Set order data
-        }, 1500);
-      } catch (error) {
-        console.error("Error fetching order:", error);
-        setLoadingOrder(false);
-      }
-    };
-
-    fetchOrder();
-  }, [params.id]);
-
-  const handleCancelOrder = async () => {
-    setLoading(true);
-    // TODO: Implement cancel order API call
-    setTimeout(() => {
-      setLoading(false);
+  // استخدام useMutation لإلغاء الطلب
+  const { mutate: cancelOrder, isPending: isCancelling } = useMutation({
+    mutationFn: async () => {
+      await axios.patch(`/api/orders/${params.id}`, { status: "canceled" });
+    },
+    onSuccess: () => {
       setCancelDialog(false);
       router.push("/orders");
-    }, 1500);
+    },
+  });
+
+  const handleCancelOrder = () => {
+    cancelOrder();
   };
 
   // Generate timeline items based on order status
@@ -304,9 +297,9 @@ const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
             onClick={handleCancelOrder}
             color="error"
             variant="contained"
-            disabled={loading}
+            disabled={isCancelling}
           >
-            {loading ? (
+            {isCancelling ? (
               <CircularProgress size={24} color="inherit" />
             ) : (
               t("common.yes")
