@@ -1,7 +1,6 @@
 "use client"
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { SnackbarProvider } from "@/hooks/useSnackbar";
 import { SocketProvider } from "@/contexts/SocketContext";
 import { LocaleProvider } from "@/contexts/LocaleContext";
 import LanguageToggle from "@/components/ui/LanguageToggle";
@@ -42,12 +41,12 @@ export default function RootLayout({
         <SessionProvider>
           <SocketProvider>
             <LocaleProvider>
-             
+            
                 {children}
                 <LanguageToggle />
                 <ToastContainer />
                 <Toaster position="bottom-right" richColors closeButton />
-             
+           
             </LocaleProvider>
           </SocketProvider>
         </SessionProvider>
