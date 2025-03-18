@@ -7,16 +7,16 @@ import useStore from '@/store/useLanguageStore';
 import { useEffect, useState } from 'react';
 import { getCategories } from '@/lib/actions/store.action';
 
-const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll }: { onFilterChange: (filter: string) => void, selectedFilter: string, showAll: boolean, setShowAll: (showAll: boolean) => void }) => {
+const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll,categoryId }: { onFilterChange: (filter: string) => void, selectedFilter: string, showAll: boolean, setShowAll: (showAll: boolean) => void,categoryId:string }) => {
     const t = useTranslations();
     let { locale } = useStore();
     let { data: categories, isLoading: isLoadingCategories, refetch } = useQuery({
         queryKey: ['categories'],
-        queryFn: () => getCategories(locale)
+        queryFn: () => getCategories(locale,10,1,'',categoryId)
     })
     useEffect(() => {
         refetch()
-    }, [locale])
+    }, [locale,categoryId])
     const handleShowAll = () => {
         setShowAll(!showAll)
     }

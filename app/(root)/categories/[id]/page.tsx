@@ -17,9 +17,9 @@ import { Pagination } from '@mui/material';
 import BottomSheet from '@/components/shared/BottomSheet'
 import { getCategories } from '@/lib/actions/store.action'
 
-const getStores = async (id: string, locale: string, page: number = 1, limit: number = 10, search?: string) => {
+const getStores = async (id: string, locale: string, page: number = 1, limit: number = 10, search?: string,filter?:string) => {
     const res = await axios.get(
-        `${apiUrl}/stores?categoryId=${id}&lang=${locale}${search ? `&search=${search}` : ''}&page=${page}&limit=${limit}`
+        `${apiUrl}/stores?categoryId=${id}&lang=${locale}${search ? `&search=${search}` : ''}&page=${page}&limit=${limit}${filter ? `&filter=${filter}` : ''}`
     );
     return res.data;
 }
@@ -49,7 +49,7 @@ const CategoryPage = ({ params, searchParams }: { params: { id: string }, search
 
     const { data: stores, isLoading, refetch } = useQuery({
         queryKey: ['stores', id, activeFilter, page, limit, search],
-        queryFn: () => getStores(activeFilter, locale, page, limit, search),
+        queryFn: () => getStores(id, locale, page, limit, search,activeFilter),
         enabled: type === 'delivery' && type2 === 'products'
     });
 
@@ -166,7 +166,7 @@ const CategoryPage = ({ params, searchParams }: { params: { id: string }, search
                 <SearchBar setSearch={setSearch} placeholder={t('search.stores_placeholder')} />
             </Box>
 
-            <StoreFilters onFilterChange={setActiveFilter} selectedFilter={activeFilter} showAll={showAll} setShowAll={setShowAll} />
+            <StoreFilters categoryId={id} onFilterChange={setActiveFilter} selectedFilter={activeFilter} showAll={showAll} setShowAll={setShowAll} />
 
             <Grid container spacing={3}>
                 {isLoading ? [1, 2, 3, 4, 5, 6, 7].map(e =>
@@ -190,7 +190,7 @@ const CategoryPage = ({ params, searchParams }: { params: { id: string }, search
             </Box>
             {showAll && <BottomSheet isOpen={showAll} onClose={() => setShowAll(false)} >
                 <div>
-                    <ShowAllCategories locale={locale} onFilterChange={setActiveFilter} selectedFilter={activeFilter} />
+                    <ShowAllCategories locale={locale} onFilterChange={setActiveFilter} selectedFilter={activeFilter} categoryId={id} />
                 </div>
             </BottomSheet>}
         </Box>
@@ -199,14 +199,14 @@ const CategoryPage = ({ params, searchParams }: { params: { id: string }, search
 
 export default CategoryPage
 
-let ShowAllCategories = ({ locale, onFilterChange, selectedFilter }: { locale: string, onFilterChange: (filter: string) => void, selectedFilter: string }) => {
+let ShowAllCategories = ({ locale, onFilterChange, selectedFilter, categoryId }: { locale: string, onFilterChange: (filter: string) => void, selectedFilter: string, categoryId: string }) => {
     const [page, setPage] = useState<number>(1);
     const [limit, setLimit] = useState<number>(14);
     const [search, setSearch] = useState<string>('');
     const t = useTranslations();
     let { data: categories, isLoading } = useQuery({
-        queryKey: ['categories', page, limit, search],
-        queryFn: () => getCategories(locale, limit, page, search)
+        queryKey: ['categories', page, limit, search,categoryId],
+        queryFn: () => getCategories(locale, limit, page, search,categoryId)
     })
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
