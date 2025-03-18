@@ -42,12 +42,12 @@ export default function RootLayout({
         <SessionProvider>
           <SocketProvider>
             <LocaleProvider>
-              <SnackbarProvider>
+             
                 {children}
                 <LanguageToggle />
                 <ToastContainer />
                 <Toaster position="bottom-right" richColors closeButton />
-              </SnackbarProvider>
+             
             </LocaleProvider>
           </SocketProvider>
         </SessionProvider>

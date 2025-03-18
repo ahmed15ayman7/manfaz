@@ -17,6 +17,7 @@ import "react-image-crop/dist/ReactCrop.css";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import API_ENDPOINTS from "@/lib/apis";
+import { toast } from "sonner";
 
 interface ImageUploadModalProps {
   open: boolean;
@@ -61,16 +62,28 @@ export default function ImageUploadModal({
       return response.data.secure_url;
     },
     onSuccess: async (imageUrl) => {
-      await axios.patch(API_ENDPOINTS.users.update(userId, {}), {
-        imageUrl,
-      });
-      onClose();
+      try {
+        await axios.patch(API_ENDPOINTS.users.update(userId, {}), {
+          imageUrl,
+        });
+        toast.success("تم تحديث الصورة الشخصية بنجاح");
+        onClose();
+      } catch (error) {
+        toast.error("حدث خطأ أثناء تحديث الصورة الشخصية");
+      }
+    },
+    onError: () => {
+      toast.error("حدث خطأ أثناء رفع الصورة");
     },
   });
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("حجم الصورة يجب أن يكون أقل من 5 ميجابايت");
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         setImage(reader.result as string);
