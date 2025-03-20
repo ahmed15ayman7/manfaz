@@ -7,7 +7,7 @@ import { Avatar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useUser } from '@/hooks/useUser';
 import { ProfilePopover } from './profile-popover';
-import { redirect } from 'next/navigation';
+import { redirect,usePathname } from 'next/navigation';
 const Topbar = ({ isWorker }: { isWorker?: boolean }) => {
   let t = useTranslations();
   const [isProfileOpen, setIsProfileOpen] = useState(false)
@@ -17,14 +17,14 @@ const Topbar = ({ isWorker }: { isWorker?: boolean }) => {
     setAnchorEl(event.currentTarget);
     setIsProfileOpen(true);
   };
-
+  let pathName=usePathname();
   const handleClose = () => {
     setAnchorEl(null);
     setIsProfileOpen(false);
   };
   useEffect(() => {
     if (status !== "loading") {
-      // isWorker && user?.role === "user" ? redirect("/home") : user?.role === "worker" ? redirect("/worker") : redirect("/")
+      isWorker && user?.role === "user" && pathName!="/home" ? redirect("/home") : user?.role === "worker" && !pathName.includes("/worker") ? redirect("/worker") : null
     }
 
   }, [user])

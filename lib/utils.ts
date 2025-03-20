@@ -28,6 +28,9 @@ export function formatDate(date: Date | string, locale: string): string {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
   }).format(d)
 }
 

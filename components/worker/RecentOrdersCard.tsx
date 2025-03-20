@@ -47,7 +47,7 @@ export default function RecentOrdersCard({ orders = [] }: RecentOrdersCardProps)
                 <h4 className="font-medium">{order.service?.name}</h4>
                 <p className="text-sm text-gray-500">{order.user?.name}</p>
                 <span className="text-xs text-gray-400">
-                  {formatDate(order.createdAt || new Date(), 'ar')}
+                  {formatDate(order.createdAt || new Date(), 'en')}
                 </span>
               </div>
               <div className="flex items-center space-x-4">

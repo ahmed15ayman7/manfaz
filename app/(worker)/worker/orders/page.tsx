@@ -1,48 +1,82 @@
-"use client"
+"use client";
 
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useTranslations } from 'next-intl'
-import Image from 'next/image'
-import useStore from '@/store/useLanguageStore'
-import { Order } from '@/interfaces'
-import { formatDate } from '@/lib/utils'
-import API_ENDPOINTS from '@/lib/apis'
-import axiosInstance from '@/lib/axios'
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import useStore from "@/store/useLanguageStore";
+import { Order, OrderStatus, PaymentStatus } from "@/interfaces";
+import { formatDate } from "@/lib/utils";
+import API_ENDPOINTS from "@/lib/apis";
+import axiosInstance from "@/lib/axios";
+import { useOrders } from "@/lib/actions/orders.actions";
+import { useUser } from "@/hooks/useUser";
+import { IconClock } from "@tabler/icons-react";
+import { Avatar } from "@mui/material";
+import src from "@emotion/styled";
 
-type OrderStatus = 'all' | 'pending' | 'in_progress' | 'completed' | 'canceled'
 
-const getWorkerOrders = async ({ locale, status, page, limit }: { locale: string; status: OrderStatus; page: number; limit: number }) => {
-  const url = API_ENDPOINTS.workers.getById('me', { lang: locale, include: 'orders', status: status === 'all' ? undefined : status, page, limit }, false)
-  const res = await axiosInstance.get(url)
-  return res.data
-}
+
+const getWorkerOrders = async ({
+  locale,
+  status,
+  page,
+  limit,
+}: {
+  locale: string;
+  status: OrderStatus | "all";
+  page: number;
+  limit: number;
+}) => {
+  const url = API_ENDPOINTS.workers.getById(
+    "me",
+    {
+      lang: locale,
+      include: "orders",
+      status: status === "all" ? undefined : status,
+      page,
+      limit,
+    },
+    false
+  );
+  const res = await axiosInstance.get(url);
+  return res.data;
+};
 
 export default function WorkerOrdersPage() {
-  const { locale } = useStore()
-  const t = useTranslations('orders')
-  const [selectedStatus, setSelectedStatus] = useState<OrderStatus>('all')
-  const [page, setPage] = useState(1)
-  const limit = 10
+  const { locale } = useStore();
+  const t = useTranslations("orders");
+  const t2 = useTranslations("");
+  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "all">("all");
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const { user ,status} = useUser();
+  const { data, isLoading ,refetch } = useOrders(
+    user?.id || "",
+    user?.role || "",
+    limit,
+    page,
+    "",
+    selectedStatus==="all" ? "" : selectedStatus,
+    "" as PaymentStatus
+  )
+  useEffect(() => {
+    refetch();
+  }, [selectedStatus, page, limit,user?.id,user?.role]);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['worker-orders', selectedStatus, page],
-    queryFn: () => getWorkerOrders({ locale, status: selectedStatus, page, limit }),
-  })
+  const orders: Order[] = data?.orders || [];
+  const totalPages = Math.ceil((data?.totalPages || 0) / limit);
 
-  const orders: Order[] = data?.data?.orders || []
-  const totalPages = Math.ceil((data?.data?.total || 0) / limit)
-
-  const statusTabs: { value: OrderStatus; label: string }[] = [
-    { value: 'all', label: t('all') },
-    { value: 'pending', label: t('pending') },
-    { value: 'in_progress', label: t('in_progress') },
-    { value: 'completed', label: t('completed') },
-    { value: 'canceled', label: t('canceled') },
-  ]
+  const statusTabs: { value: OrderStatus | "all"; label: string }[] = [
+    { value: "all", label: t("all") },
+    { value: "pending", label: t("pending") },
+    { value: "in_progress", label: t("in_progress") },
+    { value: "completed", label: t("completed") },
+    { value: "canceled", label: t("canceled") },
+  ];
 
   if (isLoading) {
-  return (
+    return (
       <div className="container mx-auto p-4">
         <div className="animate-pulse space-y-4">
           {/* Status Tabs Skeleton */}
@@ -70,12 +104,12 @@ export default function WorkerOrdersPage() {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
-              return (
+  return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
 
       {/* Status Tabs */}
       <div className="flex space-x-2 overflow-x-auto pb-4 mb-6 hide-scrollbar">
@@ -85,8 +119,8 @@ export default function WorkerOrdersPage() {
             onClick={() => setSelectedStatus(tab.value)}
             className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
               selectedStatus === tab.value
-                ? 'bg-primary text-white'
-                : 'bg-gray-100 hover:bg-gray-200'
+                ? "bg-primary text-white"
+                : "bg-gray-100 hover:bg-gray-200"
             }`}
           >
             {tab.label}
@@ -97,7 +131,7 @@ export default function WorkerOrdersPage() {
       {/* Orders List */}
       {orders.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-gray-500">{t('no_orders')}</p>
+          <p className="text-gray-500">{t("no_orders")}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -117,29 +151,57 @@ export default function WorkerOrdersPage() {
                   )}
                   <div>
                     <h3 className="font-medium">{order.service?.name}</h3>
-                    <p className="text-sm text-gray-500">
-                      {order.user?.name} • {formatDate(order.scheduleOrder?.schedule.scheduledTime || new Date(), locale)}
+                    <div className="flex items-center gap-1 ">
+                      <Avatar
+                        src={order.user?.imageUrl||""}
+                        alt={order.user?.name||""}
+                        className="w-4 h-4"
+                      />
+                    <p className="text-sm text-gray-500 flex items-center gap-2">
+                      {order.user?.name}  <span
+                    className={`inline-block  rounded-full text-sm ${
+                      order.status === "completed"
+                        ? " text-green-800"
+                        : order.status === "canceled"
+                        ? " text-red-800"
+                        : order.status === "in_progress"
+                        ? " text-blue-800"
+                        : " text-yellow-800"
+                    }`}
+                  >
+                    • </span>{" "}
+                      {formatDate(
+                        order.scheduleOrder?.schedule.scheduledTime ||
+                        new Date(),
+                        locale
+                      )}
+                      <IconClock className="w-4 h-4" />
                     </p>
+                      </div>
                     {order.description && (
-                      <p className="text-sm text-gray-600 mt-2">{order.description}</p>
+                      <p className="text-sm text-gray-600 mt-2">
+                        {order.description}
+                      </p>
                     )}
                   </div>
                 </div>
                 <div className="text-right">
                   <span
                     className={`inline-block px-3 py-1 rounded-full text-sm ${
-                      order.status === 'completed'
-                        ? 'bg-green-100 text-green-800'
-                        : order.status === 'canceled'
-                        ? 'bg-red-100 text-red-800'
-                        : order.status === 'in_progress'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-yellow-100 text-yellow-800'
+                      order.status === "completed"
+                        ? "bg-green-100 text-green-800"
+                        : order.status === "canceled"
+                        ? "bg-red-100 text-red-800"
+                        : order.status === "in_progress"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
                     {t(`status.${order.status}`)}
                   </span>
-                  <p className="font-medium mt-2">${order.totalAmount.toFixed(2)}</p>
+                  <p className="font-medium mt-2">
+                    {order.totalAmount.toFixed(2)}  {t2("home_service_details_view.price")}
+                  </p>
                 </div>
               </div>
               {order.notes && (
@@ -168,8 +230,8 @@ export default function WorkerOrdersPage() {
               onClick={() => setPage(i + 1)}
               className={`px-4 py-2 rounded-lg ${
                 page === i + 1
-                  ? 'bg-primary text-white'
-                  : 'bg-gray-100 hover:bg-gray-200'
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 hover:bg-gray-200"
               }`}
             >
               {i + 1}
@@ -185,5 +247,5 @@ export default function WorkerOrdersPage() {
         </div>
       )}
     </div>
-  )
+  );
 }
