@@ -445,6 +445,22 @@
     "settings_update_error": "Error updating settings"
   },
   "worker_schedule": {
+    "schedule_deleted": "Schedule Deleted",
+    "status_update_error": "Error updating status",
+    "orders_for_date": "Orders for the day",
+    "accept": "Accept",
+    "reject": "Reject",
+    "total_orders": "Total Orders",
+    "completed_orders": "Completed Orders",
+    "in_progress_orders": "In Progress Orders",
+    "pending_orders": "Pending Orders",
+    "no_orders": "No orders found",
+    "status":{
+      "pending": "Pending",
+      "in_progress": "In Progress",
+      "completed": "Completed",
+      "canceled": "Canceled"
+    },
     "title": "Schedule",
     "schedule_for": "Schedule for",
     "schedule_updated": "Schedule updated successfully",
@@ -1111,4 +1127,5 @@
     "services": "Services",
     "categories": "Categories"
   }
+
 }

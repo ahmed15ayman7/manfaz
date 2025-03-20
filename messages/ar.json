@@ -433,6 +433,22 @@
     "settings_update_error": "حدث خطأ أثناء تحديث الإعدادات"
   },
   "worker_schedule": {
+    "schedule_deleted": "تم حذف الجدول",
+    "status_update_error": "حدث خطأ أثناء تحديث الحالة",
+    "orders_for_date": "طلبات لليوم",
+    "accept": "قبول",
+    "reject": "رفض",
+    "total_orders": "إجمالي الطلبات",
+    "completed_orders": "طلبات مكتملة",
+    "in_progress_orders": "طلبات قيد التنفيذ",
+    "pending_orders": "طلبات قيد الانتظار",
+    "no_orders": "لا توجد طلبات",
+    "status":{
+      "pending": "قيد الانتظار",
+      "in_progress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "canceled": "ملغي"
+    },
     "title": "جدول المواعيد",
     "schedule_for": "جدول",
     "schedule_updated": "تم تحديث الجدول بنجاح",

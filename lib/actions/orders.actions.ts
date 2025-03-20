@@ -20,11 +20,12 @@ export const getOrders = async (
     page: number,
     search: string,
     status: OrderStatus | "",
-    paymentStatus: PaymentStatus
+    paymentStatus: PaymentStatus,
+    date?: string
 ): Promise<OrdersResponse> => {
     try {
         const response = await axiosInstance.get(
-            API_ENDPOINTS.orders.getAll({userId, role, limit, page, search, status, paymentStatus},false)
+            API_ENDPOINTS.orders.getAll({userId, role, limit, page, search, status, paymentStatus, date},false)
         );
         return response.data.data;
     } catch (error) {
@@ -45,11 +46,12 @@ export const useOrders = (
     page: number = 1,
     search: string = '',
     status: OrderStatus | "",
-    paymentStatus: PaymentStatus
+    paymentStatus: PaymentStatus,
+    date?:string 
 ) => {
     return useQuery<OrdersResponse, Error>({
-        queryKey: ['orders', userId, role, limit, page, search, status, paymentStatus],
-        queryFn: () => getOrders(userId, role, limit, page, search, status, paymentStatus),
+        queryKey: ['orders', userId, role, limit, page, search, status, paymentStatus, date],
+        queryFn: () => getOrders(userId, role, limit, page, search, status, paymentStatus, date),
     });
 };
 

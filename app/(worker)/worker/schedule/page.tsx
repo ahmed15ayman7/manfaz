@@ -1,14 +1,14 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { Calendar } from '@/components/ui/calendar'
-import { Dialog, DialogContent, DialogTitle } from '@mui/material'
+import { Avatar, Dialog, DialogContent, DialogTitle } from '@mui/material'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 import { toast } from 'react-toastify'
 import useStore from '@/store/useLanguageStore'
-import { Order, OrderStatus } from '@/interfaces'
+import { Order, OrderStatus, PaymentStatus } from '@/interfaces'
 import { formatDate } from '@/lib/utils'
 import API_ENDPOINTS from '@/lib/apis'
 import axiosInstance from '@/lib/axios'
@@ -17,6 +17,10 @@ import { io } from 'socket.io-client'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Transition } from '@headlessui/react'
+import { useOrders } from '@/lib/actions/orders.actions'
+import { useUser } from '@/hooks/useUser'
+import { IconClock } from '@tabler/icons-react'
+import Image from 'next/image'
 
 interface DayStats {
   total: number;
@@ -47,11 +51,13 @@ const updateOrderStatus = async ({ orderId, status }: { orderId: string; status:
 export default function WorkerSchedulePage() {
   const { locale } = useStore()
   const t = useTranslations('worker_schedule')
+  const t2 = useTranslations('')
+  const t3 = useTranslations('orders')
   const queryClient = useQueryClient()
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedDayOrders, setSelectedDayOrders] = useState<Order[]>([])
-
+  let {user}=useUser()
   // Socket.io connection
   useState(() => {
     const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || '')
@@ -65,14 +71,19 @@ export default function WorkerSchedulePage() {
     }
   })
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['worker-schedule', selectedDate],
-    queryFn: () => getWorkerSchedule({
-      locale, 
-      date: selectedDate.toISOString().split('T')[0] 
-    }),
-  })
-
+  const { data, isLoading ,refetch} = useOrders(
+    user?.id||"",
+    user?.role||"",
+    10,
+    1,
+    "",
+    "",
+    "" as PaymentStatus,
+    selectedDate.toISOString().split('T')[0]
+  )
+  useEffect(() => {
+    refetch()
+  }, [selectedDate,user])
   const updateTimeMutation = useMutation({
     mutationFn: updateOrderTime,
     onSuccess: () => {
@@ -95,11 +106,12 @@ export default function WorkerSchedulePage() {
     },
   })
 
-  const orders: Order[] = data?.data?.orders || []
+  const orders: Order[] = data?.orders || []
 
   // تجميع إحصائيات الطلبات حسب اليوم
   const getDayStats = (date: Date): DayStats => {
-    const dayOrders = orders.filter(order => {
+    const dayOrders = orders
+    .filter(order => {
       const orderDate = new Date(order.scheduleOrder?.schedule.scheduledTime || new Date())
       return orderDate.toDateString() === date.toDateString()
     })
@@ -142,9 +154,7 @@ export default function WorkerSchedulePage() {
     updateStatusMutation.mutate({ orderId, status: 'rejected' })
   }
 
-  if (isLoading) {
-    return <ScheduleSkeleton />
-  }
+
 
   return (
     <div className="container mx-auto p-4">
@@ -165,6 +175,9 @@ export default function WorkerSchedulePage() {
           className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
         >
           <Calendar
+            classNames={{
+              day: 'rdp-button_reset rdp-button h-9 w-9 p-0 font-normal aria-selected:opacity-100 bg-gray-100 text-primary-foreground hover:bg-primary hover:text-white focus:bg-primary focus:text-white bg-accent text-accent-foreground'
+            }}
             mode="single"
             selected={selectedDate}
             onSelect={(date) => {
@@ -235,8 +248,9 @@ export default function WorkerSchedulePage() {
             className="rounded-md"
           />
         </motion.div>
-
         {/* إحصائيات اليوم المحدد */}
+        {isLoading ? <ScheduleSkeleton />:
+          <div className="md:col-span-2">
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -277,6 +291,99 @@ export default function WorkerSchedulePage() {
             </motion.div>
           </div>
         </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className="md:col-span-2"
+        >
+           {orders.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-gray-500">{t("no_orders")}</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {orders.map((order) => (
+            <div key={order.id} className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-4">
+                  {order.service?.imageUrl && (
+                    <div className="relative w-16 h-16">
+                      <Image
+                        src={order.service.imageUrl}
+                        alt={order.service.name}
+                        fill
+                        className="object-cover rounded-lg"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="font-medium">{order.service?.name}</h3>
+                    <div className="flex items-center gap-1 ">
+                      <Avatar
+                        src={order.user?.imageUrl||""}
+                        alt={order.user?.name||""}
+                        className="w-4 h-4"
+                      />
+                    <p className="text-sm text-gray-500 flex items-center gap-2">
+                      {order.user?.name}  <span
+                    className={`inline-block  rounded-full text-sm ${
+                      order.status === "completed"
+                        ? " text-green-800"
+                        : order.status === "canceled"
+                        ? " text-red-800"
+                        : order.status === "in_progress"
+                        ? " text-blue-800"
+                        : " text-yellow-800"
+                    }`}
+                  >
+                    • </span>{" "}
+                      {formatDate(
+                        order.scheduleOrder?.schedule.scheduledTime ||
+                        new Date(),
+                        locale
+                      )}
+                      <IconClock className="w-4 h-4" />
+                    </p>
+                      </div>
+                    {order.description && (
+                      <p className="text-sm text-gray-600 mt-2">
+                        {order.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full text-sm ${
+                      order.status === "completed"
+                        ? "bg-green-100 text-green-800"
+                        : order.status === "canceled"
+                        ? "bg-red-100 text-red-800"
+                        : order.status === "in_progress"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {t3(`status.${order.status}`)}
+                  </span>
+                  <p className="font-medium mt-2">
+                    {order.totalAmount.toFixed(2)}  {t2("home_service_details_view.price")}
+                  </p>
+                </div>
+              </div>
+              {order.notes && (
+                <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">{order.notes}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+        </motion.div>
+        </div>
+        }
         </div>
 
       {/* Dialog لعرض طلبات اليوم */}

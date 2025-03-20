@@ -19,7 +19,7 @@ export default function ScheduleSkeleton() {
         </div>
 
         {/* Schedule Skeleton */}
-        <div className="lg:col-span-2">
+        {/* <div className="lg:col-span-2">
           <div className="bg-white rounded-lg p-6">
             <div className="h-6 w-48 bg-gray-200 rounded mb-6" />
             <div className="space-y-4">
@@ -34,7 +34,7 @@ export default function ScheduleSkeleton() {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

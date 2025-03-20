@@ -330,6 +330,22 @@
     "settings_update_error": "ترتیبات اپ ڈیٹ کرنے میں خرابی"
   },
   "worker_schedule": {
+    "schedule_deleted": "شیڈول کا حذف ہو گیا ہے",
+    "status_update_error": "حیثیت کی تجدید میں خرابی",
+    "orders_for_date": "دیہ کے آرڈرز",
+    "accept": "قبول کریں",
+    "reject": "رد کریں",
+    "total_orders": "کل آرڈرز",
+    "completed_orders": "مکمل آرڈرز",
+    "in_progress_orders": "جاری ہے آرڈرز",
+    "pending_orders": "زیر التواء آرڈرز",
+    "no_orders": "کوئی آرڈر نہیں ملا",
+    "status":{
+      "pending": "زیر التواء",
+      "in_progress": "جاری ہے",
+      "completed": "مکمل",
+      "canceled": "منسوخ"
+    },
     "title": "شیڈول",
     "schedule_for": "شیڈول برائے",
     "schedule_updated": "شیڈول کامیابی سے اپ ڈیٹ ہو گیا",
