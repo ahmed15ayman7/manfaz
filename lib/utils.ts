@@ -24,9 +24,9 @@ function deg2rad(deg: number): number {
 
 export function formatDate(date: Date | string, locale: string): string {
   const d = new Date(date)
-  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : locale === 'ur' ? 'ur-PK' : 'en-US', {
+  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-EG' : locale === 'ur' ? 'ur-PK' : 'en-US', {
     year: 'numeric',
-    month: 'short',
+    month: 'long',
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',

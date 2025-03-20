@@ -4,6 +4,9 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useLocale } from "next-intl";
+import { formatDate } from "@/lib/utils";
+import { IconLocation } from "@tabler/icons-react";
 
 interface OrderCardProps {
   order?: Order;
@@ -21,7 +24,7 @@ const OrderCard = ({ order, loading }: OrderCardProps) => {
   const t = useTranslations('orders');
   const tCommon = useTranslations('common');
   const router = useRouter();
-
+  const locale = useLocale();
   const handleClick = () => {
     if (order) {
       router.push(`/orders/${order.id}`);
@@ -120,7 +123,7 @@ const OrderCard = ({ order, loading }: OrderCardProps) => {
           {order.address && (
             <div className="flex items-center gap-2 mt-2">
               <Typography variant="body2" color="textSecondary" className="flex items-center">
-                <span className="material-icons text-sm ml-1">location_on</span>
+                <IconLocation />
                 {order.address}
               </Typography>
             </div>
@@ -136,14 +139,10 @@ const OrderCard = ({ order, loading }: OrderCardProps) => {
               {t('order_details.order_date')}
             </Typography>
             <Typography variant="body2" className="font-medium">
-              {new Date(order.createdAt|| '').toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour12: true,
-                hour: 'numeric',
-                minute: 'numeric',
-              })}
+              {formatDate(
+                new Date(order.createdAt|| ''),
+                locale
+              )}
             </Typography>
           </div>
         </div>
