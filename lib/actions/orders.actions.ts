@@ -3,6 +3,8 @@ import { apiUrl } from "@/constant";
 import { Order, OrderStatus, PaymentStatus } from "@/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import API_ENDPOINTS from "../apis";
+import axiosInstance from "../axios";
 
 interface OrdersResponse {
     orders: Order[];
@@ -21,8 +23,8 @@ export const getOrders = async (
     paymentStatus: PaymentStatus
 ): Promise<OrdersResponse> => {
     try {
-        const response = await axios.get(
-            `${apiUrl}/orders?userId=${userId}&role=${role}&limit=${limit}&page=${page}&search=${search}&status=${status}&paymentStatus=${paymentStatus}`
+        const response = await axiosInstance.get(
+            API_ENDPOINTS.orders.getAll({userId, role, limit, page, search, status, paymentStatus},false)
         );
         return response.data.data;
     } catch (error) {
@@ -72,8 +74,8 @@ export const createOrder = async (order: Order,type: string): Promise<Order> => 
     let toastId = toast.loading("Creating order...");
     try {
 
-        const response = await axios.post(`${apiUrl}/orders`, {...order,type});
-        response.data ? toast.update(toastId, { render: response.data.message || "Order created successfully", type: "success", isLoading: false, autoClose: 2000 }): toast.update(toastId, { render: response.data.message || "Something went wrong", type: "error", isLoading: false, autoClose: 2000 });
+        const response = await axiosInstance.post(API_ENDPOINTS.orders.create({},false), {...order,type});
+        response.data.status ? toast.update(toastId, { render: response.data.message || "Order created successfully", type: "success", isLoading: false, autoClose: 2000 }): toast.update(toastId, { render: response.data.message || "Something went wrong", type: "error", isLoading: false, autoClose: 2000 });
         return response.data;
     }
     catch (error: any) {

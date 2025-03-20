@@ -100,8 +100,8 @@ const OrderCard = ({ order, loading }: OrderCardProps) => {
                 {order.store.map((orderStore, index) => (
                   <Avatar 
                     key={index}
-                    src={orderStore.store.logo} 
-                    alt={orderStore.store.name}
+                    src={orderStore?.store?.logo} 
+                    alt={orderStore?.store?.name}
                     className={`border-2 border-white ${index === 0 ? 'ml-0' : '-ml-2'}`}
                   />
                 ))}
@@ -117,11 +117,11 @@ const OrderCard = ({ order, loading }: OrderCardProps) => {
             {order.description || t('order_details.no_description')}
           </Typography>
           
-          {order.location && (
+          {order.address && (
             <div className="flex items-center gap-2 mt-2">
               <Typography variant="body2" color="textSecondary" className="flex items-center">
                 <span className="material-icons text-sm ml-1">location_on</span>
-                {order.location.address}
+                {order.address}
               </Typography>
             </div>
           )}
@@ -136,7 +136,14 @@ const OrderCard = ({ order, loading }: OrderCardProps) => {
               {t('order_details.order_date')}
             </Typography>
             <Typography variant="body2" className="font-medium">
-              {new Date(order.createdAt|| '').toLocaleDateString('ar-SA')}
+              {new Date(order.createdAt|| '').toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour12: true,
+                hour: 'numeric',
+                minute: 'numeric',
+              })}
             </Typography>
           </div>
         </div>

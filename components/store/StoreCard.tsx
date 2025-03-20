@@ -115,6 +115,7 @@ const StoreCard = ({ store, isLoading = false }: StoreCardProps) => {
                     <CardMedia
                         component="img"
                         height="140"
+                        className='object-fit'
                         image={store.coverImage || '/placeholder-cover.jpg'}
                         alt={store.name}
                         sx={{
@@ -158,14 +159,14 @@ const StoreCard = ({ store, isLoading = false }: StoreCardProps) => {
                             ({store.reviewsCount})
                         </Typography>
                     </Box>
-                    {nearestLocation && (
+                   
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
                             <IconMapPin size={16} />
                             <Typography variant="body2" color="text.secondary">
-                                {nearestLocation.distance} {t('stores.km_away')}
+                                {nearestLocation && nearestLocation.distance || 0} {t('stores.km_away')}
                             </Typography>
                         </Box>
-                    )}
+                  
                     {hasActiveDiscounts && (
                         <Chip
                             label={t('stores.discounts_available')}

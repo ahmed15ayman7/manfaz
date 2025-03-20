@@ -47,8 +47,8 @@ export default function WorkerProfilePage() {
   return (
     <div className="container mx-auto p-4">
       {/* Header Section */}
-      <div className="relative h-48 md:h-64 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg mb-16">
-        <div className="absolute -bottom-12 left-4 flex items-end">
+      <div className="relative h-40 md:h-44 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg mb-16">
+        <div className="absolute -bottom-12 left-4 flex items-end rtl:flex-row flex-row-reverse rtl:right-4">
           <div className="relative w-24 h-24 md:w-32 md:h-32">
             <Image
               src={worker.user?.imageUrl || '/imgs/default-avatar.png'}
@@ -134,7 +134,7 @@ export default function WorkerProfilePage() {
       <div className="bg-white rounded-lg p-6 mb-8">
         <h2 className="text-xl font-semibold mb-4">{t('experience')}</h2>
         <div className="space-y-6">
-          {worker.experiences.map((exp) => (
+          {worker.experiences?.map((exp) => (
             <div key={exp.id} className="border-l-2 border-gray-200 pl-4">
               <h3 className="font-semibold text-lg">{exp.title}</h3>
               <p className="text-primary">{exp.company}</p>
@@ -157,7 +157,7 @@ export default function WorkerProfilePage() {
           </button>
         </div>
         <div className="space-y-6">
-          {worker.reviews.slice(0, 3).map((review: Review) => (
+          {worker.reviews?.slice(0, 3).map((review: Review) => (
             <div key={review.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center">

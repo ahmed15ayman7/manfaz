@@ -8,6 +8,8 @@ import { apiUrl } from '@/constant';
 import LocationForm from '@/components/map/LocationForm';
 import { UserLocation } from '@/interfaces';
 import { useRouter } from 'next/navigation';
+import axiosInstance from '@/lib/axios';
+import API_ENDPOINTS from '@/lib/apis';
 
 const UserLocationPage = () => {
     const t = useTranslations();
@@ -20,8 +22,8 @@ const UserLocationPage = () => {
         if (params.locationId) {
             const fetchLocation = async () => {
                 try {
-                    const response = await axios.get(`${apiUrl}/user-locations/${params.locationId}`);
-                    setInitialData(response.data);
+                    const response = await axiosInstance.get(API_ENDPOINTS.userLocations.getAll(params.userId as string,{},false));
+                    setInitialData(response.data.data?.[0]);
                 } catch (error) {
                     console.error('Error fetching location:', error);
                 }
@@ -34,10 +36,10 @@ const UserLocationPage = () => {
         try {
             if (params.locationId) {
                 // تحديث موقع موجود
-                await axios.put(`${apiUrl}/user-locations/${params.locationId}`, data);
+                await axios.put(API_ENDPOINTS.userLocations.update(params.locationId as string, data), data);
             } else {
                 // إضافة موقع جديد
-                await axios.post(`${apiUrl}/user-locations/users/${params.userId}/locations`, data);
+                await axios.post(API_ENDPOINTS.userLocations.create(params.userId as string, data), data);
             }
             router.push('/profile'); // أو أي مسار آخر تريد التوجيه إليه
         } catch (error) {

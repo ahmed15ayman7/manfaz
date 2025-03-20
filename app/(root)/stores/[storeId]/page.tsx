@@ -85,7 +85,7 @@ export default function StoreDetailsPage() {
       setLocations(user?.locations || [])
     }
   }, [status])
-
+console.log(store)
   const filteredProducts = (categoryId: string) => {
     return store?.products.filter(product => {
       const matchesCategory = product.categoryId === categoryId
@@ -131,7 +131,7 @@ export default function StoreDetailsPage() {
   }
   // التحقق من حالة المتجر وساعات العمل
   const isOpen = useMemo(() => {
-      if (store.status !== 'active') return false;
+      if (store?.status !== 'active') return false;
 
       const now = new Date();
       const dayOfWeek = now.getDay(); // 0 للأحد، 1 للاثنين، إلخ
@@ -142,7 +142,7 @@ export default function StoreDetailsPage() {
       if (!todayHours || !todayHours.isOpen) return false;
 
       return currentTime.localeCompare(todayHours.openTime) >= 0 && currentTime.localeCompare(todayHours.closeTime) < 0;
-  }, [store.status, store.workingHours]);
+  }, [store?.status, store?.workingHours]);
 
   // الحصول على وقت الفتح القادم
   const nextOpenTime = useMemo(() => {
@@ -152,7 +152,7 @@ export default function StoreDetailsPage() {
       const dayOfWeek = now.getDay();
       const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-      const todayHours = store.workingHours?.find(hours => hours.dayOfWeek === dayOfWeek);
+      const todayHours = store?.workingHours?.find(hours => hours.dayOfWeek === dayOfWeek);
       
       if (todayHours && todayHours.isOpen && currentTime < todayHours.openTime) {
         return todayHours.openTime;
@@ -161,7 +161,7 @@ export default function StoreDetailsPage() {
       // البحث عن اليوم التالي المفتوح
       for (let i = 1; i <= 7; i++) {
         const nextDay = (dayOfWeek + i) % 7;
-        const nextDayHours = store.workingHours?.find(hours => hours.dayOfWeek === nextDay);
+        const nextDayHours = store?.workingHours?.find(hours => hours.dayOfWeek === nextDay);
         
         if (nextDayHours?.isOpen) {
           return nextDayHours.openTime;
@@ -169,7 +169,7 @@ export default function StoreDetailsPage() {
       }
       
       return null;
-    }, [isOpen, store.workingHours]);
+    }, [isOpen, store?.workingHours]);
     
       if (isLoading) {
         return (
@@ -198,7 +198,7 @@ export default function StoreDetailsPage() {
     return (
     <div className="min-h-screen bg-gray-50 rounded-3xl">
       {/* Cover Image */}
-      <div className="relative h-48 md:h-64 rounded-t-3xl">
+      <div className="relative h-60 md:h-64 rounded-t-3xl">
         <Image
           src={store.coverImage || '/imgs/default-cover.jpg'}
           alt={store.name}
@@ -206,13 +206,13 @@ export default function StoreDetailsPage() {
           className="object-cover rounded-t-3xl"
         />
         <div className="absolute inset-0 bg-black/20 rounded-3xl" />
-        <Button
+        {/* <Button
           variant="outlined"
           className="absolute top-4 right-4 text-white"
           onClick={() => router.back()}
         >
           <ArrowLeft className="h-6 w-6" />
-        </Button>
+        </Button> */}
       </div>
 
       {/* Store Info */}
@@ -311,6 +311,7 @@ export default function StoreDetailsPage() {
             variant="scrollable"
             scrollButtons="auto"
           >
+            <Tab.Group >
             {store.categories.map((category) => (
               <Tab
                 key={category.id}
@@ -319,6 +320,7 @@ export default function StoreDetailsPage() {
                 className="min-w-[120px]"
               />
             ))}
+</Tab.Group >
           </Tabs>
         </div>
       </div>

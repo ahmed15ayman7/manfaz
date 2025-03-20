@@ -199,6 +199,7 @@
     "invalid_phone": "Invalid phone number"
   },
   "stores": {
+     "description": "Shop from the best local stores.",
     "available_stores": "Available Stores",
     "offers": "Offers",
     "discounts": "Discounts",
@@ -278,7 +279,6 @@
       "distance": "Distance",
       "delivery_time": "Delivery Time",
       "min_order_amount": "Minimum Order Amount",
-      "delivery_fee": "Delivery Fee",
       "store_status": {
         "open": "Open",
         "closed": "Closed",
@@ -428,7 +428,7 @@
     }
   },
   "worker_settings": {
-    "title": "Settings",
+    "title2": "Settings",
     "profile_image": "Profile Image",
     "change_image": "Change Image",
     "personal_info": "Personal Information",
@@ -474,7 +474,7 @@
     "order_image": "Order Image",
     "status_and_actions": "Status & Actions",
     "order_status": "Order Status",
-    "payment_status": "Payment Status",
+    "payment_status2": "Payment Status",
     "accept": "Accept",
     "reject": "Reject",
     "mark_as_completed": "Mark as Completed",
@@ -500,17 +500,12 @@
     "description": "We provide you with the best services and stores in one place. Order your service now with ease and security."
   },
   "our_services": "Our Services",
-  "services": {
-    "description": "We offer a wide range of services to meet your daily needs."
-  },
   "browse_categories": "Browse Categories",
   "categories": {
     "description": "Discover a variety of available categories."
   },
   "featured_stores": "Featured Stores",
-  "stores": {
-    "description": "Shop from the best local stores."
-  },
+
   "cta": {
     "title": "Get the App Now",
     "description": "Download the Manfadh app and enjoy a smooth and secure shopping experience."
@@ -688,6 +683,20 @@
       "a5": "You can check your order status in the 'My Orders' section of the app or website."
     },
     "delivery": {
+      "title": "Delivery",
+      "content": "We strive to provide fast and reliable delivery services for all your requests.",
+      "process": {
+        "title": "Delivery Process",
+        "content": "Your request is tracked in real-time from the moment of confirmation until delivery."
+      },
+      "timing": {
+        "title": "Delivery Timing",
+        "content": "We strive to deliver your request on time, considering unforeseen circumstances."
+      },
+      "responsibility": {
+        "title": "Responsibility",
+        "content": "We are responsible for delivering your request in good condition and on time."
+      },
       "q1": "How long does delivery take?",
       "a1": "Delivery time depends on your location and the store. Typically, it takes between 30 to 45 minutes.",
       "q2": "What are the delivery charges?",
@@ -790,25 +799,9 @@
         }
       }
     },
-    "delivery": {
-      "title": "Delivery",
-      "content": "We strive to provide fast and reliable delivery services for all your requests.",
-      "process": {
-        "title": "Delivery Process",
-        "content": "Your request is tracked in real-time from the moment of confirmation until delivery."
-      },
-      "timing": {
-        "title": "Delivery Timing",
-        "content": "We strive to deliver your request on time, considering unforeseen circumstances."
-      },
-      "responsibility": {
-        "title": "Responsibility",
-        "content": "We are responsible for delivering your request in good condition and on time."
-      }
-    },
     "prohibited": {
       "title": "Prohibited",
-      "content": "There are some activities and behaviors prohibited when using our platform.",
+
       "content": {
         "title": "Prohibited Content",
         "content": "It is prohibited to publish any illegal or harmful content."

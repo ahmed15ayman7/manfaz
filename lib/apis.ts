@@ -31,6 +31,13 @@ const API_ENDPOINTS = {
     update: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/services/${id}`, params, isBaseUrl),
     delete: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/services/${id}`, params, isBaseUrl),
   },
+  serviceParameters: {
+    getAll: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/service-parameters', params, isBaseUrl),
+    create: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/service-parameters', params, isBaseUrl),
+    getById: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/service-parameters/${id}`, params, isBaseUrl),
+    update: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/service-parameters/${id}`, params, isBaseUrl),
+    delete: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/service-parameters/${id}`, params, isBaseUrl),
+  },
   workers: {
     getAll: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/workers', params, isBaseUrl),
     create: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/workers', params, isBaseUrl),
@@ -66,6 +73,7 @@ const API_ENDPOINTS = {
     delete: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/stores/${id}`, params, isBaseUrl),
     categories: (storeId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/stores/${storeId}/categories`, params, isBaseUrl),
     products: (storeId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/stores/${storeId}/products`, params, isBaseUrl),
+    product: ( id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/stores/products/${id}`, params, isBaseUrl),
     offers: (storeId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/stores/${storeId}/offers`, params, isBaseUrl),
     locations: (storeId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/stores/${storeId}/locations`, params, isBaseUrl),
     discounts: {
@@ -105,8 +113,8 @@ const API_ENDPOINTS = {
     },
   },
   userLocations: {
-    getAll: (userId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/users/${userId}/locations`, params, isBaseUrl),
-    create: (userId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/users/${userId}/locations`, params, isBaseUrl),
+    getAll: (userId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/locations/${userId}`, params, isBaseUrl),
+    create: (userId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/locations/${userId}`, params, isBaseUrl),
     update: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/locations/${id}`, params, isBaseUrl),
     delete: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/locations/${id}`, params, isBaseUrl),
     setDefault: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/locations/${id}/set-default`, params, isBaseUrl),

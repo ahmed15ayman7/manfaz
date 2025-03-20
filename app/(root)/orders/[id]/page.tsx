@@ -195,14 +195,14 @@ const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {order?.store?.map((orderStore) => (
-                    <Card key={orderStore.store.id} className="p-3">
+                    <Card key={orderStore?.store?.id} className="p-3">
                       <div className="flex items-center gap-3">
                         <Avatar
-                          src={orderStore.store.logo}
-                          alt={orderStore.store.name}
+                          src={orderStore?.store?.logo}
+                          alt={orderStore?.store?.name}
                         />
                         <Typography variant="subtitle2">
-                          {orderStore.store.name}
+                          {orderStore?.store?.name}
                         </Typography>
                       </div>
                     </Card>
@@ -217,15 +217,15 @@ const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
               </Typography>
               <Card className="p-4 bg-gray-50">
                 <Typography variant="body1">
-                  {order?.location?.address}
+                  {order?.address}
                 </Typography>
-                {order?.location?.notes && (
+                {order?.notes && (
                   <Typography
                     variant="body2"
                     color="textSecondary"
                     className="mt-2"
                   >
-                    {t("order_details.notes")}: {order.location.notes}
+                    {t("order_details.notes")}: {order.notes}
                   </Typography>
                 )}
               </Card>

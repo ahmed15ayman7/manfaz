@@ -2,7 +2,8 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { SocketProvider } from "@/contexts/SocketContext";
-import { LocaleProvider } from "@/contexts/LocaleContext";
+import {SnackbarProvider} from "@/hooks/useSnackbar"
+import  LocaleProvider  from "@/components/providers/IntlProvider";
 import LanguageToggle from "@/components/ui/LanguageToggle";
 import { SessionProvider } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
@@ -40,6 +41,8 @@ export default function RootLayout({
       <body className={inter.className}>
         <SessionProvider>
           <SocketProvider>
+            <SnackbarProvider>
+
             <LocaleProvider>
             
                 {children}
@@ -48,6 +51,7 @@ export default function RootLayout({
                 <Toaster position="bottom-right" richColors closeButton />
            
             </LocaleProvider>
+            </SnackbarProvider>
           </SocketProvider>
         </SessionProvider>
       </body>

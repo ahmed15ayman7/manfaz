@@ -12,8 +12,9 @@ import ProfileForm from "./components/ProfileForm";
 import ProfileHeader from "./components/ProfileHeader";
 import ProfileProgress from "./components/ProfileProgress";
 import { useSnackbar } from "@/hooks/useSnackbar";
-
-export default function ProfilePage() {
+import { Suspense } from "react";
+import { SkeletonLoader } from "@/components/shared/skeleton-loader";
+function ProfilePage() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
   const { showSnackbar } = useSnackbar();
@@ -23,7 +24,7 @@ export default function ProfilePage() {
     queryKey: ["user", userId],
     queryFn: async () => {
       const response = await axios.get(API_ENDPOINTS.users.getById(userId || "",{}));
-      return response.data as User;
+      return response.data.data as User;
     },
     enabled: !!userId,
   });
@@ -75,5 +76,13 @@ export default function ProfilePage() {
         </Paper>
       </motion.div>
     </Container>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<SkeletonLoader type="details" />}>
+      <ProfilePage />
+    </Suspense>
   );
 }

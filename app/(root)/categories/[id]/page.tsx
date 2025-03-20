@@ -158,9 +158,9 @@ const CategoryPage = ({ params, searchParams }: { params: { id: string }, search
     }
     return (
         <Box sx={{ p: 2 }} className='max-w-[99vw]'>
-            <Typography variant="h4" sx={{ mb: 3 }}>
+            {/* <Typography variant="h4" sx={{ mb: 3 }}>
                 {t('stores.available_stores')}
-            </Typography>
+            </Typography> */}
 
             <Box sx={{ mb: 3 }}>
                 <SearchBar setSearch={setSearch} placeholder={t('search.stores_placeholder')} />

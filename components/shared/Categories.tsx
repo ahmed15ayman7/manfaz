@@ -155,7 +155,7 @@ const Categories = () => {
               />
             ))
           ) : (
-            servicesData?.data?.services?.map((service: any, index: number) => (
+            servicesData?.data?.map((service: any, index: number) => (
               <motion.div
                 key={service.id}
                 initial={{ opacity: 0, y: 20 }}

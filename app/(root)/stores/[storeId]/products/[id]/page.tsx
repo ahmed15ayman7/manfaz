@@ -46,7 +46,7 @@ const getProductDetails = async ({ id, storeId, locale }: {
   storeId: string
   locale: string 
 }) => {
-  const url = API_ENDPOINTS.stores.products(storeId, { id, lang: locale }, false)
+  const url = API_ENDPOINTS.stores.product( id, { id, lang: locale }, false)
   const res = await axiosInstance.get(url)
   return res.data.data
 }
@@ -62,6 +62,7 @@ export default function ProductDetailsPage() {
   const router = useRouter()
   const { locale } = useStore()
   const t = useTranslations('stores.product_details')
+  const t2 = useTranslations('')
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const { addItem, getItemQuantity } = useCartStore()
@@ -117,7 +118,7 @@ export default function ProductDetailsPage() {
 
     addItem({
       id: product.id,
-      type: 'product',
+      type: 'delivery',
       quantity,
       product
     })
@@ -173,7 +174,7 @@ export default function ProductDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-gray-50 relative" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       {/* Sticky header */}
       <motion.div
         initial={false}
@@ -181,7 +182,7 @@ export default function ProductDetailsPage() {
           backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.9)' : 'transparent',
           borderBottom: isScrolled ? '1px solid #E5E7EB' : 'none'
         }}
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 backdrop-blur-sm transition-colors duration-200"
+        className="sticky top-20 left-0 right-0 z-50 flex items-center justify-between p-4 backdrop-blur-sm transition-colors duration-200"
       >
         <Button
           variant="outlined"
@@ -224,9 +225,9 @@ export default function ProductDetailsPage() {
         animate="visible"
       >
         {/* Product images */}
-        <motion.div variants={itemVariants} className="relative aspect-square">
+        <motion.div variants={itemVariants} className="relative aspect-square h-[60vh] w-full">
           <Image
-            src={product.images[selectedImage] || '/imgs/default-product.jpg'}
+            src={product.images?.[selectedImage] || '/imgs/default-product.jpg'}
             alt={product.name}
             fill
             className="object-cover"
@@ -237,7 +238,7 @@ export default function ProductDetailsPage() {
         {/* Thumbnail gallery */}
         <motion.div variants={itemVariants} className="bg-white p-4">
           <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-            {product.images.map((image: string, index: number) => (
+            {product.images?.map((image: string, index: number) => (
               <motion.button
                 key={index}
                 whileTap={{ scale: 0.95 }}
@@ -270,11 +271,11 @@ export default function ProductDetailsPage() {
             <div className="text-right">
               <div className="flex items-center gap-2">
                 <span className="text-2xl font-bold text-primary">
-                  {product.discountPrice || product.price} {t('common.currency')}
+                  {product.discountPrice || product.price} {t2("home_service_details_view.price")}
                 </span>
                 {product.discountPrice && (
                   <span className="text-lg text-gray-500 line-through">
-                    {product.price} {t('common.currency')}
+                    {product.price} {t2("home_service_details_view.price")}
                   </span>
                 )}
               </div>
@@ -359,7 +360,7 @@ export default function ProductDetailsPage() {
           )}
 
           {/* Shipping and warranty info */}
-          <div className="mt-6 space-y-4">
+          <div className="mt-20 space-y-4">
             <div className="flex items-center gap-3">
               <Truck className="h-5 w-5 text-primary" />
               <div>
@@ -383,7 +384,7 @@ export default function ProductDetailsPage() {
           animate={{ y: 0 }}
           className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t"
         >
-          <div className="flex items-center justify-between max-w-md mx-auto">
+          <div className="flex items-center justify-between max-w-md mx-auto gap-10">
             <div className="flex items-center gap-4">
               <motion.button
                 whileTap={{ scale: 0.95 }}
@@ -403,6 +404,7 @@ export default function ProductDetailsPage() {
                 <Plus className="h-5 w-5" />
               </motion.button>
             </div>
+            <p className="text-sm text-gray-600">{quantity * product.price } {t2("home_service_details_view.price")}</p>
             <Button
               onClick={handleAddToCart}
               className="flex-1 ml-4"
@@ -411,7 +413,7 @@ export default function ProductDetailsPage() {
               color="primary"
             >
               <ShoppingCart className="h-5 w-5 mr-2" />
-              {t('cart.add_to_cart')}
+              {t2('services.add_to_cart')}
             </Button>
           </div>
         </motion.div>

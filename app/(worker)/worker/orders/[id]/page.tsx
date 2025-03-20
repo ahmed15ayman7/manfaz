@@ -172,10 +172,7 @@ export default function OrderDetailsPage() {
             </div>
             <div>
               <p className="text-sm text-gray-500">{t('location')}</p>
-              <p className="font-medium">{order.location?.address}</p>
-              <p className="text-sm text-gray-500">
-                {order.location?.area}, {order.location?.city}
-              </p>
+              <p className="font-medium">{order?.address}</p>
             </div>
           </div>
         </div>

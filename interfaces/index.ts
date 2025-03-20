@@ -147,17 +147,17 @@ export interface Store {
 export interface OrdersStore {
     id: string;
     orderId: string;
-    order: Order;
+    order?: Order;
     storeId: string;
-    store: Store;
+    store?: Store;
     products: ProductsOrder[]
   }
   export interface ProductsOrder{
     id: string;
     orderId: string;
-    orders: OrdersStore;
+    orders?: OrdersStore;
     productId: string;
-    product: Product;
+    product?: Product;
     quantity : number
   }
 export interface Order {
@@ -172,19 +172,22 @@ export interface Order {
     deliveryDriver?: DeliveryDriver;
     description?: string;
     imageUrl?: string;
-    locationId: string;
-    location?: UserLocation;
+    latitude?: number;
+    longitude?: number;
+    address?: string;
     notes: string;
     price?: number;
     duration?: number;
     status: OrderStatus;
     totalAmount: number;
     paymentStatus: PaymentStatus;
+    paymentMethod?: PaymentMethod;
     createdAt?: Date;
     updatedAt?: Date;
     store?: OrdersStore[];
     scheduleOrder?: ScheduleOrder
 }
+export type PaymentMethod = "cash" | "credit_card" | "tamara" | "tabby";
 export type OrderStatus = "pending" | "in_progress" | "completed" | "canceled";
 
 export type PaymentStatus = "pending" | "paid" | "failed";
