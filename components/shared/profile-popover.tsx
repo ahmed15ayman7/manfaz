@@ -23,24 +23,27 @@ import {
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { alpha } from '@mui/material/styles';
+import { User } from '@/interfaces';
 
 interface ProfilePopoverProps {
   open: boolean;
   anchorEl: HTMLElement | null;
   onClose: () => void;
-  user?: {
-    name?: string;
-    email?: string;
-    imageUrl?: string;
-    role?: string;
-  };
+  user?:User
 }
 
 const menuItems = [
   {
     title: 'الملف الشخصي',
-    path: '/profile',
+    path: '/profile?id=:id',
     icon: IconUser,
+    roles: ['user'],
+  },
+  {
+    title: 'الملف الشخصي',
+    path: '/worker/profile/:id',
+    icon: IconUser,
+    roles: ['worker'],
   },
   {
     title: 'متجري',
@@ -50,20 +53,33 @@ const menuItems = [
   },
   {
     title: 'طلباتي',
-    path: '/my-orders',
+    path: '/orders',
     icon: IconTruck,
     roles: ['user', 'store'],
   },
   {
+    title: 'طلباتي',
+    path: '/worker/orders',
+    icon: IconTruck,
+    roles: ['worker'],
+  },
+  {
     title: 'محفظتي',
-    path: '/my-wallet',
+    path: '/worker/wallet',
     icon: IconWallet,
-    roles: ['user', 'store', 'worker'],
+    roles: ['worker'],
+  },
+  {
+    title: 'محفظتي',
+    path: '/wallet',
+    icon: IconWallet,
+    roles: ['user', 'store',],
   },
   {
     title: 'الإعدادات',
-    path: '/settings',
+    path: '/worker/settings',
     icon: IconSettings,
+    roles: [ 'worker'],
   },
 ];
 
@@ -189,7 +205,9 @@ export function ProfilePopover({ open, anchorEl, onClose, user }: ProfilePopover
           },
         }}
       >
-        {filteredMenuItems.map((item) => (
+        {filteredMenuItems.map((item) =>{
+          item.path=item.path.replace(':id', user?.id||"")
+           return (
           <ListItem
             key={item.path}
             component={Link}
@@ -217,7 +235,7 @@ export function ProfilePopover({ open, anchorEl, onClose, user }: ProfilePopover
               }
             />
           </ListItem>
-        ))}
+)})}
         <ListItem
           onClick={handleLogout}
           sx={{

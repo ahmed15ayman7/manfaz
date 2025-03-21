@@ -18,16 +18,19 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import API_ENDPOINTS from "@/lib/apis";
 import { toast } from "sonner";
+import axiosInstance from "@/lib/axios";
 
 interface ImageUploadModalProps {
   open: boolean;
   onClose: () => void;
   userId: string;
+  refetch: () => void;
 }
 
 export default function ImageUploadModal({
   open,
   onClose,
+  refetch,
   userId,
 }: ImageUploadModalProps) {
   const [image, setImage] = useState<string | null>(null);
@@ -44,29 +47,33 @@ export default function ImageUploadModal({
 
   const { mutate: uploadImage, isPending } = useMutation({
     mutationFn: async (croppedImage: Blob) => {
-      const formData = new FormData();
-      formData.append("file", croppedImage);
-      formData.append("upload_preset", "your_upload_preset");
+    const formData = new FormData();
+formData.append('file', croppedImage);
+formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!); // لو عندك preset
+formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!);
+formData.append('timestamp', (Date.now() / 1000).toString()); // timestamp مهم في بعض الحالات
 
-      const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
-        formData,
-        {
-          onUploadProgress: (progressEvent) => {
-            const progress = (progressEvent.loaded / progressEvent.total!) * 100;
-            setUploadProgress(progress);
-          },
-        }
-      );
+const response = await axios.post(
+  `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+  formData,
+  {
+    onUploadProgress: (progressEvent) => {
+      const progress = (progressEvent.loaded / progressEvent.total!) * 100;
+      setUploadProgress(progress);
+    },
+  }
+);
+
 
       return response.data.secure_url;
     },
     onSuccess: async (imageUrl) => {
       try {
-        await axios.patch(API_ENDPOINTS.users.update(userId, {}), {
-          imageUrl,
+        await axiosInstance.put(API_ENDPOINTS.users.update(userId, {},false), {
+          imageUrl: imageUrl,
         });
         toast.success("تم تحديث الصورة الشخصية بنجاح");
+        refetch();
         onClose();
       } catch (error) {
         toast.error("حدث خطأ أثناء تحديث الصورة الشخصية");
@@ -96,14 +103,18 @@ export default function ImageUploadModal({
     const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-    canvas.width = crop.width;
-    canvas.height = crop.height;
+  
+    const cropWidth = Math.round(crop.width);
+    const cropHeight = Math.round(crop.height);
+  
+    canvas.width = cropWidth;
+    canvas.height = cropHeight;
+  
     const ctx = canvas.getContext("2d");
-
     if (!ctx) {
-      throw new Error("No 2d context");
+      throw new Error("No 2D context");
     }
-
+  
     ctx.drawImage(
       image,
       crop.x * scaleX,
@@ -112,16 +123,21 @@ export default function ImageUploadModal({
       crop.height * scaleY,
       0,
       0,
-      crop.width,
-      crop.height
+      cropWidth,
+      cropHeight
     );
-
-    return new Promise<Blob>((resolve) => {
+  
+    return new Promise<Blob>((resolve, reject) => {
       canvas.toBlob((blob) => {
-        if (blob) resolve(blob);
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error("Canvas is empty or failed to create blob."));
+        }
       }, "image/jpeg");
     });
   };
+  
 
   const handleCrop = async () => {
     if (imgRef.current && crop.width && crop.height) {

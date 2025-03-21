@@ -9,9 +9,10 @@ import { User } from "@/interfaces";
 
 interface ProfileHeaderProps {
   user: User | undefined;
+  refetch: () => void;
 }
 
-export default function ProfileHeader({ user }: ProfileHeaderProps) {
+export default function ProfileHeader({ user, refetch }: ProfileHeaderProps) {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   if (!user) return null;
@@ -71,6 +72,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
       </motion.div>
 
       <ImageUploadModal
+        refetch={refetch}
         open={isImageModalOpen}
         onClose={() => setIsImageModalOpen(false)}
         userId={user.id}

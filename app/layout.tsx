@@ -3,6 +3,8 @@ import "./globals.css";
 import LocaleProvider from "@/components/providers/IntlProvider";
 import useStore from '@/store/useLanguageStore';
 import { ToastContainer } from 'react-toastify';
+import { SnackbarProvider } from '@/hooks/useSnackbar';
+
 import 'react-toastify/dist/ReactToastify.css';
 import { SessionProvider } from "next-auth/react";
 import { SocketProvider } from '@/components/providers/SocketProvider';
@@ -27,10 +29,12 @@ export default function RootLayout({
     <>
       <SessionProvider>
         <SocketProvider>
-          <LocaleProvider>
-            {children}
-            <LanguageToggle />
-          </LocaleProvider>
+          <SnackbarProvider>
+            <LocaleProvider>
+              {children}
+              <LanguageToggle />
+            </LocaleProvider>
+          </SnackbarProvider>
         </SocketProvider>
       </SessionProvider>
       <ToastContainer/>

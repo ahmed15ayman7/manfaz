@@ -20,7 +20,7 @@ function ProfilePage() {
   const { showSnackbar } = useSnackbar();
   const [profileCompletion, setProfileCompletion] = useState(0);
 
-  const { data: user, isLoading, error } = useQuery({
+  const { data: user, isLoading, error, refetch } = useQuery({
     queryKey: ["user", userId],
     queryFn: async () => {
       const response = await axios.get(API_ENDPOINTS.users.getById(userId || "",{}));
@@ -70,7 +70,7 @@ function ProfilePage() {
         transition={{ duration: 0.5 }}
       >
         <Paper elevation={0} sx={{ p: 4, borderRadius: 2 }}>
-          <ProfileHeader user={user} />
+          <ProfileHeader user={user} refetch={refetch} />
           <ProfileProgress value={profileCompletion} />
           <ProfileForm user={user} />
         </Paper>
