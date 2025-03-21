@@ -9,33 +9,40 @@ import CategoryCard from './components/CategoryCard'
 import { useQuery } from '@tanstack/react-query'
 import axiosInstance from '@/lib/axios'
 import { Skeleton } from '@mui/material'
-const useServicesQuery = () => {
+import { useEffect } from 'react'
+import  useStore  from '@/store/useLanguageStore';
+const useServicesQuery = (locale: string) => {
   return useQuery({
     queryKey: ['services'],
-    queryFn: () => axiosInstance.get(API_ENDPOINTS.services.getAll({ limit: 6 }, false))
+    queryFn: () => axiosInstance.get(API_ENDPOINTS.services.getAll({lang: locale, limit: 6 ,}, false))
   })
 }
 
-const useStoresQuery = () => {
+const useStoresQuery = (locale: string) => {
   return useQuery({
     queryKey: ['stores'],
-    queryFn: () => axiosInstance.get(API_ENDPOINTS.stores.getAll({ limit: 6 }, false))
+    queryFn: () => axiosInstance.get(API_ENDPOINTS.stores.getAll({lang: locale, limit: 6 ,}, false))
   })
 }
 
-const useCategoriesQuery = () => {
+const useCategoriesQuery = (locale: string) => {
   return useQuery({
     queryKey: ['categories'],
-    queryFn: () => axiosInstance.get(API_ENDPOINTS.categories.getAll({ limit: 6 }, false))
+    queryFn: () => axiosInstance.get(API_ENDPOINTS.categories.getAll({lang: locale, limit: 6 ,}, false))
   })
 }
 
 export default function WelcomePage() {
   const t = useTranslations()
-  const { data: services, isLoading: servicesLoading } = useServicesQuery()
-  const { data: stores, isLoading: storesLoading } = useStoresQuery()
-  const { data: categories, isLoading: categoriesLoading } = useCategoriesQuery()
-
+  let {locale} = useStore()
+  const { data: services, isLoading: servicesLoading,refetch:servicesRefetch } = useServicesQuery(locale)
+  const { data: stores, isLoading: storesLoading,refetch:storesRefetch } = useStoresQuery(locale)
+  const { data: categories, isLoading: categoriesLoading,refetch:categoriesRefetch } = useCategoriesQuery(locale)
+  useEffect(()=>{
+    servicesRefetch()
+    storesRefetch()
+    categoriesRefetch()
+  },[locale])
   return (
     <div className="space-y-20 py-10 flex flex-col items-center">
       {/* Hero Section */}
