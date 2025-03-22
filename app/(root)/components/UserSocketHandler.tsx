@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useSocket } from '@/lib/socket';
 import { useNotifications } from '@/hooks/useNotifications';
 import { toast } from 'sonner';
+import { toast as toast2 } from 'react-toastify';
 import { UserEvents } from '@/types/socket';
 
 export const UserSocketHandler = () => {
@@ -42,6 +43,20 @@ export const UserSocketHandler = () => {
         toast.info(message);
         showNotification('تحديث الطلب', { body: message });
       }
+    });
+    socket.on('newNotification', (notification: any) => {
+      // عرض الإشعار باستخدام react-toastify
+      if (notification.relatedId=== userId) {
+      showNotification('إشعار جديد', { body: notification.message });
+      toast2.info(notification.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        rtl: true // للغة العربية
+      });}
     });
 
     // إشعارات خاصة بالمستخدم العادي
@@ -148,6 +163,7 @@ export const UserSocketHandler = () => {
       socket.off('verificationCodeResent');
       socket.off('accountVerified');
       socket.off('orderUpdated');
+      socket.off('newNotification');
       if (userType === 'user') {
         socket.off('walletUpdated');
         socket.off('newReward');
