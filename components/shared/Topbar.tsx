@@ -24,7 +24,7 @@ const Topbar = ({ isWorker }: { isWorker?: boolean }) => {
   };
   useEffect(() => {
     if (status !== "loading") {
-      isWorker && user?.role === "user" && pathName!="/home" ? redirect("/home") : user?.role === "worker" && !pathName.includes("/worker") ? redirect("/worker") : null
+      // isWorker && user?.role === "user" && pathName!="/home" ? redirect("/home") : user?.role === "worker" && !pathName.includes("/worker") ? redirect("/worker") : null
     }
 
   }, [user])
