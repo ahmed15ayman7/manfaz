@@ -1126,6 +1126,12 @@
     "contact": "Contact",
     "services": "Services",
     "categories": "Categories"
+  },
+  "Notifications":{
+    "noNotifications": "No notifications yet",
+    "noNotificationsDescription": "Your notifications will appear here once you have any."
   }
+  
+
 
 }

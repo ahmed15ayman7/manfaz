@@ -90,6 +90,7 @@ export interface Service {
     name: string;
     slug: string;
     description?: string;
+    subName?: string;
     categoryId: string;
     type: "service" | "delivery";
     subType?: "delivery_service" | "delivery_driver";
@@ -464,3 +465,27 @@ export interface Reward {
     description?: string; // وصف المكافأة
     createdAt: Date;
 }
+export interface Notification {
+    id :string;    
+    title :string;
+    message :string;
+    type :NotificationType
+    relatedId :string;    
+    senderId :string;    
+    orderId :string;    
+    isRead :boolean;    
+    createdAt :Date;    
+    updatedAt :Date;    
+  
+    // العلاقات الاختيارية مع النماذج المختلفة
+    user? :User
+    sender? : User
+    order?: Order
+  }
+  
+  export enum NotificationType {
+    user,
+    employee,
+    worker
+  }
+  

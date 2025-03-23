@@ -104,7 +104,7 @@ const LoginView: React.FC = () => {
               autoClose: 3000,
               closeButton: true
             });
-            router.push(result.url.includes("worker") && role === "worker" ? "/worker" : result.url.includes("store") && role === "store" ? "/store" : "/home");
+            router.push(  role === "worker" ?result.url.includes("worker")?result.url: "/worker" : role === "store" ?result.url.includes("store") ?result.url: "/store" : "/home");
           }
         }
       }
@@ -181,7 +181,7 @@ const LoginView: React.FC = () => {
           >
             <MenuItem value="user">{t('user')}</MenuItem>
             <MenuItem value="worker">{t('worker')}</MenuItem>
-            <MenuItem value="store">{t('store')}</MenuItem>
+            {/* <MenuItem value="store">{t('store')}</MenuItem> */}
           </Select>
         </FormControl>
         <CusTextFormField

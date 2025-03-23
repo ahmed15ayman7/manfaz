@@ -1107,5 +1107,9 @@
     "services": "خدمات",
     "categories": "تصنیفات",
     "stores": "اسٹورز"
-  }
+  },
+  "Notifications":{
+    "noNotifications": "ابھی تک کوئی اطلاع نہیں ہے",
+    "noNotificationsDescription": "جیسے ہی آپ کو کوئی اطلاع موصول ہوگی، وہ یہاں ظاہر ہوگی۔"
+  }  
 }

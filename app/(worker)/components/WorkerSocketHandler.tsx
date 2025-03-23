@@ -7,32 +7,34 @@ import { toast } from 'sonner';
 
 export const WorkerSocketHandler = () => {
   const { socket } = useSocket();
-  const { showNotification } = useNotifications();
+  const { showNotification, permission } = useNotifications();
 
   useEffect(() => {
     if (!socket) return;
 
     // طلب جديد
-    socket.on('newOrder', ({ type, order }) => {
-      if (type === 'service') {
-        showNotification('طلب خدمة جديد', {
-          body: `لديك طلب خدمة جديد برقم: ${order.id}`,
-        });
-        toast.info('لديك طلب خدمة جديد');
-      }
-    });
+    // socket.on('newOrder', ({ type, order }) => {
+    //   if (type === 'service') {
+    //     showNotification( {
+    //       title:'طلب خدمة جديد',
+    //       message: `لديك طلب خدمة جديد برقم: ${order.id}`,
+    //     }, permission);
+    //     toast.info('لديك طلب خدمة جديد');
+    //   }
+    // });
 
     // تحديث طلب
-    socket.on('orderUpdated', (order) => {
-      toast.info(`تم تحديث حالة الطلب ${order.id} إلى ${order.status}`);
-    });
+    // socket.on('orderUpdated', (order) => {
+    //   toast.info(`تم تحديث حالة الطلب ${order.id} إلى ${order.status}`);
+    // });
 
     // تقييم جديد
-    socket.on('newReview', (review) => {
-      showNotification('تقييم جديد', {
-        body: `لقد تلقيت تقييماً جديداً: ${review.rating} نجوم`,
-      });
-    });
+    // socket.on('newReview', (review) => {
+    //   showNotification('تقييم جديد', {
+    //     body: `لقد تلقيت تقييماً جديداً: ${review.rating} نجوم`,
+    //   }, permission);
+    //   toast.info(`تم تقييم طلبك برقم: ${review.orderId}`);
+    // });
 
     // تحديث الأرباح
     socket.on('earningsUpdated', ({ totalEarned }) => {

@@ -5,6 +5,6 @@ import NotificationsList from "@/components/shared/NotificationsList";
 export default function Notifications() {
 
   return (
-    <NotificationsList  />
+    <NotificationsList isWorker  />
   );
 }

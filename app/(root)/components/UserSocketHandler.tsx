@@ -9,7 +9,7 @@ import { UserEvents } from '@/types/socket';
 
 export const UserSocketHandler = () => {
   const { socket, userId, userType } = useSocket();
-  const { showNotification } = useNotifications();
+  const { showNotification,permission } = useNotifications();
 
   useEffect(() => {
     if (!socket || !userId || !userType) return;
@@ -39,68 +39,68 @@ export const UserSocketHandler = () => {
           break;
       }
 
-      if (message) {
-        toast.info(message);
-        showNotification('تحديث الطلب', { body: message });
-      }
+      // if (message) {
+      //   toast.info(message);
+      //   showNotification('تحديث الطلب', { body: message },permission);
+      // }
     });
-    socket.on('newNotification', (notification: any) => {
-      // عرض الإشعار باستخدام react-toastify
-      if (notification.relatedId=== userId) {
-      showNotification('إشعار جديد', { body: notification.message });
-      toast2.info(notification.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        rtl: true // للغة العربية
-      });}
-    });
+    // socket.on('newNotification', (notification: any) => {
+    //   // عرض الإشعار باستخدام react-toastify
+    //   if (notification.relatedId=== userId) {
+    //   showNotification('إشعار جديد', { body: notification.message },permission);
+    //   toast2.info(notification.message, {
+    //     position: "top-right",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     rtl: true // للغة العربية
+    //   });}
+    // });
 
     // إشعارات خاصة بالمستخدم العادي
     if (userType === 'user') {
       // المحفظة
-      socket.on('walletUpdated', (data: UserEvents['walletUpdated']) => {
-        showNotification('تحديث المحفظة', {
-          body: `تم تحديث رصيد محفظتك: ${data.balance} ريال`,
-        });
-        toast.success(`تم تحديث رصيد محفظتك: ${data.balance} ريال`);
-      });
+      // socket.on('walletUpdated', (data: UserEvents['walletUpdated']) => {
+      //   showNotification('تحديث المحفظة', {
+      //     body: `تم تحديث رصيد محفظتك: ${data.balance} ريال`,
+      //   },permission);
+      //   toast.success(`تم تحديث رصيد محفظتك: ${data.balance} ريال`);
+      // });
 
-      // المكافآت
-      socket.on('newReward', (reward: UserEvents['newReward']) => {
-        showNotification('مكافأة جديدة!', {
-          body: `لقد حصلت على مكافأة جديدة: ${reward.title}`,
-        });
-        toast.success('مكافأة جديدة!', {
-          description: `لقد حصلت على مكافأة جديدة: ${reward.title}`,
-        });
-      });
-    }
+    //   // المكافآت
+    //   socket.on('newReward', (reward: UserEvents['newReward']) => {
+    //     showNotification('مكافأة جديدة!', {
+    //       body: `لقد حصلت على مكافأة جديدة: ${reward.title}`,
+    //     },permission);
+    //     toast.success('مكافأة جديدة!', {
+    //       description: `لقد حصلت على مكافأة جديدة: ${reward.title}`,
+    //     });
+    //   });
+    // }
 
     // إشعارات خاصة بالعامل
-    if (userType === 'worker') {
-      socket.on('newOrder', (data) => {
-        if (data.type === 'service'&&data.providerId===userId) {
-          showNotification('طلب خدمة جديد', {
-            body: `لديك طلب خدمة جديد برقم: ${data.order.id}`,
-          });
-          toast.info('لديك طلب خدمة جديد');
-        }
-      });
+    // if (userType === 'worker') {
+    //   socket.on('newOrder', (data) => {
+    //     if (data.type === 'service'&&data.providerId===userId) {
+    //       showNotification('طلب خدمة جديد', {
+    //         body: `لديك طلب خدمة جديد برقم: ${data.order.id}`,
+    //       },permission);
+    //       toast.info('لديك طلب خدمة جديد');
+    //     }
+    //   });
 
       socket.on('earningsUpdated', (data) => {
         toast.success(`تم تحديث أرباحك: ${data.totalEarned} ريال`);
       });
     }
-    socket.on('walletUpdated', ({ balance, transaction }) => {
-        showNotification('تحديث المحفظة', {
-          body: `تم تحديث رصيد محفظتك: ${balance} ريال`,
-        });
-        toast.success(`تم تحديث رصيد محفظتك: ${balance} ريال`);
-      });
+    // socket.on('walletUpdated', ({ balance, transaction }) => {
+    //     showNotification('تحديث المحفظة', {
+    //       body: `تم تحديث رصيد محفظتك: ${balance} ريال`,
+    //     },permission);
+    //     toast.success(`تم تحديث رصيد محفظتك: ${balance} ريال`);
+    //   });
 
     socket.on('orderUpdated', (order) => {
       toast.info('تحديث الطلب', {
@@ -108,14 +108,14 @@ export const UserSocketHandler = () => {
       });
     });
 
-    socket.on('orderCompleted', (order) => {
-      showNotification('اكتمال الطلب', {
-        body: `تم اكتمال طلبك رقم: ${order.id}. يرجى تقييم الخدمة`,
-      });
-      toast.success('اكتمال الطلب', {
-        description: `تم اكتمال طلبك رقم: ${order.id}. يرجى تقييم الخدمة`
-      });
-    });
+    // socket.on('orderCompleted', (order) => {
+    //   showNotification('اكتمال الطلب', {
+    //     body: `تم اكتمال طلبك رقم: ${order.id}. يرجى تقييم الخدمة`,
+    //   },permission);
+    //   toast.success('اكتمال الطلب', {
+    //     description: `تم اكتمال طلبك رقم: ${order.id}. يرجى تقييم الخدمة`
+    //   });
+    // });
 
     // المواقع
     socket.on('newLocation', (location) => {
@@ -138,16 +138,16 @@ export const UserSocketHandler = () => {
     socket.on('accountVerified', () => {
       toast.success('تم التحقق من حسابك بنجاح');
     });
-    if (userType === 'store') {
-        socket.on('newOrder', (data) => {
-          if (data.store?.some((store: any) => store.id === userId)) {
-            showNotification('طلب جديد', {
-              body: `لديك طلب جديد برقم: ${data.order.id}`,
-            });
-            toast.info('لديك طلب جديد');
-          }
-        });
-    }
+    // if (userType === 'store') {
+    //     socket.on('newOrder', (data) => {
+    //       if (data.store?.some((store: any) => store.id === userId)) {
+    //         showNotification('طلب جديد', {
+    //           body: `لديك طلب جديد برقم: ${data.order.id}`,
+    //         },permission);
+    //         toast.info('لديك طلب جديد');
+    //       }
+    //     });
+    // }
 
     return () => {
       socket.off('walletUpdated');

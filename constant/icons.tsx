@@ -26,23 +26,28 @@ export const SidebarLinks = [
       route: "/profile",
       label: "profile",
     },
-];
-export const sidebarLinksWorkers = [
-  {
-    icon: <Home size={24} />,
-    route: "/worker",
-    label: "home",
-  },
-  {
-    icon: <Calendar size={24} />,
-    route: "/worker/schedule",
-    label: "schedule",
-  },
-  {
-    icon: <ClipboardList size={24} />,
-    route: "/worker/orders",
-    label: "orders",
-  },
+  ];
+  export const sidebarLinksWorkers = [
+    {
+      icon: <Home size={24} />,
+      route: "/worker",
+      label: "home",
+    },
+    {
+      icon: <Calendar size={24} />,
+      route: "/worker/schedule",
+      label: "schedule",
+    },
+    {
+      icon: <ClipboardList size={24} />,
+      route: "/worker/orders",
+      label: "orders",
+    },
+    {
+      icon: <IconBell size={24} />,
+      route: "/worker/notification",
+      label: "notification",
+    },
   {
     icon: <Star size={24} />,
     route: "/worker/reviews",

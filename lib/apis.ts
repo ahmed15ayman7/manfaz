@@ -162,6 +162,11 @@ const API_ENDPOINTS = {
       delete: (walletId: string, id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/wallets/${walletId}/transactions/${id}`, params, isBaseUrl),
     },
   },
+  notifications: {
+    getAll: (type: string, id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/notifications/${type}/${id}`, params, isBaseUrl),
+    markAsRead: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/notifications/${id}/mark-as-read`, params, isBaseUrl),
+    delete: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/notifications/${id}`, params, isBaseUrl),
+  },
 };
 
 export default API_ENDPOINTS;

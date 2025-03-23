@@ -3,20 +3,20 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import { useTranslations } from 'next-intl';
-import { getUserData } from '@/lib/actions/user.action'
-import { useQuery } from '@tanstack/react-query'
 import { IconLogout } from '@tabler/icons-react'
 import { SidebarLinks,sidebarLinksWorkers } from '@/constant/icons'
 import useCartStore from '@/store/useCartStore'
 import { Badge } from '@mui/material'
 import { signOut } from 'next-auth/react';
 import { useUser } from '@/hooks/useUser';
+import {useNotifications}  from '@/hooks/useNotifications';
 const LeftSidebar = ({isWorker}:{isWorker?:boolean}) => {
   let pathname = usePathname();
   let router = useRouter();
   let { user:userData, status:isLoading } = useUser();
   let t = useTranslations('');
   let { items } = useCartStore();
+  let {notifications}  = useNotifications();
   let [items2, setItems2] = React.useState(items);
   React.useEffect(() => {
     setItems2(items);
@@ -35,7 +35,9 @@ const LeftSidebar = ({isWorker}:{isWorker?:boolean}) => {
               {items2.length > 0 && link.route == "/checkout" ? (
                 <Badge style={{ position: 'absolute' }} className="absolute top-0 right-0 rounded-full px-2 translate-x-1/2 -translate-y-1/2  bg-primary text-white border-2 border-white">{items2.length}</Badge>
               ) : null}
-
+              {notifications.length > 0 && (link.route == "/notification"||link.route == "/worker/notification") ? (
+                <Badge style={{ position: 'absolute' }} className="absolute top-0 right-0 rounded-full px-2 translate-x-1/2 -translate-y-1/2  bg-primary text-white border-2 border-white">{notifications.length}</Badge>
+              ) : null}
             </Link>
           )
         }

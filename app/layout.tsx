@@ -8,7 +8,7 @@ import { SnackbarProvider } from '@/hooks/useSnackbar';
 import 'react-toastify/dist/ReactToastify.css';
 import { SessionProvider } from "next-auth/react";
 import { SocketProvider } from '@/components/providers/SocketProvider';
-import { Toaster } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import LanguageToggle from "@/components/ui/LanguageToggle";
 import { useEffect } from 'react';
 
@@ -37,13 +37,24 @@ export default function RootLayout({
           </SnackbarProvider>
         </SocketProvider>
       </SessionProvider>
-      <ToastContainer/>
+      <ToastContainer
+position="top-center"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop
+closeOnClick
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
       <Toaster
-        position={locale === 'en' ? 'bottom-right' : 'bottom-left'}
+        position={locale === 'en' ? 'top-right' : 'top-right'}
         dir={locale === 'en' ? 'ltr' : 'rtl'}
         richColors
         closeButton
       />
+      
     </>
   ) : null;
 

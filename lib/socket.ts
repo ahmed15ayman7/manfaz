@@ -28,31 +28,34 @@ export const useSocketStore = create<SocketStore>((set) => ({
     });
 
     socket.on('connect', () => {
-      set({ connected: true });
-      
-      // الانضمام إلى الغرفة الخاصة بنوع المستخدم ومعرفه
+      // انضمام للغرفة الخاصة v
       socket.emit('register', {
-        userId,
+        id: userId,
         type,
-        room: `${type}_${userId}`
+        room: `${type}_${userId}`,
       });
 
-      // الانضمام إلى الغرفة العامة لنوع المستخدم
+      // انضمام للغرفة العامة إن كان admin
       if (type === 'admin') {
         socket.emit('joinRoom', 'admin');
       }
+      set((state) => ({ ...state, connected: true }));
     });
 
     socket.on('disconnect', () => {
-      set({ connected: false });
+      set((state) => ({ ...state, connected: false }));
     });
 
-    set({ socket, userId, userType: type });
+    set({
+      socket,
+      userId,
+      userType: type,
+      connected: socket.connected,
+    });
   },
   disconnect: () => {
     set((state) => {
       if (state.socket) {
-        // مغادرة الغرف قبل قطع الاتصال
         if (state.userType && state.userId) {
           state.socket.emit('leaveRoom', `${state.userType}_${state.userId}`);
           if (state.userType === 'admin') {
@@ -66,8 +69,7 @@ export const useSocketStore = create<SocketStore>((set) => ({
   },
 }));
 
-// هوك مساعد للحصول على حالة الاتصال
 export const useSocket = () => {
   const { socket, connected, userId, userType, connect, disconnect } = useSocketStore();
   return { socket, connected, userId, userType, connect, disconnect };
-}; 
+};
