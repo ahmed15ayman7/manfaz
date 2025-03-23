@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import {
   Container,
@@ -19,6 +20,7 @@ import {
   IconCheck,
   IconX,
   IconLoader,
+  IconHomeDot,
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -34,6 +36,8 @@ const schema = z.object({
   email: z.string().email('البريد الإلكتروني غير صالح'),
 });
 
+type Schema = z.infer<typeof schema>;
+
 const WorkerPayoutPage = () => {
   const t = useTranslations('wallet');
   const queryClient = useQueryClient();
@@ -43,7 +47,7 @@ const WorkerPayoutPage = () => {
   const { data: walletData } = useQuery({
     queryKey: ['worker-wallet'],
     queryFn: async () => {
-      const response = await axiosInstance.get(API_ENDPOINTS.wallets.getById('current'));
+      const response = await axiosInstance.get(API_ENDPOINTS.wallets.getById('current',{},false));
       return response.data;
     },
   });
@@ -54,12 +58,12 @@ const WorkerPayoutPage = () => {
     queryFn: async () => {
       if (!payoutId) return null;
       const response = await axiosInstance.get(
-        API_ENDPOINTS.payments.worker.checkPayoutStatus(payoutId)
+        API_ENDPOINTS.payments.worker.checkPayoutStatus(payoutId,{},false)
       );
-      return response.data;
+      return response.data.data;
     },
     enabled: !!payoutId,
-    refetchInterval: (data) => (!data || data.status === 'pending' ? 5000 : false),
+    refetchInterval: (data:any) => (!data || data?.status === 'pending' ? 5000 : false),
   });
 
   const {
@@ -67,23 +71,23 @@ const WorkerPayoutPage = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<Schema>({
     resolver: zodResolver(schema),
   });
 
   // تنفيذ عملية السحب
   const payoutMutation = useMutation({
     mutationFn: async (data: { amount: number; email: string }) => {
-      const response = await axiosInstance.post(API_ENDPOINTS.payments.worker.payout(), data);
+      const response = await axiosInstance.post(API_ENDPOINTS.payments.worker.payout({},false), data);
       return response.data;
     },
     onSuccess: (data) => {
       setPayoutId(data.id);
-      queryClient.invalidateQueries(['worker-wallet']);
+      queryClient.invalidateQueries({queryKey: ['worker-wallet']});
     },
   });
 
-  const onSubmit = (data: { amount: number; email: string }) => {
+  const onSubmit = (data: Schema) => {
     payoutMutation.mutate(data);
   };
 
@@ -109,7 +113,7 @@ const WorkerPayoutPage = () => {
       case 'failed':
         return <IconX size={16} />;
       default:
-        return null;
+        return <IconHomeDot size={16} />;
     }
   };
 
@@ -190,9 +194,9 @@ const WorkerPayoutPage = () => {
                       type="submit"
                       variant="contained"
                       fullWidth
-                      disabled={payoutMutation.isLoading}
+                      disabled={payoutMutation.isPending}
                       startIcon={
-                        payoutMutation.isLoading ? (
+                        payoutMutation.isPending ? (
                           <CircularProgress size={20} />
                         ) : null
                       }

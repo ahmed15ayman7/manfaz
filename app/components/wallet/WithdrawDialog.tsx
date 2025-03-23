@@ -40,13 +40,13 @@ const WithdrawDialog = ({
       .min(1, 'المبلغ يجب أن يكون أكبر من صفر')
       .max(maxAmount, 'المبلغ يتجاوز الرصيد المتاح'),
   });
-
+type schemaType = z.infer<typeof schema>;
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<schemaType>({
     resolver: zodResolver(schema),
   });
 
@@ -55,7 +55,7 @@ const WithdrawDialog = ({
     onClose();
   };
 
-  const onSubmit = async (data: { amount: number }) => {
+  const onSubmit = async (data: schemaType) => {
     setIsLoading(true);
     try {
       await onWithdraw(data.amount);

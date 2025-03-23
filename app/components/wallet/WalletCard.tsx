@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import { Card, CardContent, Typography, Button, Box, useTheme } from '@mui/material';
 import { IconWallet, IconPlus, IconMinus } from '@tabler/icons-react';

@@ -20,7 +20,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 const schema = z.object({
   amount: z.number().min(1, 'المبلغ يجب أن يكون أكبر من صفر'),
 });
-
+type schemaType = z.infer<typeof schema>;
 interface DepositDialogProps {
   open: boolean;
   onClose: () => void;
@@ -36,7 +36,7 @@ const DepositDialog = ({ open, onClose, onDeposit }: DepositDialogProps) => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<schemaType>({
     resolver: zodResolver(schema),
   });
 
@@ -45,7 +45,7 @@ const DepositDialog = ({ open, onClose, onDeposit }: DepositDialogProps) => {
     onClose();
   };
 
-  const onSubmit = async (data: { amount: number }) => {
+  const onSubmit = async (data:schemaType) => {
     setIsLoading(true);
     try {
       await onDeposit(data.amount);
