@@ -83,6 +83,7 @@
     }
   },
   "bottom_nav": {
+    "wallet":"Wallet",
     "home": "Home",
     "orders": "Orders",
     "notification": "Notifications",

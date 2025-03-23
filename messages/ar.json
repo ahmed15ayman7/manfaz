@@ -71,6 +71,7 @@
     }
   },
   "bottom_nav": {
+    "wallet": "المحفظة",
     "home": "الرئيسية",
     "orders": "الطلبات",
     "notification": "الإشعارات",

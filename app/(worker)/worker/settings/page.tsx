@@ -6,10 +6,12 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { toast } from 'react-toastify'
 import useStore from '@/store/useLanguageStore'
-import { Worker } from '@/interfaces'
+import { User as UserInterface, Worker } from '@/interfaces'
+import { useUser } from '@/hooks/useUser'
 import SettingsSkeleton from '@/components/skeletons/SettingsSkeleton'
 import API_ENDPOINTS from '@/lib/apis'
 import axiosInstance from '@/lib/axios'
+import Link from 'next/link';
 
 const settingsTabs = [
   {
@@ -39,8 +41,8 @@ const settingsTabs = [
   },
 ];
 
-const getWorkerSettings = async ({ locale }: { locale: string }) => {
-  const url = API_ENDPOINTS.workers.getById('me', { lang: locale }, false)
+const getWorkerSettings = async ({ locale,id }: { locale: string,id:string }) => {
+  const url = API_ENDPOINTS.users.getById(id, { lang: locale,role: 'worker' }, false)
   const res = await axiosInstance.get(url)
   return res.data
 }
@@ -53,10 +55,12 @@ export default function WorkerSettingsPage() {
   const [imagePreview, setImagePreview] = useState<string>('')
   const [skills, setSkills] = useState<string[]>([])
   const [newSkill, setNewSkill] = useState('')
+  let {user,status}=useUser();
 
   const { data: settingsData, isLoading, refetch } = useQuery({
-    queryKey: ['worker-settings'],
-    queryFn: () => getWorkerSettings({ locale }),
+    queryKey: ['worker-settings',user?.id],
+    queryFn: () => getWorkerSettings({ locale,id:user?.id||"" }),
+    enabled:!user?.id
   })
 
   const updateSettingsMutation = useMutation({
@@ -74,7 +78,9 @@ export default function WorkerSettingsPage() {
       toast.error(t('settings_update_error'))
     },
   })
-
+useEffect(()=>{
+  refetch();
+},[locale,user?.id])
   useEffect(() => {
     if (settingsData?.data) {
       const worker: Worker = settingsData.data
@@ -116,7 +122,7 @@ export default function WorkerSettingsPage() {
     return <SettingsSkeleton />
   }
 
-  const worker: Worker = settingsData?.data
+  const worker: UserInterface = settingsData?.data
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -126,8 +132,8 @@ export default function WorkerSettingsPage() {
             <div className="flex items-center space-x-4">
               <div className="relative w-24 h-24">
                 <Image
-                  src={imagePreview || worker.user?.imageUrl || '/imgs/default-avatar.png'}
-                  alt={worker.user?.name || ''}
+                  src={imagePreview || worker?.imageUrl || '/imgs/default-avatar.png'}
+                  alt={worker?.name || ''}
                   fill
                   className="object-cover rounded-full"
                 />
@@ -157,7 +163,7 @@ export default function WorkerSettingsPage() {
                   <input
                     type="text"
                     name="name"
-                    defaultValue={worker.user?.name}
+                    defaultValue={worker?.name}
                     className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
                     required
                   />
@@ -167,7 +173,7 @@ export default function WorkerSettingsPage() {
                   <input
                     type="text"
                     name="title"
-                    defaultValue={worker.title}
+                    defaultValue={worker?.Worker?.[0]?.title}
                     className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
                     required
                   />
@@ -177,7 +183,7 @@ export default function WorkerSettingsPage() {
                   <input
                     type="email"
                     name="email"
-                    defaultValue={worker.user?.email}
+                    defaultValue={worker?.email}
                     className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
                     required
                   />
@@ -187,7 +193,7 @@ export default function WorkerSettingsPage() {
                   <input
                     type="tel"
                     name="phone"
-                    defaultValue={worker.user?.phone}
+                    defaultValue={worker?.phone}
                     className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
                     required
                   />
@@ -312,6 +318,7 @@ export default function WorkerSettingsPage() {
                 </div>
               </div>
               <button className="btn-secondary w-full">Add New Payment Method</button>
+              <Link href="/worker/payout" className="btn-secondary w-full">pay out</Link>
             </div>
           </div>
         );

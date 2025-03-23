@@ -152,6 +152,7 @@ const API_ENDPOINTS = {
   wallets: {
     getAll: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/wallets', params, isBaseUrl),
     getById: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/wallets/${id}`, params, isBaseUrl),
+    getByUserId: (userId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/wallets/${userId}/user`, params, isBaseUrl),
     create: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/wallets', params, isBaseUrl),
     update: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/wallets/${id}`, params, isBaseUrl),
     delete: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/wallets/${id}`, params, isBaseUrl),

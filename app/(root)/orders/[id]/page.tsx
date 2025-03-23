@@ -25,28 +25,37 @@ import {
   TimelineDot,
 } from "@mui/lab";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import  axiosInstance from '@/lib/axios';
+import API_ENDPOINTS from "@/lib/apis";
+import { useLocale } from "next-intl";
+import { formatDate } from "@/lib/utils";
 
 const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
   const t = useTranslations("orders");
   const [cancelDialog, setCancelDialog] = useState(false);
   const router = useRouter();
+  let locale = useLocale();
 
   // استخدام useQuery لجلب بيانات الطلب
-  const { data: order, isLoading: loadingOrder } = useQuery<Order>({
+  const { data: order, isLoading: loadingOrder ,refetch} = useQuery<Order>({
     queryKey: ["order", params.id],
     queryFn: async () => {
-      const response = await axios.get(`/api/orders/${params.id}`);
-      return response.data;
+      const response = await axiosInstance.get(API_ENDPOINTS.orders.getById(params.id,{ lang: locale },false));
+      return response.data.data;
     },
   });
-
+useEffect(() => {
+  refetch();
+}, [locale]);
   // استخدام useMutation لإلغاء الطلب
   const { mutate: cancelOrder, isPending: isCancelling } = useMutation({
     mutationFn: async () => {
-      await axios.patch(`/api/orders/${params.id}`, { status: "canceled" });
+      await axios.put(API_ENDPOINTS.orders.getById(params.id, { lang: locale },false),{
+        status: "canceled",
+      });
     },
     onSuccess: () => {
       setCancelDialog(false);
@@ -96,7 +105,7 @@ const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
 
   if (loadingOrder) {
     return (
-      <div className="container mx-auto p-4">
+      <div className="w-full mx-auto p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -134,7 +143,7 @@ const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="w-full mx-auto p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -254,7 +263,7 @@ const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
                   </Typography>
                   {item.date && (
                     <Typography variant="caption" color="textSecondary">
-                      {new Date(item.date).toLocaleString("ar-SA")}
+                      {formatDate(item.date,locale)}
                     </Typography>
                   )}
                 </TimelineContent>

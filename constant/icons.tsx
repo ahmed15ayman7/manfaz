@@ -22,6 +22,11 @@ export const SidebarLinks = [
       label: "notification",
     },
     {
+      icon:   <Wallet size={24} />,
+      route: "/wallet",
+      label: "wallet",
+    },
+    {
       icon: <IconUser size={24} />,
       route: "/profile",
       label: "profile",

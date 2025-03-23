@@ -71,6 +71,7 @@
     }
   },
   "bottom_nav": {
+    "wallet":"والٹ",
     "home": "ہوم",
     "orders": "آرڈرز",
     "notification": "اطلاعات",

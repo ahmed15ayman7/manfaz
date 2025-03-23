@@ -4,28 +4,32 @@ import { useTranslations } from 'next-intl';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '@/lib/axios';
 import API_ENDPOINTS from '@/lib/apis';
+import {useUser} from '@/hooks/useUser';
 import WalletCard from '@/app/components/wallet/WalletCard';
 import TransactionsTable from '@/app/components/wallet/TransactionsTable';
-
+import { useEffect } from 'react';
+import { useLocale } from 'next-intl';
 const WalletPage = () => {
+  let {user,status}=useUser()
   const t = useTranslations('wallet');
   const queryClient = useQueryClient();
+  let locale = useLocale();
 
   // استعلام لجلب بيانات المحفظة
-  const { data: walletData, isLoading: isLoadingWallet } = useQuery({
-    queryKey: ['wallet'],
+  const { data: walletData, isLoading: isLoadingWallet,refetch: refetchWallet } = useQuery({
+    queryKey: ['wallet',user?.id],
     queryFn: async () => {
-      const response = await axiosInstance.get(API_ENDPOINTS.wallets.getById('current',{},false));
+      const response = await axiosInstance.get(API_ENDPOINTS.wallets.getByUserId(user?.id || "",{},false));
       return response.data;
     },
   });
 
   // استعلام لجلب المعاملات
-  const { data: transactions, isLoading: isLoadingTransactions } = useQuery({
-    queryKey: ['wallet-transactions'],
+  const { data: transactions, isLoading: isLoadingTransactions,refetch: refetchTransactions } = useQuery({
+    queryKey: ['wallet-transactions',user?.id],
     queryFn: async () => {
       const response = await axiosInstance.get(
-        API_ENDPOINTS.payments.wallet.getTransactions('current',{},false)
+        API_ENDPOINTS.payments.wallet.getTransactions(user?.id || "",{},false)
       );
       return response.data;
     },
@@ -56,7 +60,10 @@ const WalletPage = () => {
       queryClient.invalidateQueries({queryKey:['wallet-transactions']});
     },
   });
-
+useEffect(()=>{
+  refetchWallet()
+  refetchTransactions()
+},[locale,user?.id,status])
   return (
     <Container maxWidth="lg">
       <Box py={4}>
