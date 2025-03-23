@@ -177,7 +177,67 @@ const API_ENDPOINTS = {
       payout: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/payments/worker/payout', params, isBaseUrl),
       checkPayoutStatus: (payoutId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/payments/worker/payout/${payoutId}`, params, isBaseUrl),
     },
+    tap: {
+      createCharge: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/payments/charges', params, isBaseUrl),
+      getCharge: (chargeId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/payments/charges/${chargeId}`, params, isBaseUrl),
+      refundCharge: (chargeId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/payments/charges/${chargeId}/refunds`, params, isBaseUrl),
+      createPayout: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/payments/payouts', params, isBaseUrl),
+      getPayout: (payoutId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/payments/payouts/${payoutId}`, params, isBaseUrl),
+      handleCallback: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/payments/callback', params, isBaseUrl),
+    },
   },
 };
 
 export default API_ENDPOINTS;
+
+// أنواع البيانات للمدفوعات
+export interface TapChargeRequest {
+  amount: number;
+  currency: string;
+  description: string;
+  customer: {
+    first_name: string;
+    email: string;
+    phone: string;
+  };
+  source: {
+    id: string;
+  };
+  redirect: {
+    url: string;
+  };
+  reference: {
+    transaction: string;
+    order: string;
+  };
+}
+
+export interface TapPayoutRequest {
+  amount: number;
+  currency: string;
+  description: string;
+  beneficiary: {
+    name: string;
+    account_number: string;
+    bank_name: string;
+    bank_code: string;
+    country: string;
+    currency: string;
+  };
+  reference: {
+    transaction: string;
+    order: string;
+  };
+}
+
+export interface TapCallbackResponse {
+  id: string;
+  status: string;
+  amount: number;
+  currency: string;
+  description: string;
+  reference: {
+    transaction: string;
+    order: string;
+  };
+}

@@ -4,14 +4,14 @@ import { useTranslations } from "next-intl";
 import useCartStore from "@/store/useCartStore";
 import { useState, useEffect, Suspense } from "react";
 import { IconCash, IconClock, IconCreditCard, IconMedal, IconPlus, IconStar, IconTrophy, IconWallet } from "@tabler/icons-react";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery, useMutation } from "@tanstack/react-query";
 import useStore from "@/store/useLanguageStore";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 // import PhoneInput from 'react-phone-input-2'
 // import "react-phone-input-2/lib/style.css"
-import { Select, MenuItem, SelectChangeEvent, Box, Typography, Chip, Divider, Card, Grid, Avatar, CardContent, Rating } from "@mui/material";
+import { Select, MenuItem, SelectChangeEvent, Box, Typography, Chip, Divider, Card, Grid, Avatar, CardContent, Rating, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, CircularProgress } from "@mui/material";
 import { createOrder } from "@/lib/actions/orders.actions";
 import { OrdersStore, PaymentMethod, Service, ServiceParameter, Store, UserLocation, Worker } from "@/interfaces";
 import axiosInstance from "@/lib/axios";
@@ -118,6 +118,17 @@ function CheckoutPage() {
     ] as OrdersStore[],
     price: 0,
     totalAmount: 0,
+  });
+
+  const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
+  const [cardDetails, setCardDetails] = useState({
+    number: "",
+    expiryMonth: "",
+    expiryYear: "",
+    cvc: "",
+    name: "",
   });
 
   const handleAddressChange = (
@@ -283,8 +294,160 @@ function CheckoutPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handlePaymentDialogOpen = () => {
+    setOpenPaymentDialog(true);
+    setPaymentError("");
+  };
+
+  const handlePaymentDialogClose = () => {
+    setOpenPaymentDialog(false);
+    setPaymentError("");
+  };
+
+  const createTapChargeMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.payments.tap.createCharge({}, true),
+        data
+      );
+      return response.data;
+    },
+  });
+
+  // إضافة دوال التحقق من صحة البيانات
+  const validateCardNumber = (number: string) => {
+    // التحقق من رقم البطاقة باستخدام خوارزمية Luhn
+    const digits = number.replace(/\D/g, '');
+    if (digits.length < 13 || digits.length > 19) return false;
+    
+    let sum = 0;
+    let isEven = false;
+    
+    for (let i = digits.length - 1; i >= 0; i--) {
+      let digit = parseInt(digits[i]);
+      if (isEven) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+      isEven = !isEven;
+    }
+    
+    return sum % 10 === 0;
+  };
+
+  const validateExpiryDate = (month: string, year: string) => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    const expMonth = parseInt(month);
+    const expYear = parseInt(year);
+    
+    if (expMonth < 1 || expMonth > 12) return false;
+    if (expYear < currentYear) return false;
+    if (expYear === currentYear && expMonth < currentMonth) return false;
+    
+    return true;
+  };
+
+  const validateCVC = (cvc: string) => {
+    const digits = cvc.replace(/\D/g, '');
+    return digits.length >= 3 && digits.length <= 4;
+  };
+
+  const validateLocation = (latitude: number, longitude: number) => {
+    // التحقق من صحة الإحداثيات
+    return latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180;
+  };
+
+  const validateAmount = (amount: number) => {
+    return amount > 0 && amount <= 100000; // مثال للحد الأقصى
+  };
+
+  // تحديث handleCardPayment
+  const handleCardPayment = async () => {
+    try {
+      setPaymentLoading(true);
+      setPaymentError("");
+
+      // التحقق من صحة بيانات البطاقة
+      if (!validateCardNumber(cardDetails.number)) {
+        setPaymentError(t("payment.invalid_card_number"));
+        return;
+      }
+
+      if (!validateExpiryDate(cardDetails.expiryMonth, cardDetails.expiryYear)) {
+        setPaymentError(t("payment.invalid_expiry_date"));
+        return;
+      }
+
+      if (!validateCVC(cardDetails.cvc)) {
+        setPaymentError(t("payment.invalid_cvc"));
+        return;
+      }
+
+      if (!cardDetails.name.trim()) {
+        setPaymentError(t("payment.name_required"));
+        return;
+      }
+
+      // التحقق من صحة المبلغ
+      if (!validateAmount(formData.totalAmount)) {
+        setPaymentError(t("payment.invalid_amount"));
+        return;
+      }
+
+      const chargeData = {
+        amount: formData.totalAmount,
+        currency: "SAR",
+        description: "Payment for services",
+        customer: {
+          first_name: userData?.user?.name,
+          email: userData?.user?.email,
+          phone: userData?.user?.phone,
+        },
+        source: {
+          number: cardDetails.number.replace(/\s/g, ''),
+          exp_month: cardDetails.expiryMonth,
+          exp_year: cardDetails.expiryYear,
+          cvc: cardDetails.cvc,
+          name: cardDetails.name,
+        },
+        redirect: {
+          url: window.location.origin + "/payment-callback",
+        },
+        reference: {
+          transaction: "txn_" + Date.now(),
+          order: "ord_" + Date.now(),
+        },
+      };
+
+      const result = await createTapChargeMutation.mutateAsync(chargeData);
+
+      if (result.status === "success") {
+        // إنشاء الطلب بعد نجاح الدفع
+        await handleSubmit();
+        handlePaymentDialogClose();
+        router.push("/orders");
+      } else {
+        setPaymentError(t("payment.failed"));
+      }
+    } catch (error: any) {
+      setPaymentError(error.message || t("payment.failed"));
+    } finally {
+      setPaymentLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+
+    if (paymentMethod === "credit_card") {
+      handlePaymentDialogOpen();
+      return;
+    }
+
     try {
       if (userData?.user?.id) {
         const response = await createOrder(
@@ -294,14 +457,14 @@ function CheckoutPage() {
             longitude: formData.longitude,
             address: formData.address,
             notes: formData.notes,
-            serviceId:parameterId||"",
+            serviceId: parameterId || "",
             price: formData.price,
             totalAmount: formData.totalAmount,
             userId: userData?.user?.id,
             status: "pending",
             paymentStatus: "pending",
             id: "",
-            providerId: workerId||"",
+            providerId: workerId || "",
             store: formData.store,
           },
           workerId ? "service" : selectedServiceId.type
@@ -311,10 +474,8 @@ function CheckoutPage() {
           router.push(`/orders`);
         }
       }
-      // Redirect or show success message
     } catch (error) {
       console.error("Error creating order:", error);
-      // Show error message
     }
   };
 
@@ -345,287 +506,347 @@ function CheckoutPage() {
     );
   }
   return (
-    <div className=" mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">{t("checkout.title")}</h1>
+    <>
+      <div className=" mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-6">{t("checkout.title")}</h1>
 
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-      >
-        <div className="lg:col-span-2 space-y-6">
-        {!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId&& <WorkerCard worker={worker!} distance={distance||0}  isRow />}
-          {/* Contact Information */}
-          <div className="bg-white rounded-lg p-6 shadow-sm">
-            <h2 className="text-xl font-semibold mb-4">
-              {t("checkout.contact_info")}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {t("checkout.phone")}
-                </label>
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium mb-1">
-                  {t("checkout.address")}
-                </label>
-                <Select
-                  value={formData.locationId}
-                  onChange={(e) => handleAddressChange(e, userData?.user?.id)}
-                  displayEmpty
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                >
-                  {!locationsLoading &&
-                    locations?.map((location, index) => (
-                      <MenuItem key={index} value={location.id}>
-                        {location.address}
-                      </MenuItem>
-                    ))}
-                  <MenuItem value="new">
-                    <IconPlus /> {t("checkout.add_new_address")}
-                  </MenuItem>
-                </Select>
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium mb-1">
-                  {t("checkout.notes")}
-                </label>
-                <textarea
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleInputChange}
-                  rows={3}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Payment Method */}
-          <div className="bg-white rounded-lg p-6 shadow-sm">
-            <h2 className="text-xl font-semibold mb-4">
-              {t("checkout.payment_method")}
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("cash")}
-                className={`flex items-center gap-3 p-4 border rounded-lg ${
-                  paymentMethod === "cash" ? "border-primary bg-primary/5" : ""
-                }`}
-              >
-                <IconCash className="text-primary" size={24} />
-                <span>{t("checkout.cash")}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("credit_card")}
-                className={`flex items-center gap-3 p-4 border rounded-lg ${
-                  paymentMethod === "credit_card"
-                    ? "border-primary bg-primary/5"
-                    : ""
-                }`}
-              >
-                <IconCreditCard className="text-primary" size={24} />
-                <span>{t("checkout.card")}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("tabby")}
-                className={`flex items-center gap-3 p-4 border rounded-lg ${
-                  paymentMethod === "tabby" ? "border-primary bg-primary/5" : ""
-                }`}
-              >
-                <img src="/imgs/tabby.png" alt="Tabby" className="w-10 h-6" />
-                <span>{t("checkout.tabby")}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("tamara")}
-                className={`flex items-center gap-2 p-4 border rounded-lg ${
-                  paymentMethod === "tamara"
-                    ? "border-primary bg-primary/5"
-                    : ""
-                }`}
-              >
-                <img src="/imgs/tamara.png" alt="Tamara" className="w-10 h-6" />
-                <span>{t("checkout.tamara")}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Cart Items */}
-          {!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId?  null: (
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        >
+          <div className="lg:col-span-2 space-y-6">
+          {!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId&& <WorkerCard worker={worker!} distance={distance||0}  isRow />}
+            {/* Contact Information */}
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <h2 className="text-xl font-semibold mb-4">
-                {t("checkout.order_summary")}
+                {t("checkout.contact_info")}
               </h2>
-              <div className="space-y-4 mb-4">
-                {items?.map((item, index) => {
-                  const query = itemQueries[index];
-                  const itemData = query?.data;
-
-                  return (
-                    <div
-                      key={item?.id}
-                      style={{
-                        backgroundColor:
-                          selectedServiceId?.id === item?.id ? "#5A9CFF50" : "",
-                      }}
-                      className={`flex p-2  items-center gap-4 border-b pb-4  cursor-pointer border ${
-                        selectedServiceId?.id === item?.id
-                          ? "  border-primary  rounded-lg"
-                          : "last:border-transparent "
-                      }`}
-                      onClick={() => handleServiceSelect(item)}
-                    >
-                      {itemData?.imageUrl ||
-                        (itemData?.images?.[0] && (
-                          <img
-                            src={itemData?.imageUrl || itemData?.images?.[0]}
-                            alt={itemData.name}
-                            className="w-20 h-20 rounded-lg object-cover"
-                          />
-                        ))}
-                      <div className="flex-1">
-                        <h3 className="font-medium">{itemData?.name}</h3>
-                        {itemData?.name && (
-                          <p className="text-sm text-gray-600">
-                            {itemData.name}
-                          </p>
-                        )}
-                        <p className="text-primary font-medium mt-1">
-                          {item.quantity} - {itemData?.price}{" "}
-                          {t("home_service_details_view.price")}
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(item?.id)}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  );
-                })}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {t("checkout.phone")}
+                  </label>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium mb-1">
+                    {t("checkout.address")}
+                  </label>
+                  <Select
+                    value={formData.locationId}
+                    onChange={(e) => handleAddressChange(e, userData?.user?.id)}
+                    displayEmpty
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    {!locationsLoading &&
+                      locations?.map((location, index) => (
+                        <MenuItem key={index} value={location.id}>
+                          {location.address}
+                        </MenuItem>
+                      ))}
+                    <MenuItem value="new">
+                      <IconPlus /> {t("checkout.add_new_address")}
+                    </MenuItem>
+                  </Select>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium mb-1">
+                    {t("checkout.notes")}
+                  </label>
+                  <textarea
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleInputChange}
+                    rows={3}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
               </div>
             </div>
-          )}
-        </div>
 
-        {/* Order Summary */}
-        <div className="">
-        {!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId?  (
-             <Box className="mb-3">
-             <Grid container spacing={4}>
-               {/* Service Details */}
-               <Grid item xs={12}>
-                 <motion.div
-                   initial={{ opacity: 0, y: 20 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   transition={{ duration: 0.5, delay: 0.2 }}
-                   className="bg-white"
-                 >
-                   <Box className="relative bg-white h-48">
-                     <img
-                       src={service.imageUrl}
-                       alt={service.name}
-                       className="w-full h-full object-cover"
-                     />
-                     <Box className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                     <Box className="absolute bottom-4 left-4 text-white">
-                       <Typography variant="h4">{service.name}</Typography>
-                       <Box className="flex items-center gap-2">
-                         <Rating value={service.rating} readOnly precision={0.1} size="small" />
-                         <Typography variant="body2">
-                           ({service.ratingCount} ratings)
-                         </Typography>
-                       </Box>
-                     </Box>
-                   </Box>
-                   <CardContent>
-                     <Grid container spacing={3}>
-                       <Grid item xs={6}>
-                         <Box className="flex items-center gap-2">
-                           <IconClock className="text-blue-600" />
-                           <div>
-                             <Typography variant="body2" color="textSecondary">
-                               Duration
-                             </Typography>
-                             <Typography variant="h6">
-                               {service.duration} min
-                             </Typography>
-                           </div>
-                         </Box>
-                       </Grid>
-                       <Grid item xs={6}>
-                         <Box className="flex items-center gap-2">
-                           <IconMedal className="text-purple-600" />
-                           <div>
-                             <Typography variant="body2" color="textSecondary">
-                               Warranty
-                             </Typography>
-                             <Typography variant="h6">
-                               {service.warranty} months
-                             </Typography>
-                           </div>
-                         </Box>
-                       </Grid>
-                     </Grid>
-                     <Divider className="my-4" />
-                     <Typography variant="body1" className="mb-4">
-                       {service.description}
-                     </Typography>
-                     <Box className="flex items-center justify-between">
-                       <Typography variant="h4" color="primary">
-                         {service.price} {t("home_service_details_view.price")}
-                       </Typography>
-                       <Chip
-                         icon={<IconStar size={16} />}
-                         label={`${service.rating} Rating`}
-                         color="primary"
-                       />
-                     </Box>
-                   </CardContent>
-                 </motion.div>
-               </Grid>
-             </Grid>
-           </Box>
-          ) :null}
-        <div className="bg-white rounded-lg p-6 shadow-sm h-fit">
-        
-          <h2 className="text-xl font-semibold mb-4">
-            {t("checkout.order_summary")}
-          </h2>
+            {/* Payment Method */}
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h2 className="text-xl font-semibold mb-4">
+                {t("checkout.payment_method")}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("cash")}
+                  className={`flex items-center gap-3 p-4 border rounded-lg ${
+                    paymentMethod === "cash" ? "border-primary bg-primary/5" : ""
+                  }`}
+                >
+                  <IconCash className="text-primary" size={24} />
+                  <span>{t("checkout.cash")}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("credit_card")}
+                  className={`flex items-center gap-3 p-4 border rounded-lg ${
+                    paymentMethod === "credit_card"
+                      ? "border-primary bg-primary/5"
+                      : ""
+                  }`}
+                >
+                  <IconCreditCard className="text-primary" size={24} />
+                  <span>{t("checkout.card")}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("tabby")}
+                  className={`flex items-center gap-3 p-4 border rounded-lg ${
+                    paymentMethod === "tabby" ? "border-primary bg-primary/5" : ""
+                  }`}
+                >
+                  <img src="/imgs/tabby.png" alt="Tabby" className="w-10 h-6" />
+                  <span>{t("checkout.tabby")}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("tamara")}
+                  className={`flex items-center gap-2 p-4 border rounded-lg ${
+                    paymentMethod === "tamara"
+                      ? "border-primary bg-primary/5"
+                      : ""
+                  }`}
+                >
+                  <img src="/imgs/tamara.png" alt="Tamara" className="w-10 h-6" />
+                  <span>{t("checkout.tamara")}</span>
+                </button>
+              </div>
+            </div>
 
-          <div className="space-y-3 mb-6">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">
-                {t("checkout.services_count", {
-                  count: workerId ? 1 : items?.length,
-                })}
-              </span>
-              <span>{workerId ? 1 : items?.length}</span>
-            </div>
-            <div className="flex items-center justify-between font-medium">
-              <span>{t("checkout.total_amount")}</span>
-              <span>
-                {formData.totalAmount} {t("home_service_details_view.price")}
-              </span>
-            </div>
+            {/* Cart Items */}
+            {!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId?  null: (
+              <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold mb-4">
+                  {t("checkout.order_summary")}
+                </h2>
+                <div className="space-y-4 mb-4">
+                  {items?.map((item, index) => {
+                    const query = itemQueries[index];
+                    const itemData = query?.data;
+
+                    return (
+                      <div
+                        key={item?.id}
+                        style={{
+                          backgroundColor:
+                            selectedServiceId?.id === item?.id ? "#5A9CFF50" : "",
+                        }}
+                        className={`flex p-2  items-center gap-4 border-b pb-4  cursor-pointer border ${
+                          selectedServiceId?.id === item?.id
+                            ? "  border-primary  rounded-lg"
+                            : "last:border-transparent "
+                        }`}
+                        onClick={() => handleServiceSelect(item)}
+                      >
+                        {itemData?.imageUrl ||
+                          (itemData?.images?.[0] && (
+                            <img
+                              src={itemData?.imageUrl || itemData?.images?.[0]}
+                              alt={itemData.name}
+                              className="w-20 h-20 rounded-lg object-cover"
+                            />
+                          ))}
+                        <div className="flex-1">
+                          <h3 className="font-medium">{itemData?.name}</h3>
+                          {itemData?.name && (
+                            <p className="text-sm text-gray-600">
+                              {itemData.name}
+                            </p>
+                          )}
+                          <p className="text-primary font-medium mt-1">
+                            {item.quantity} - {itemData?.price}{" "}
+                            {t("home_service_details_view.price")}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(item?.id)}
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-600 transition-colors"
+          {/* Order Summary */}
+          <div className="">
+          {!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId?  (
+               <Box className="mb-3">
+               <Grid container spacing={4}>
+                 {/* Service Details */}
+                 <Grid item xs={12}>
+                   <motion.div
+                     initial={{ opacity: 0, y: 20 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ duration: 0.5, delay: 0.2 }}
+                     className="bg-white"
+                   >
+                     <Box className="relative bg-white h-48">
+                       <img
+                         src={service.imageUrl}
+                         alt={service.name}
+                         className="w-full h-full object-cover"
+                       />
+                       <Box className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                       <Box className="absolute bottom-4 left-4 text-white">
+                         <Typography variant="h4">{service.name}</Typography>
+                         <Box className="flex items-center gap-2">
+                           <Rating value={service.rating} readOnly precision={0.1} size="small" />
+                           <Typography variant="body2">
+                             ({service.ratingCount} ratings)
+                           </Typography>
+                         </Box>
+                       </Box>
+                     </Box>
+                     <CardContent>
+                       <Grid container spacing={3}>
+                         <Grid item xs={6}>
+                           <Box className="flex items-center gap-2">
+                             <IconClock className="text-blue-600" />
+                             <div>
+                               <Typography variant="body2" color="textSecondary">
+                                 Duration
+                               </Typography>
+                               <Typography variant="h6">
+                                 {service.duration} min
+                               </Typography>
+                             </div>
+                           </Box>
+                         </Grid>
+                         <Grid item xs={6}>
+                           <Box className="flex items-center gap-2">
+                             <IconMedal className="text-purple-600" />
+                             <div>
+                               <Typography variant="body2" color="textSecondary">
+                                 Warranty
+                               </Typography>
+                               <Typography variant="h6">
+                                 {service.warranty} months
+                               </Typography>
+                             </div>
+                           </Box>
+                         </Grid>
+                       </Grid>
+                       <Divider className="my-4" />
+                       <Typography variant="body1" className="mb-4">
+                         {service.description}
+                       </Typography>
+                       <Box className="flex items-center justify-between">
+                         <Typography variant="h4" color="primary">
+                           {service.price} {t("home_service_details_view.price")}
+                         </Typography>
+                         <Chip
+                           icon={<IconStar size={16} />}
+                           label={`${service.rating} Rating`}
+                           color="primary"
+                         />
+                       </Box>
+                     </CardContent>
+                   </motion.div>
+                 </Grid>
+               </Grid>
+             </Box>
+            ) :null}
+          <div className="bg-white rounded-lg p-6 shadow-sm h-fit">
+          
+            <h2 className="text-xl font-semibold mb-4">
+              {t("checkout.order_summary")}
+            </h2>
+
+            <div className="space-y-3 mb-6">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">
+                  {t("checkout.services_count", {
+                    count: workerId ? 1 : items?.length,
+                  })}
+                </span>
+                <span>{workerId ? 1 : items?.length}</span>
+              </div>
+              <div className="flex items-center justify-between font-medium">
+                <span>{t("checkout.total_amount")}</span>
+                <span>
+                  {formData.totalAmount} {t("home_service_details_view.price")}
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-600 transition-colors"
+            >
+              {t("checkout.confirm_order")}
+            </button>
+          </div>
+          </div>
+        </form>
+      </div>
+
+      <Dialog open={openPaymentDialog} onClose={handlePaymentDialogClose} maxWidth="sm" fullWidth>
+        <DialogTitle>{t("payment.card_details")}</DialogTitle>
+        <DialogContent>
+          <div className="space-y-4 mt-4">
+            {paymentError && (
+              <div className="text-red-500 mb-4">{paymentError}</div>
+            )}
+            <TextField
+              fullWidth
+              label={t("payment.card_number")}
+              value={cardDetails.number}
+              onChange={(e) => setCardDetails({ ...cardDetails, number: e.target.value })}
+            />
+            <div className="grid grid-cols-2 gap-4">
+              <TextField
+                label={t("payment.expiry_month")}
+                value={cardDetails.expiryMonth}
+                onChange={(e) => setCardDetails({ ...cardDetails, expiryMonth: e.target.value })}
+              />
+              <TextField
+                label={t("payment.expiry_year")}
+                value={cardDetails.expiryYear}
+                onChange={(e) => setCardDetails({ ...cardDetails, expiryYear: e.target.value })}
+              />
+            </div>
+            <TextField
+              fullWidth
+              label={t("payment.cvc")}
+              value={cardDetails.cvc}
+              onChange={(e) => setCardDetails({ ...cardDetails, cvc: e.target.value })}
+            />
+            <TextField
+              fullWidth
+              label={t("payment.name_on_card")}
+              value={cardDetails.name}
+              onChange={(e) => setCardDetails({ ...cardDetails, name: e.target.value })}
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handlePaymentDialogClose} disabled={paymentLoading}>
+            {t("common.cancel")}
+          </Button>
+          <Button
+            onClick={handleCardPayment}
+            variant="contained"
+            color="primary"
+            disabled={paymentLoading}
           >
-            {t("checkout.confirm_order")}
-          </button>
-        </div>
-        </div>
-      </form>
-    </div>
+            {paymentLoading ? (
+              <CircularProgress size={24} />
+            ) : (
+              t("payment.pay_now")
+            )}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 
