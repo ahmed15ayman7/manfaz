@@ -1153,9 +1153,18 @@
       "withdraw_success": "تم سحب الرصيد بنجاح",
       "withdraw_failed": "فشل سحب الرصيد",
       "payout_success": "تم إرسال طلب السحب بنجاح",
-      "payout_failed": "فشل إرسال طلب السحب"
+      "payout_failed": "فشل إرسال طلب السحب",
+      "create_success": "تم إنشاء المحفظة بنجاح",
+      "create_failed": "فشل في إنشاء المحفظة"
     },
     "no_transactions": "لا توجد معاملات",
-    "loading": "جاري التحميل..."
+    "loading": "جاري التحميل...",
+    "create_wallet": "إنشاء محفظة",
+    "no_wallet": "لا توجد محفظة",
+    "initial_balance": "الرصيد الأولي",
+    "validation": {
+      "user_required": "المستخدم مطلوب",
+      "balance_positive": "يجب أن يكون الرصيد أكبر من صفر"
+    }
   }
 }

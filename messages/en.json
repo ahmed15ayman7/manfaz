@@ -1156,7 +1156,9 @@
       "amount_positive": "Amount must be greater than zero",
       "amount_exceeded": "Amount exceeds available balance",
       "email_required": "Email is required",
-      "email_invalid": "Invalid email address"
+      "email_invalid": "Invalid email address",
+      "user_required": "User is required",
+      "balance_positive": "Balance must be greater than zero"
     },
     "messages": {
       "deposit_success": "Deposit successful",
@@ -1167,6 +1169,9 @@
       "payout_failed": "Payout request failed"
     },
     "no_transactions": "No transactions found",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "create_wallet": "Create Wallet",
+    "no_wallet": "No Wallet",
+    "initial_balance": "Initial Balance"
   }
 }
