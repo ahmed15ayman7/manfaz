@@ -25,7 +25,7 @@ const LanguageToggle: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-10 w-12 h-10 right-10 z-50 inline-block text-left" >
+    <div className="fixed bottom-24 w-12 h-10 right-10 z-50 inline-block text-left" >
       <div className="w-full h-full">
         <button onClick={toggleDropdown} className=" text-center w-full h-full rounded-md border border-gray-300 shadow-sm px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
           <img src={languages.find(lang => lang.code === locale)?.flag} alt={languages.find(lang => lang.code === locale)?.label} className=" w-full h-full" />

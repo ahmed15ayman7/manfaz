@@ -62,11 +62,17 @@ export const SocketProvider = ({ children }: SocketProviderProps) => {
     if (socket) {
       socket.onAny((event, ...args) => {
         console.log('📥 Event received:', event, args);
+        if(event==="newNotification"){
+          console.log('data', args[0]);
+      console.log('userId', session?.user?.id,args[0].relatedId);
+       handleNewNotification(args[0])
+        }
       });
     }
-    socket.on("newNotification", (data) =>{
-      console.log('data', data);
-       handleNewNotification(data)});
+    // socket.on("newNotification", (data) =>{
+    //   console.log('data', data);
+    //   console.log('userId', session?.user?.id,data.relatedId);
+    //    handleNewNotification(data)});
     // المحفظة
     socket.on('walletUpdated', ({ balance, transaction }) => {
       toast.success(`تم تحديث رصيد محفظتك: ${balance}`);

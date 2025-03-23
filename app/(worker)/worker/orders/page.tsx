@@ -14,7 +14,7 @@ import { useUser } from "@/hooks/useUser";
 import { IconClock } from "@tabler/icons-react";
 import { Avatar } from "@mui/material";
 import src from "@emotion/styled";
-
+import { useRouter } from "next/navigation";
 
 
 const getWorkerOrders = async ({
@@ -51,6 +51,7 @@ export default function WorkerOrdersPage() {
   const [page, setPage] = useState(1);
   const limit = 10;
   const { user ,status} = useUser();
+  const router = useRouter();
   const { data, isLoading ,refetch } = useOrders(
     user?.id || "",
     user?.role || "",
@@ -77,7 +78,7 @@ export default function WorkerOrdersPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4">
+      <div className="w-full mx-auto p-4">
         <div className="animate-pulse space-y-4">
           {/* Status Tabs Skeleton */}
           <div className="flex space-x-2 overflow-x-auto pb-2">
@@ -108,7 +109,7 @@ export default function WorkerOrdersPage() {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="w-full mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
 
       {/* Status Tabs */}
@@ -136,7 +137,7 @@ export default function WorkerOrdersPage() {
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
-            <div key={order.id} className="bg-white rounded-lg p-6 shadow-sm">
+            <div key={order.id} className="bg-white rounded-lg p-6 shadow-sm cursor-pointer" onClick={() => router.push(`/worker/orders/${order.id}`)}>
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-4">
                   {order.service?.imageUrl && (

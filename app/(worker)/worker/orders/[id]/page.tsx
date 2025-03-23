@@ -19,8 +19,9 @@ const getOrderDetails = async ({ orderId, locale }: { orderId: string; locale: s
 
 const updateOrderStatus = async ({ orderId, status }: { orderId: string; status: 'accepted' | 'rejected' | 'completed' }) => {
   const url = API_ENDPOINTS.orders.update(orderId, {}, false)
-  const res = await axiosInstance.patch(url, { 
+  const res = await axiosInstance.put(url, { 
     status: status === 'accepted' ? 'in_progress' : status === 'completed' ? 'completed' : 'canceled' 
+    , updatedBy: 'worker'
   })
   return res.data
 }
@@ -53,7 +54,7 @@ export default function OrderDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4">
+      <div className="w-full mx-auto p-4">
         <div className="animate-pulse">
           <div className="h-8 w-1/3 bg-gray-200 rounded mb-6" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -75,7 +76,7 @@ export default function OrderDetailsPage() {
 
   if (!order) {
     return (
-      <div className="container mx-auto p-4">
+      <div className="w-full mx-auto p-4">
         <div className="text-center py-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('order_not_found')}</h2>
           <p className="text-gray-600 mb-4">{t('order_not_found_description')}</p>
@@ -91,7 +92,7 @@ export default function OrderDetailsPage() {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="w-full mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">{t('order_details')}</h1>
         <button

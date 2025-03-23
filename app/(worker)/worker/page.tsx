@@ -86,7 +86,7 @@ export default function WorkerDashboardPage() {
     }
   }
   return (
-    <div className="container mx-auto p-4">
+    <div className="w-full mx-auto p-4">
       {/* Header Section */}
       <div className="bg-white rounded-lg p-6 mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
