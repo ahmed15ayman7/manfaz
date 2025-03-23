@@ -1137,7 +1137,9 @@
       "amount_positive": "رقم صفر سے زیادہ ہونی چاہیے",
       "amount_exceeded": "رقم دستیاب بیلنس سے زیادہ ہے",
       "email_required": "ای میل درکار ہے",
-      "email_invalid": "غلط ای میل پتہ"
+      "email_invalid": "غلط ای میل پتہ",
+      "user_required": "کاربر درکار ہے",
+       "balance_positive": "رصيد صفر سے زیادہ ہونی چاہیے"
     },
     "messages": {
       "deposit_success": "رقم کامیابی سے جمع ہو گئی",
@@ -1150,6 +1152,11 @@
       "create_failed": "والٹ بنانے میں ناکامی"
     },
     "no_transactions": "کوئی لین دین نہیں ملا",
-    "loading": "لوڈ ہو رہا ہے..."
+    "loading": "لوڈ ہو رہا ہے...",
+    "create_success": "والٹ کامیابی سے بن گیا",
+    "create_failed": "والٹ بنانے میں ناکامی",
+    "no_wallet": "والٹ نہیں ملا",
+    "initial_balance": "نشأ رصيد"
+
   }
 }

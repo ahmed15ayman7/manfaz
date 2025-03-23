@@ -1171,7 +1171,10 @@
     "no_transactions": "No transactions found",
     "loading": "Loading...",
     "create_wallet": "Create Wallet",
+    "create_success": "Wallet created successfully",
+    "create_failed": "Wallet creation failed",
     "no_wallet": "No Wallet",
     "initial_balance": "Initial Balance"
+    
   }
 }

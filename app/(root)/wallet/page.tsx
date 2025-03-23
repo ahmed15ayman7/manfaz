@@ -31,7 +31,7 @@ const WalletPage = () => {
     queryKey: ['wallet',user?.id],
     queryFn: async () => {
       const response = await axiosInstance.get(API_ENDPOINTS.wallets.getByUserId(user?.id || "",{},false));
-      return response.data;
+      return response.data.data;
     },
   });
 
@@ -40,7 +40,7 @@ const WalletPage = () => {
     queryKey: ['wallet-transactions',user?.id],
     queryFn: async () => {
       const response = await axiosInstance.get(
-        API_ENDPOINTS.payments.wallet.getTransactions(user?.id || "",{},false)
+        API_ENDPOINTS.payments.wallet.getTransactions(wallet?.id || "",{},false)
       );
       return response.data;
     },
@@ -49,14 +49,22 @@ const WalletPage = () => {
   // تنفيذ عملية الإيداع
   const depositMutation = useMutation({
     mutationFn: async (amount: number) => {
-      await axiosInstance.post(API_ENDPOINTS.payments.wallet.deposit({},false), {
+      const response = await axiosInstance.post(API_ENDPOINTS.payments.wallet.deposit({},false), {
         amount,
+        userId: user?.id || "",
       });
+      return response.data.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      
       queryClient.invalidateQueries({queryKey:['wallet']});
       queryClient.invalidateQueries({queryKey:['wallet-transactions']});
-      toast.success(t('messages.deposit_success'));
+      // toast.success(t('messages.deposit_success'));
+      console.log(data)
+      if (data.payment.transaction.url) {
+        window.location.href = data.payment.transaction.url;
+      }
+
     },
     onError: () => {
       toast.error(t('messages.deposit_failed'));
@@ -68,6 +76,7 @@ const WalletPage = () => {
     mutationFn: async (amount: number) => {
       await axiosInstance.post(API_ENDPOINTS.payments.wallet.withdraw({},false), {
         amount,
+        userId:user?.id || "",
       });
     },
     onSuccess: () => {
@@ -89,6 +98,8 @@ const WalletPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey:['wallet']});
       handleCreateDialogClose();
+      refetchWallet();
+      refetchTransactions();
       toast.success(t('messages.create_success'));
     },
     onError: () => {
@@ -139,6 +150,10 @@ const WalletPage = () => {
   useEffect(()=>{
     refetchWallet()
     refetchTransactions()
+    setWalletData({
+      userId: user?.id || "",
+      balance: 0
+    })
   },[locale,user?.id,status])
 
   return (
@@ -198,6 +213,7 @@ const WalletPage = () => {
               fullWidth
               type="number"
               label={t('initial_balance')}
+              disabled
               value={walletData.balance}
               onChange={(e) => setWalletData({ ...walletData, balance: parseFloat(e.target.value) })}
             />

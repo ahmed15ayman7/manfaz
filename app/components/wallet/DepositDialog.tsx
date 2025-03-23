@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import {
   Dialog,
@@ -54,20 +56,16 @@ const DepositDialog = ({ open, onClose, onDeposit }: DepositDialogProps) => {
       setIsLoading(false);
     }
   };
-
+  console.log("fffff");
   return (
     <Dialog
       open={open}
       onClose={handleClose}
       component={motion.div}
-      sx={{
-        opacity: 0,
-        y: -20,
-        animate: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.3 }
-        }
+      PaperProps={{
+        initial: { opacity: 0, y: -20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.3 },
       }}
       
       fullWidth

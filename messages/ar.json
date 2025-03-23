@@ -1145,7 +1145,9 @@
       "amount_positive": "المبلغ يجب أن يكون أكبر من صفر",
       "amount_exceeded": "المبلغ يتجاوز الرصيد المتاح",
       "email_required": "البريد الإلكتروني مطلوب",
-      "email_invalid": "البريد الإلكتروني غير صالح"
+      "email_invalid": "البريد الإلكتروني غير صالح",
+      "user_required": "المستخدم مطلوب",
+      "balance_positive": "يجب أن يكون الرصيد أكبر من صفر"
     },
     "messages": {
       "deposit_success": "تم شحن الرصيد بنجاح",
@@ -1160,11 +1162,9 @@
     "no_transactions": "لا توجد معاملات",
     "loading": "جاري التحميل...",
     "create_wallet": "إنشاء محفظة",
+    "create_success": "تم إنشاء المحفظة بنجاح",
+    "create_failed": "فشل في إنشاء المحفظة",
     "no_wallet": "لا توجد محفظة",
-    "initial_balance": "الرصيد الأولي",
-    "validation": {
-      "user_required": "المستخدم مطلوب",
-      "balance_positive": "يجب أن يكون الرصيد أكبر من صفر"
-    }
+    "initial_balance": "الرصيد الأولي"
   }
 }
