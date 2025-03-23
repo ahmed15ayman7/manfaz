@@ -1130,8 +1130,42 @@
   "Notifications":{
     "noNotifications": "No notifications yet",
     "noNotificationsDescription": "Your notifications will appear here once you have any."
+  },
+  "wallet": {
+    "title": "Wallet",
+    "balance": "Current Balance",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "transactions": "Transaction History",
+    "amount": "Amount",
+    "email": "Email",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "status": {
+      "pending": "Processing",
+      "completed": "Completed",
+      "failed": "Failed"
+    },
+    "types": {
+      "deposit": "Deposit",
+      "withdraw": "Withdraw"
+    },
+    "validation": {
+      "amount_required": "Amount is required",
+      "amount_positive": "Amount must be greater than zero",
+      "amount_exceeded": "Amount exceeds available balance",
+      "email_required": "Email is required",
+      "email_invalid": "Invalid email address"
+    },
+    "messages": {
+      "deposit_success": "Deposit successful",
+      "deposit_failed": "Deposit failed",
+      "withdraw_success": "Withdrawal successful",
+      "withdraw_failed": "Withdrawal failed",
+      "payout_success": "Payout request sent successfully",
+      "payout_failed": "Payout request failed"
+    },
+    "no_transactions": "No transactions found",
+    "loading": "Loading..."
   }
-  
-
-
 }

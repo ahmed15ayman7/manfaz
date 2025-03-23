@@ -1119,6 +1119,42 @@
   "Notifications":{
     "noNotifications": "لا توجد إشعارات حتى الآن",
     "noNotificationsDescription": "ستظهر الإشعارات هنا عند وصول أي جديد."
+  },
+  "wallet": {
+    "title": "المحفظة",
+    "balance": "الرصيد الحالي",
+    "deposit": "شحن رصيد",
+    "withdraw": "سحب رصيد",
+    "transactions": "سجل المعاملات",
+    "amount": "المبلغ",
+    "email": "البريد الإلكتروني",
+    "confirm": "تأكيد",
+    "cancel": "إلغاء",
+    "status": {
+      "pending": "قيد المعالجة",
+      "completed": "مكتمل",
+      "failed": "فشل"
+    },
+    "types": {
+      "deposit": "شحن",
+      "withdraw": "سحب"
+    },
+    "validation": {
+      "amount_required": "المبلغ مطلوب",
+      "amount_positive": "المبلغ يجب أن يكون أكبر من صفر",
+      "amount_exceeded": "المبلغ يتجاوز الرصيد المتاح",
+      "email_required": "البريد الإلكتروني مطلوب",
+      "email_invalid": "البريد الإلكتروني غير صالح"
+    },
+    "messages": {
+      "deposit_success": "تم شحن الرصيد بنجاح",
+      "deposit_failed": "فشل شحن الرصيد",
+      "withdraw_success": "تم سحب الرصيد بنجاح",
+      "withdraw_failed": "فشل سحب الرصيد",
+      "payout_success": "تم إرسال طلب السحب بنجاح",
+      "payout_failed": "فشل إرسال طلب السحب"
+    },
+    "no_transactions": "لا توجد معاملات",
+    "loading": "جاري التحميل..."
   }
-  
 }

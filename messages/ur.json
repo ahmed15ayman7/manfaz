@@ -1111,5 +1111,42 @@
   "Notifications":{
     "noNotifications": "ابھی تک کوئی اطلاع نہیں ہے",
     "noNotificationsDescription": "جیسے ہی آپ کو کوئی اطلاع موصول ہوگی، وہ یہاں ظاہر ہوگی۔"
-  }  
+  },
+  "wallet": {
+    "title": "والٹ",
+    "balance": "موجودہ بیلنس",
+    "deposit": "رقم جمع کریں",
+    "withdraw": "رقم نکالیں",
+    "transactions": "لین دین کی تاریخ",
+    "amount": "رقم",
+    "email": "ای میل",
+    "confirm": "تصدیق کریں",
+    "cancel": "منسوخ کریں",
+    "status": {
+      "pending": "زیر التواء",
+      "completed": "مکمل",
+      "failed": "ناکام"
+    },
+    "types": {
+      "deposit": "جمع",
+      "withdraw": "نکالیں"
+    },
+    "validation": {
+      "amount_required": "رقم درکار ہے",
+      "amount_positive": "رقم صفر سے زیادہ ہونی چاہیے",
+      "amount_exceeded": "رقم دستیاب بیلنس سے زیادہ ہے",
+      "email_required": "ای میل درکار ہے",
+      "email_invalid": "غلط ای میل پتہ"
+    },
+    "messages": {
+      "deposit_success": "رقم کامیابی سے جمع ہو گئی",
+      "deposit_failed": "رقم جمع کرنے میں ناکامی",
+      "withdraw_success": "رقم کامیابی سے نکال لی گئی",
+      "withdraw_failed": "رقم نکالنے میں ناکامی",
+      "payout_success": "ادائیگی کی درخواست کامیابی سے بھیج دی گئی",
+      "payout_failed": "ادائیگی کی درخواست ناکام ہو گئی"
+    },
+    "no_transactions": "کوئی لین دین نہیں ملا",
+    "loading": "لوڈ ہو رہا ہے..."
+  }
 }

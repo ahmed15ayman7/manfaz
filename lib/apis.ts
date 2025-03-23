@@ -167,6 +167,17 @@ const API_ENDPOINTS = {
     markAsRead: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/notifications/${id}/mark-as-read`, params, isBaseUrl),
     delete: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/notifications/${id}`, params, isBaseUrl),
   },
+  payments: {
+    wallet: {
+      deposit: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/payments/wallet/deposit', params, isBaseUrl),
+      withdraw: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/payments/wallet/withdraw', params, isBaseUrl),
+      getTransactions: (walletId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/wallets/${walletId}/transactions/user`, params, isBaseUrl),
+    },
+    worker: {
+      payout: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/payments/worker/payout', params, isBaseUrl),
+      checkPayoutStatus: (payoutId: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/payments/worker/payout/${payoutId}`, params, isBaseUrl),
+    },
+  },
 };
 
 export default API_ENDPOINTS;
