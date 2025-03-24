@@ -16,7 +16,7 @@ export const config = {
     "/settings/:path*",
     "/services/:path*",
     "/user-location/:path*",
-    "/api/:path*",
+    "/api/auth/:path*",
     "/_next/:path*",
     "/_next/static/:path*",
     "/_next/image/:path*",
