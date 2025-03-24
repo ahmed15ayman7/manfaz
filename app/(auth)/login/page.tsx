@@ -214,10 +214,10 @@ const LoginView: React.FC = () => {
           <span className="mx-2">{t('or_sign_in_with')}</span>
           <div className="flex-grow h-[2px] bg-gray-300 min-w-[80px]"></div>
         </div>
-
-        <button onClick={() => { /* Handle Google sign-in */ }}>
+{/* 
+        <button >
           <img src="/assets/svg/google.svg" alt="Google Sign In" className="w-8 h-8" />
-        </button>
+        </button> */}
 
         <div className="mt-4">
           <span>{t('no_account')}</span>

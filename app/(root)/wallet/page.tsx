@@ -74,14 +74,21 @@ const WalletPage = () => {
   // تنفيذ عملية السحب
   const withdrawMutation = useMutation({
     mutationFn: async (amount: number) => {
-      await axiosInstance.post(API_ENDPOINTS.payments.wallet.withdraw({},false), {
+     let res= await axiosInstance.post(API_ENDPOINTS.payments.wallet.withdraw({},false), {
         amount,
         userId:user?.id || "",
       });
+      return res.data.data
     },
-    onSuccess: () => {
+    
+    onSuccess: (data) => {
       queryClient.invalidateQueries({queryKey:['wallet']});
       queryClient.invalidateQueries({queryKey:['wallet-transactions']});
+      console.log(data)
+      if (data.payment.transaction.url) {
+        window.location.href = data.payment.transaction.url;
+      }
+
       toast.success(t('messages.withdraw_success'));
     },
     onError: () => {
