@@ -4,6 +4,7 @@ import LocaleProvider from "@/components/providers/IntlProvider";
 import useStore from '@/store/useLanguageStore';
 import { ToastContainer } from 'react-toastify';
 import { SnackbarProvider } from '@/hooks/useSnackbar';
+import Script from 'next/script';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { SessionProvider } from "next-auth/react";
@@ -38,29 +39,61 @@ export default function RootLayout({
         </SocketProvider>
       </SessionProvider>
       <ToastContainer
-position="top-center"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop
-closeOnClick
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="light"
-/>
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Toaster
         position={locale === 'en' ? 'top-right' : 'top-right'}
         dir={locale === 'en' ? 'ltr' : 'rtl'}
         richColors
         closeButton
       />
-      
     </>
   ) : null;
 
   return (
     <html suppressHydrationWarning>
       <head>
+        {/* Google Tag Manager */}
+        <Script id="google-tag-manager" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'startTime':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-XXXXXXX');
+          `}
+        </Script>
+        <noscript>
+          <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+            height="0" width="0" style={{ display: 'none', visibility: 'hidden' }}></iframe>
+          <div style={{ display: 'none' }}>
+            <img src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" alt="" />
+          </div>
+        </noscript>
+        {/* End Google Tag Manager */}
+
+        {/* Google Analytics */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XXXXXXXXXX', {
+              page_path: window.location.pathname,
+              send_page_view: true
+            });
+          `}
+        </Script>
+
         <title>{locale === 'en' ? "Al Manafth - Professional Home Services Platform" : locale === 'ur' ? "المنفذ - پلیٹ فارم برائے پیشہ ورانہ گھریلو خدمات" : "المنفذ - منصة خدمات المنازل الاحترافية"}</title>
         <meta name="description" content={locale === 'en' ? "Al Manafth is your trusted platform for professional home services. Connect with verified service providers for plumbing, electrical, cleaning, and more." : locale === 'ur' ? "المنفذ آپ کا معتبر پلیٹ فارم ہے جو پیشہ ورانہ گھریلو خدمات فراہم کرتا ہے. سباكة، برقی، صفائی اور مزید خدمات کے لیے تصدیق شدہ سروس فراہم کرنے والوں سے رابطہ کریں." : "المنفذ هي منصتك الموثوقة للخدمات المنزلية الاحترافية. تواصل مع مزودي الخدمات المعتمدين للسباكة والكهرباء والتنظيف والمزيد."} />
         <meta name="keywords" content={locale === 'en' ? "home services, professional services, plumbing, electrical, cleaning, maintenance, Saudi Arabia" : locale === 'ur' ? "گھریلو خدمات, پیشہ ورانہ خدمات, سباكة, برقی, صفائی, دیکھ بھال, سعودی عرب" : "خدمات المنازل، خدمات احترافية، سباكة، كهرباء، تنظيف، صيانة، المملكة العربية السعودية"} />
