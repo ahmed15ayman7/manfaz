@@ -93,6 +93,17 @@ export default function RootLayout({
             });
           `}
         </Script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9L0JCKTEEG"></script>
+  <script
+    dangerouslySetInnerHTML={{
+      __html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-9L0JCKTEEG');
+      `,
+    }}
+  />
 
         <title>{locale === 'en' ? "Al Manafth - Professional Home Services Platform" : locale === 'ur' ? "المنفذ - پلیٹ فارم برائے پیشہ ورانہ گھریلو خدمات" : "المنفذ - منصة خدمات المنازل الاحترافية"}</title>
         <meta name="description" content={locale === 'en' ? "Al Manafth is your trusted platform for professional home services. Connect with verified service providers for plumbing, electrical, cleaning, and more." : locale === 'ur' ? "المنفذ آپ کا معتبر پلیٹ فارم ہے جو پیشہ ورانہ گھریلو خدمات فراہم کرتا ہے. سباكة، برقی، صفائی اور مزید خدمات کے لیے تصدیق شدہ سروس فراہم کرنے والوں سے رابطہ کریں." : "المنفذ هي منصتك الموثوقة للخدمات المنزلية الاحترافية. تواصل مع مزودي الخدمات المعتمدين للسباكة والكهرباء والتنظيف والمزيد."} />
