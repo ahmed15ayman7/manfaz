@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const baseUrl = 'https://manfaz.com'
+const baseUrl = 'https://www.almanafth.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // يمكنك جلب البيانات الديناميكية هنا من قاعدة البيانات
@@ -16,6 +16,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/faq',
     '/terms',
     '/privacy',
+    '/how-it-works',
+    '/become-a-provider',
+    '/customer-support',
   ]
 
   const staticPages = routes.map(route => ({
@@ -34,6 +37,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'plumbing',
     'grocery',
     'restaurants',
+    'pest-control',
+    'painting',
+    'carpentry',
+    'appliance-repair',
   ]
 
   const categoryPages = serviceCategories.map(category => ({
@@ -52,6 +59,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'khobar',
     'tabuk',
     'abha',
+    'taif',
+    'buraidah',
+    'khamis-mushait',
+    'hail',
   ]
 
   const cityPages = cities.map(city => ({
@@ -66,6 +77,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'tips',
     'guides',
     'updates',
+    'home-improvement',
+    'service-providers',
+    'customer-stories',
+    'maintenance-tips',
   ]
 
   const blogPages = blogCategories.map(category => ({

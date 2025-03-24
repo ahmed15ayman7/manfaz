@@ -1,0 +1,35 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "المنفذ",
+  "url": "https://www.almanafth.com",
+  "description": "منصة خدمات المنازل الاحترافية في المملكة العربية السعودية",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.almanafth.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
+  "inLanguage": ["ar", "en", "ur"],
+  "alternateName": ["Al Manafth", "المنفذ"],
+  "sameAs": [
+    "https://twitter.com/almanafth",
+    "https://facebook.com/almanafth",
+    "https://instagram.com/almanafth"
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "SAR"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Saudi Arabia"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+966-50-000-0000",
+    "contactType": "customer service",
+    "areaServed": "SA",
+    "availableLanguage": ["Arabic", "English", "Urdu"]
+  }
+} 

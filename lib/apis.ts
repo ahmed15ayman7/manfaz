@@ -187,6 +187,13 @@ const API_ENDPOINTS = {
       handleCallback: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/payments/callback', params, isBaseUrl),
     },
   },
+  posts: {
+    getAll: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/posts', params, isBaseUrl),
+    getById: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/posts/${id}`, params, isBaseUrl),
+    create: (params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams('/posts', params, isBaseUrl),
+    update: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/posts/${id}`, params, isBaseUrl),
+    delete: (id: string, params: Record<string, any>, isBaseUrl: boolean = true) => appendQueryParams(`/posts/${id}`, params, isBaseUrl),
+  },
 };
 
 export default API_ENDPOINTS;
