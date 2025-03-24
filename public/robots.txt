@@ -14,13 +14,14 @@ Allow: /become-a-provider/
 Allow: /customer-support/
 
 # Host
-Host: https://manfaz.com
+Host: https://www.almanafth.com
 
 # Sitemaps
-Sitemap: https://manfaz.com/sitemap.xml
-Sitemap: https://manfaz.com/ar/sitemap.xml
-Sitemap: https://manfaz.com/en/sitemap.xml
-Sitemap: https://manfaz.com/ur/sitemap.xml
+Sitemap: https://www.almanafth.com/sitemap.xml
+Sitemap: https://www.almanafth.com/ar/sitemap.xml
+Sitemap: https://www.almanafth.com/en/sitemap.xml
+Sitemap: https://www.almanafth.com/ur/sitemap.xml
+Sitemap: https://www.almanafth.com/api/generateSitemap
 
 # Disallow
 Disallow: /api/

@@ -8,17 +8,20 @@ export async function GET() {
   try {
     // جلب البيانات من API
     const [servicesRes, storesRes, citiesRes, postsRes] = await Promise.all([
-      axiosInstance.get(API_ENDPOINTS.services.getAll({lang:"ar"},false)),
-      axiosInstance.get(API_ENDPOINTS.stores.getAll({lang:"ar"},false)),
-      axiosInstance.get(API_ENDPOINTS.categories.getAll({lang:"ar"},false)),
-      axiosInstance.get(API_ENDPOINTS.posts.getAll({lang:"ar"},false)),
+      axiosInstance.get(API_ENDPOINTS.services.getAll({lang:"en"},false)),
+      axiosInstance.get(API_ENDPOINTS.stores.getAll({lang:"en"},false)),
+      axiosInstance.get(API_ENDPOINTS.categories.getAll({lang:"en"},false)),
+      axiosInstance.get(API_ENDPOINTS.stores.getAll({lang:"en"},false)),
     ]);
 
-    const services = await servicesRes.data;
-    const stores = await storesRes.data;
-    const cities = await citiesRes.data;
-    const posts = await postsRes.data;
-
+    const services = await servicesRes.data.data;
+    const stores = await storesRes.data.data.stores;
+    const cities = await citiesRes.data.data.categories;
+    const posts = await postsRes.data.data.stores;
+    console.log("services", services);
+    console.log("stores", stores);
+    console.log("cities", cities);
+    console.log("posts", posts);
     // إنشاء XML
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -58,7 +61,7 @@ export async function GET() {
   </url>`).join('')}
 
   <!-- الخدمات -->
-  ${services.data.map((service: { id: string; slug: string; updatedAt: string }) => `
+  ${services.map((service: { id: string; slug: string; updatedAt: string }) => `
   <url>
     <loc>${baseUrl}/services/${service.slug}</loc>
     <lastmod>${service.updatedAt}</lastmod>
@@ -67,7 +70,7 @@ export async function GET() {
   </url>`).join('')}
 
   <!-- المتاجر -->
-  ${stores.data.map((store: { id: string; slug: string; updatedAt: string }) => `
+  ${stores.map((store: { id: string; slug: string; updatedAt: string }) => `
   <url>
     <loc>${baseUrl}/stores/${store.slug}</loc>
     <lastmod>${store.updatedAt}</lastmod>
@@ -76,16 +79,16 @@ export async function GET() {
   </url>`).join('')}
 
   <!-- المدن -->
-  ${cities.data.map((city: { id: string; slug: string; updatedAt: string }) => `
+  ${cities.map((city: { id: string; slug: string; updatedAt: string }) => `
   <url>
-    <loc>${baseUrl}/cities/${city.slug}</loc>
+    <loc>${baseUrl}/categories/${city.id}</loc>
     <lastmod>${city.updatedAt}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`).join('')}
 
   <!-- المقالات -->
-  ${posts.data.map((post: { id: string; slug: string; updatedAt: string }) => `
+  ${posts.map((post: { id: string; slug: string; updatedAt: string }) => `
   <url>
     <loc>${baseUrl}/blog/${post.slug}</loc>
     <lastmod>${post.updatedAt}</lastmod>
