@@ -21,7 +21,7 @@ export const config = {
     "/_next/static/:path*",
     "/_next/image/:path*",
     "/favicon.ico",
-    "/sitemap.xml",
-    "/robots.txt",
+    // "/sitemap.xml",
+    // "/robots.txt",
   ]
 }
