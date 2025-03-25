@@ -22,6 +22,7 @@ Sitemap: https://www.almanafth.com/ar/sitemap.xml
 Sitemap: https://www.almanafth.com/en/sitemap.xml
 Sitemap: https://www.almanafth.com/ur/sitemap.xml
 Sitemap: https://www.almanafth.com/api/generateSitemap
+Sitemap: https://www.almanafth.com/api/generateSitemapAr
 
 # Disallow
 Disallow: /api/

@@ -8,10 +8,10 @@ export async function GET() {
   try {
     // جلب البيانات من API
     const [servicesRes, storesRes, citiesRes, postsRes] = await Promise.all([
-      axiosInstance.get(API_ENDPOINTS.services.getAll({lang:"en"},false)),
-      axiosInstance.get(API_ENDPOINTS.stores.getAll({lang:"en"},false)),
-      axiosInstance.get(API_ENDPOINTS.categories.getAll({lang:"en"},false)),
-      axiosInstance.get(API_ENDPOINTS.stores.getAll({lang:"en"},false)),
+      axiosInstance.get(API_ENDPOINTS.services.getAll({lang:"ar"},false)),
+      axiosInstance.get(API_ENDPOINTS.stores.getAll({lang:"ar"},false)),
+      axiosInstance.get(API_ENDPOINTS.categories.getAll({lang:"ar"},false)),
+      axiosInstance.get(API_ENDPOINTS.stores.getAll({lang:"ar"},false)),
     ]);
 
     const services = await servicesRes.data.data;

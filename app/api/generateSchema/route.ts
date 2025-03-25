@@ -14,15 +14,15 @@ export async function GET() {
       axiosInstance.get(API_ENDPOINTS.posts.getAll({lang:"ar"},false)),
     ]);
 
-    const services = await servicesRes.data;
-    const stores = await storesRes.data;
-    const cities = await citiesRes.data;
-    const posts = await postsRes.data;
+    const services = await servicesRes.data.data;
+    const stores = await storesRes.data.data.stores;
+    const cities = await citiesRes.data.data.categories;
+    const posts = await postsRes.data.data.stores;
 
-    const servicesCount = services.data.length;
-    const storesCount = stores.data.length;
-    const citiesCount = cities.data.length;
-    const postsCount = posts.data.length;
+    const servicesCount = services.length;
+    const storesCount = stores.length;
+    const citiesCount = cities.length;
+    const postsCount = posts.length;
 
     // إنشاء Schema.org
     const schema = {
