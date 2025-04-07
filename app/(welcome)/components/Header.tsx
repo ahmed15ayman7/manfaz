@@ -98,11 +98,14 @@ export default function Header() {
           <ProfilePopover open={isProfileOpen} anchorEl={anchorEl} onClose={handleClose} user={user} />
           {/* Mobile Navigation */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="md:hidden">
+            <div className="md:hidden">
+
+            <SheetTrigger asChild >
               <Button variant="outlined" size="small">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
+            </div>
             <SheetContent side="right">
               <nav className="flex flex-col space-y-4 mt-6">
                 {navItems.map((item) => (

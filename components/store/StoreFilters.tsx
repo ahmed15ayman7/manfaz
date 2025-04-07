@@ -7,7 +7,7 @@ import useStore from '@/store/useLanguageStore';
 import { useEffect, useState } from 'react';
 import { getCategories } from '@/lib/actions/store.action';
 
-const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll,categoryId }: { onFilterChange: (filter: string) => void, selectedFilter: string, showAll: boolean, setShowAll: (showAll: boolean) => void,categoryId:string }) => {
+const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll,categoryId }: { onFilterChange: (filter: string) => void, selectedFilter: string, showAll: boolean, setShowAll: (showAll: boolean) => void,categoryId?:string }) => {
     const t = useTranslations();
     let { locale } = useStore();
     let { data: categories, isLoading: isLoadingCategories, refetch } = useQuery({

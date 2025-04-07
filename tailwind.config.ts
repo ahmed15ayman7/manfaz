@@ -177,6 +177,7 @@ export default {
         glassmorphism: "#dedef599",
         foreground: "var(--foreground)",
         primary: "var(--primary)",
+        "primary-foreground": "var(--primary-foreground)",
         "primary-light": "var(--primary-light)",
         "primary-dark": "var(--primary-dark)",
 

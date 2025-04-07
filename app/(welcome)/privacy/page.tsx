@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ChevronDown,
@@ -27,6 +27,7 @@ import {
 import AnimatedSection from '../components/AnimatedSection'
 import Link from 'next/link'
 import Image from 'next/image'
+import { formatDate } from '@/lib/utils'
 
 const sections = [
   {
@@ -210,14 +211,15 @@ export default function PrivacyPage() {
   const t = useTranslations()
   const [openSection, setOpenSection] = useState<string | null>('introduction')
   const [lastUpdated] = useState('2024-03-08')
+  let locale = useLocale()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-gradient-to-b from-background flex items-center flex-col to-muted/20">
       {/* الهيدر الرئيسي */}
-      <div className="relative h-[40vh] min-h-[400px] bg-primary overflow-hidden">
+      <div className="relative h-[40vh] min-h-[400px] bg-primary w-full overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/privacy/pattern.svg')] opacity-20" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/90 to-primary" />
-        <div className="container relative z-10 h-full flex flex-col items-center justify-center text-primary-foreground">
+        <div className=" relative z-10 h-full flex flex-col items-center justify-center text-primary-foreground">
           <motion.h1 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -239,7 +241,7 @@ export default function PrivacyPage() {
 
       <div className="container py-12">
         {/* شريط المعلومات */}
-        <AnimatedSection className="relative -mt-24 mb-12 z-20">
+        <AnimatedSection className="relative -mt-24 mb-12 z-20 bg-white">
           <div className="bg-card shadow-xl rounded-xl p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="flex items-center gap-4">
@@ -251,7 +253,7 @@ export default function PrivacyPage() {
                     {t('privacy.last_updated')}
                   </p>
                   <p className="font-medium">
-                    {new Date(lastUpdated).toLocaleDateString('ar-SA')}
+                    {formatDate(lastUpdated, locale)}
                   </p>
                 </div>
               </div>

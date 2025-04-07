@@ -9,14 +9,14 @@ const QuickActions = () => {
   const router = useRouter();
 
   const actions = [
-    {
-      icon: <IconTools size={24} className="text-green-600" />,
-      title: t('services'),
-      description: t('services_description'),
-      onClick: () => router.push('/services'),
-      color: 'bg-green-50',
-      hoverColor: 'hover:bg-green-100',
-    },
+    // {
+    //   icon: <IconTools size={24} className="text-green-600" />,
+    //   title: t('services'),
+    //   description: t('services_description'),
+    //   onClick: () => router.push('/services'),
+    //   color: 'bg-green-50',
+    //   hoverColor: 'hover:bg-green-100',
+    // },
     {
       icon: <IconTruck size={24} className="text-blue-600" />,
       title: t('delivery'),
@@ -29,7 +29,7 @@ const QuickActions = () => {
       icon: <IconShoppingCart size={24} className="text-purple-600" />,
       title: t('products'),
       description: t('products_description'),
-      onClick: () => router.push('/products'),
+      onClick: () => router.push('/stores'),
       color: 'bg-purple-50',
       hoverColor: 'hover:bg-purple-100',
     },

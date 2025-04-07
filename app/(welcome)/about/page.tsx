@@ -181,7 +181,7 @@ export default function AboutPage() {
 
       <div className="container relative py-12  mx-auto">
         {/* الإحصائيات */}
-        <AnimatedSection className="relative -mt-24 mb-12 z-20">
+        <AnimatedSection className="relative -mt-24 mb-12 z-20 bg-white">
           <div className="bg-card shadow-xl rounded-xl p-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {stats.map(({ icon: Icon, value, label }) => (

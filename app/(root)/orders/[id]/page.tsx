@@ -28,7 +28,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import  axiosInstance from '@/lib/axios';
+import axiosInstance from '@/lib/axios';
 import API_ENDPOINTS from "@/lib/apis";
 import { useLocale } from "next-intl";
 import { formatDate } from "@/lib/utils";
@@ -40,20 +40,20 @@ const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
   let locale = useLocale();
 
   // استخدام useQuery لجلب بيانات الطلب
-  const { data: order, isLoading: loadingOrder ,refetch} = useQuery<Order>({
+  const { data: order, isLoading: loadingOrder, refetch } = useQuery<Order>({
     queryKey: ["order", params.id],
     queryFn: async () => {
-      const response = await axiosInstance.get(API_ENDPOINTS.orders.getById(params.id,{ lang: locale },false));
+      const response = await axiosInstance.get(API_ENDPOINTS.orders.getById(params.id, { lang: locale }, false));
       return response.data.data;
     },
   });
-useEffect(() => {
-  refetch();
-}, [locale]);
+  useEffect(() => {
+    refetch();
+  }, [locale]);
   // استخدام useMutation لإلغاء الطلب
   const { mutate: cancelOrder, isPending: isCancelling } = useMutation({
     mutationFn: async () => {
-      await axios.put(API_ENDPOINTS.orders.getById(params.id, { lang: locale },false),{
+      await axios.put(API_ENDPOINTS.orders.getById(params.id, { lang: locale }, false), {
         status: "canceled",
       });
     },
@@ -182,9 +182,9 @@ useEffect(() => {
           {/* Order Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Typography variant="h6" className="mb-4">
+              {order?.service && <Typography variant="h6" className="mb-4">
                 {t("order_details.service_provider")}
-              </Typography>
+              </Typography>}
               {order?.service ? (
                 <div className="flex items-center gap-4">
                   <Avatar
@@ -251,7 +251,7 @@ useEffect(() => {
             {getTimelineItems().map((item, index) => (
               <TimelineItem key={item.status}>
                 <TimelineSeparator>
-                  <TimelineDot 
+                  <TimelineDot
                     color={item.completed ? "success" : "grey"}
                     variant={item.completed ? "filled" : "outlined"}
                   />
@@ -263,7 +263,7 @@ useEffect(() => {
                   </Typography>
                   {item.date && (
                     <Typography variant="caption" color="textSecondary">
-                      {formatDate(item.date,locale)}
+                      {formatDate(item.date, locale)}
                     </Typography>
                   )}
                 </TimelineContent>

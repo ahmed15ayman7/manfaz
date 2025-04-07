@@ -71,7 +71,7 @@
     }
   },
   "bottom_nav": {
-    "wallet":"والٹ",
+    "wallet": "والٹ",
     "home": "ہوم",
     "orders": "آرڈرز",
     "notification": "اطلاعات",
@@ -207,7 +207,8 @@
     "save_error": "مقام محفوظ کرنے میں خرابی"
   },
   "common": {
-    "save": "محفوظ کریں"
+    "save": "محفوظ کریں",
+    "cancel": "منسوخ کریں"
   },
   "search": {
     "stores_placeholder": "متجر میں تلاش کریں",
@@ -341,7 +342,7 @@
     "in_progress_orders": "جاری ہے آرڈرز",
     "pending_orders": "زیر التواء آرڈرز",
     "no_orders": "کوئی آرڈر نہیں ملا",
-    "status":{
+    "status": {
       "pending": "زیر التواء",
       "in_progress": "جاری ہے",
       "completed": "مکمل",
@@ -495,13 +496,11 @@
     "description": "ہم آپ کو بہترین خدمات اور دکانیں ایک ہی جگہ پر فراہم کرتے ہیں۔ اپنی خدمت کو آسانی اور محفوظ طریقے سے ابھی آرڈر کریں۔"
   },
   "our_services": "ہماری خدمات",
-
   "browse_categories": "اقسام براؤز کریں",
   "categories": {
     "description": "دستیاب مختلف اقسام کو دریافت کریں۔"
   },
   "featured_stores": "نمایاں دکانیں",
-
   "cta": {
     "title": "ابھی ایپ حاصل کریں",
     "description": "منفذ ایپ ڈاؤن لوڈ کریں اور ایک ہموار اور محفوظ خریداری کا تجربہ حاصل کریں۔"
@@ -799,7 +798,6 @@
     },
     "prohibited": {
       "title": "ممنوعات",
-
       "content": {
         "title": "ممنوعہ مواد",
         "content": "کسی بھی غیر قانونی یا نقصان دہ مواد کی اشاعت ممنوع ہے۔"
@@ -1109,7 +1107,7 @@
     "categories": "تصنیفات",
     "stores": "اسٹورز"
   },
-  "Notifications":{
+  "Notifications": {
     "noNotifications": "ابھی تک کوئی اطلاع نہیں ہے",
     "noNotificationsDescription": "جیسے ہی آپ کو کوئی اطلاع موصول ہوگی، وہ یہاں ظاہر ہوگی۔"
   },
@@ -1139,7 +1137,7 @@
       "email_required": "ای میل درکار ہے",
       "email_invalid": "غلط ای میل پتہ",
       "user_required": "کاربر درکار ہے",
-       "balance_positive": "رصيد صفر سے زیادہ ہونی چاہیے"
+      "balance_positive": "رصيد صفر سے زیادہ ہونی چاہیے"
     },
     "messages": {
       "deposit_success": "رقم کامیابی سے جمع ہو گئی",
@@ -1157,6 +1155,19 @@
     "create_failed": "والٹ بنانے میں ناکامی",
     "no_wallet": "والٹ نہیں ملا",
     "initial_balance": "نشأ رصيد"
-
+  },
+  "payment": {
+    "card_details": "کارڈ کی تفصیلات",
+    "card_number": "کارڈ نمبر",
+    "expiry_month": "اختتام ماہ",
+    "expiry_year": "اختتام سال",
+    "cvc": "CVC",
+    "name_on_card": "کارڈ پر نام",
+    "pay_now": "ابھی ادائیگی کریں",
+    "invalid_card_number": "کارڈ نمبر درست نہیں ہے۔",
+      "invalid_expiry_date": "اختتامی تاریخ درست نہیں ہے۔",
+      "invalid_cvc": "CVC کوڈ درست نہیں ہے۔",
+      "name_required": "کارڈ پر نام درج کرنا ضروری ہے۔",
+      "invalid_amount": "رقم درست نہیں ہے۔"
   }
 }

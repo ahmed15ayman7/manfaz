@@ -11,17 +11,17 @@ import BottomSheet from './BottomSheet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tab } from '@headlessui/react';
 
-const getCategories = async ({ locale, type = 'all' }: { locale: string, type?: string }) => {
+const getCategories = async ({ locale, type = 'all',search }: { locale: string, type?: string ,search:string}) => {
   let res = await axios.get(`${apiUrl}/categories?type=${type}&lang=${locale}`)
   return res.data
 }
 
-const getServices = async ({ categoryId, locale, type }: { categoryId: string, locale: string, type: string }) => {
+const getServices = async ({ categoryId, locale, type,search }: { categoryId: string, locale: string, type: string ,search:string}) => {
   let res = await axios.get(`${apiUrl}/services?categoryId=${categoryId}&lang=${locale}&type=${type}`)
   return res.data
 }
 
-const Categories = () => {
+const Categories = ({search}:{search:string}) => {
   const router = useRouter();
   const { locale } = useStore();
   const t = useTranslations('home');
@@ -30,12 +30,12 @@ const Categories = () => {
 
   const { data: categoriesData, isLoading, refetch } = useQuery({
     queryKey: ['categories', selectedTab],
-    queryFn: () => getCategories({ locale, type: selectedTab === 0 ? 'service' : 'delivery' }),
+    queryFn: () => getCategories({ locale, type: selectedTab === 0 ? 'service' : 'delivery',search }),
   });
 
   const { data: servicesData, isLoading: isLoadingServices, refetch: refetchServices } = useQuery({
     queryKey: ['services', selectedCategory?.id],
-    queryFn: () => selectedCategory ? getServices({ categoryId: selectedCategory.id, locale, type: selectedCategory.type }) : null,
+    queryFn: () => selectedCategory ? getServices({ categoryId: selectedCategory.id, locale, type: selectedCategory.type ,search}) : null,
     enabled: !!selectedCategory,
   });
 
@@ -54,7 +54,7 @@ const Categories = () => {
   useEffect(() => {
     refetch();
     refetchServices();
-  }, [locale, selectedTab]);
+  }, [locale, selectedTab,search]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

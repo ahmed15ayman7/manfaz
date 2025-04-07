@@ -17,6 +17,7 @@ import {
 import AnimatedSection from '../components/AnimatedSection'
 import { TextField } from '@mui/material'
 import Link from 'next/link'
+import SearchBar from '@/components/shared/SearchBar'
 
 const categories = [
   {
@@ -139,12 +140,12 @@ export default function FAQPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex flex-col items-center">
       {/* الهيدر الرئيسي */}
-      <div className="relative h-[40vh] min-h-[400px] bg-primary overflow-hidden">
+      <div className="relative h-[40vh] min-h-[400px] bg-primary w-full overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/faq/pattern.svg')] opacity-20" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/90 to-primary" />
-        <div className="container relative z-10 h-full flex flex-col items-center justify-center text-primary-foreground">
+        <div className=" relative z-10 h-full flex flex-col items-center justify-center text-primary-foreground">
           <motion.h1
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -164,20 +165,13 @@ export default function FAQPage() {
         </div>
       </div>
 
-      <div className="container py-12">
+      <div className="container  py-12">
         {/* شريط البحث */}
-        <AnimatedSection className="relative -mt-24 mb-12 z-20">
-          <div className="bg-card shadow-xl rounded-xl p-6">
+        <AnimatedSection className="">
+          <div className=" rounded-xl p-6">
             <div className="max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <TextField
-                  type="text"
-                  placeholder={t('faq.search_placeholder')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-4 pr-10 py-6 text-lg"
-                />
+              <div className=" relative -mt-24 mb-12 z-20">
+                <SearchBar placeholder={t('faq.search_placeholder')} setSearch={()=>{}}/>
               </div>
             </div>
           </div>

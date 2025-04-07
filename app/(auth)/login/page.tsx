@@ -134,9 +134,10 @@ const LoginView: React.FC = () => {
   }, [isPhoneInput]);
 
   return (
-    <div className="bg-white h-screen">
+    <div className="bg-white min-h-screen">
       <div className="flex flex-col items-center gap-2 justify-center h-full p-5">
-        <img src="/assets/images/manfaz_logo.png" alt="Manfaz Logo" className="h-36 mb-8" />
+        
+        <img src="/assets/images/manfaz_logo.png" alt="Manfaz Logo" className="h-28 mb-8 cursor-pointer" onClick={()=>router.push("/")} />
         <h1 className="text-2xl text-center font-bold text-primary">{t('welcome')}</h1>
         <p className="text-gray-600 mb-8 text-center">{t('login_description')}</p>
 

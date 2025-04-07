@@ -20,7 +20,23 @@ import { SkeletonLoader } from "@/components/shared/skeleton-loader";
 import { motion } from "framer-motion";
 import { calculateDistance } from "@/lib/utils";
 import WorkerCard from "@/components/cards/WorkerCard";
+import Image from "next/image";
 
+
+// Helper to detect card type
+const getCardType = (number: string) => {
+  if (/^4/.test(number)) return "visa";
+  if (/^5[1-5]/.test(number)) return "mastercard";
+  return "default";
+};
+
+// Helper to format card number
+const formatCardNumber = (value: string) =>
+  value
+    .replace(/\D/g, "") // remove non-digits
+    .slice(0, 16)
+    .replace(/(.{4})/g, "$1 ")
+    .trim();
 const getWorker = async ({ id, locale }: { id: string; locale: string }) => {
   const res = await axiosInstance.get(
     API_ENDPOINTS.workers.getById(id, { lang: locale })
@@ -39,12 +55,12 @@ const getServiceParameter = async ({
   const res =
     type === "serviceParameter"
       ? await axiosInstance.get(
-          API_ENDPOINTS.serviceParameters.getById(id, { lang: locale })
-        )
+        API_ENDPOINTS.serviceParameters.getById(id, { lang: locale })
+      )
       : await axiosInstance.get(
-          API_ENDPOINTS.services.getById(id, { lang: locale })
-        );
-  return res.data.data ;
+        API_ENDPOINTS.services.getById(id, { lang: locale })
+      );
+  return res.data.data;
 };
 
 const getService = async ({
@@ -59,7 +75,7 @@ const getService = async ({
   const res = await axiosInstance.get(
     API_ENDPOINTS.stores.product(id, { lang: locale, type })
   );
-  return res.data.data ;
+  return res.data.data;
 };
 const getUserLocations = async ({
   id,
@@ -183,10 +199,10 @@ function CheckoutPage() {
         queryFn: () =>
           item?.type === "service"
             ? getServiceParameter({
-                id: item?.id,
-                locale,
-                type: "serviceParameter",
-              })
+              id: item?.id,
+              locale,
+              type: "serviceParameter",
+            })
             : getService({ id: item?.id, locale, type: "delivery" }),
         enabled: !!item?.id && !!locale,
       })) || [],
@@ -222,48 +238,48 @@ function CheckoutPage() {
   let [distance, setDistance] = useState<number | null>(null)
   useEffect(() => {
     if (userLocation) {
-      setDistance(userLocation &&  worker?.user?.locations?.[0]?calculateDistance(
+      setDistance(userLocation && worker?.user?.locations?.[0] ? calculateDistance(
         userLocation.latitude,
         userLocation.longitude,
         worker.user.locations[0].latitude,
         worker.user.locations[0].longitude
-      ):null)
+      ) : null)
       setFormData((prev) => ({
         ...prev,
-        totalAmount:service?.price || 0,
+        totalAmount: service?.price || 0,
       }))
     }
-  }, [worker, userLocation,service])
+  }, [worker, userLocation, service])
   useEffect(() => {
     setSelectedServiceId(items[0]);
     if (status !== "loading" && userData && userData?.user) {
       setFormData({
-        locationId: "",
+        locationId: locations?.[0]?.id || "",
         store: itemQueries
           ?.map((query) => {
             return query?.data?.type
               ? null
               : {
-                  id: "",
-                  storeId: query?.data?.storeId || "",
-                  store: {},
-                  order: {},
-                  orderId: "",
-                  products: items
-                    .filter(
-                      (item) =>
-                        item?.type === "delivery" &&
-                        item?.id === query?.data?.id
-                    )
-                    .map((item) => ({
-                      id: "",
-                      orders: {},
-                      orderId: "",
-                      product: {},
-                      productId: item?.id || "",
-                      quantity: item?.quantity || 0,
-                    })),
-                };
+                id: "",
+                storeId: query?.data?.storeId || "",
+                store: {},
+                order: {},
+                orderId: "",
+                products: items
+                  .filter(
+                    (item) =>
+                      item?.type === "delivery" &&
+                      item?.id === query?.data?.id
+                  )
+                  .map((item) => ({
+                    id: "",
+                    orders: {},
+                    orderId: "",
+                    product: {},
+                    productId: item?.id || "",
+                    quantity: item?.quantity || 0,
+                  })),
+              };
           })
           .filter((item) => item !== null) as OrdersStore[],
         latitude: 0,
@@ -272,11 +288,11 @@ function CheckoutPage() {
         notes: "",
         serviceId: items[0]?.id || "",
         providerId: "", // Assuming providerId will be set later
-        price:service &&!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId ?service?.price || 0 : getTotalPrice(),
-        totalAmount: service &&!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId ?service?.price || 0 : getTotalPrice(),
+        price: service && !workerLoading && !serviceLoading && !servicesLoading && workerId && serviceId && parameterId ? service?.price || 0 : getTotalPrice(),
+        totalAmount: service && !workerLoading && !serviceLoading && !servicesLoading && workerId && serviceId && parameterId ? service?.price || 0 : getTotalPrice(),
       });
     }
-  }, [status, userData, items, itemQueries ,service]);
+  }, [status, userData, items, itemQueries, service]);
 
   const getTotalPrice = () => {
     return (
@@ -319,10 +335,10 @@ function CheckoutPage() {
     // التحقق من رقم البطاقة باستخدام خوارزمية Luhn
     const digits = number.replace(/\D/g, '');
     if (digits.length < 13 || digits.length > 19) return false;
-    
+
     let sum = 0;
     let isEven = false;
-    
+
     for (let i = digits.length - 1; i >= 0; i--) {
       let digit = parseInt(digits[i]);
       if (isEven) {
@@ -332,7 +348,7 @@ function CheckoutPage() {
       sum += digit;
       isEven = !isEven;
     }
-    
+
     return sum % 10 === 0;
   };
 
@@ -340,14 +356,14 @@ function CheckoutPage() {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;
-    
+
     const expMonth = parseInt(month);
-    const expYear = parseInt(year);
-    
+    const expYear = parseInt(`20${year}`);
+
     if (expMonth < 1 || expMonth > 12) return false;
     if (expYear < currentYear) return false;
     if (expYear === currentYear && expMonth < currentMonth) return false;
-    
+
     return true;
   };
 
@@ -431,9 +447,11 @@ function CheckoutPage() {
         handlePaymentDialogClose();
         router.push("/orders");
       } else {
+
         setPaymentError(t("payment.failed"));
       }
     } catch (error: any) {
+      console.log(error)
       setPaymentError(error.message || t("payment.failed"));
     } finally {
       setPaymentLoading(false);
@@ -515,7 +533,7 @@ function CheckoutPage() {
           className="grid grid-cols-1 lg:grid-cols-3 gap-6"
         >
           <div className="lg:col-span-2 space-y-6">
-          {!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId&& <WorkerCard worker={worker!} distance={distance||0}  isRow />}
+            {!workerLoading && !serviceLoading && !servicesLoading && workerId && serviceId && parameterId && <WorkerCard worker={worker!} distance={distance || 0} isRow />}
             {/* Contact Information */}
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <h2 className="text-xl font-semibold mb-4">
@@ -534,7 +552,7 @@ function CheckoutPage() {
                   <Select
                     value={formData.locationId}
                     onChange={(e) => handleAddressChange(e, userData?.user?.id)}
-                    displayEmpty
+                    // displayEmpty
                     className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     {!locationsLoading &&
@@ -572,9 +590,8 @@ function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setPaymentMethod("cash")}
-                  className={`flex items-center gap-3 p-4 border rounded-lg ${
-                    paymentMethod === "cash" ? "border-primary bg-primary/5" : ""
-                  }`}
+                  className={`flex items-center gap-3 p-4 border rounded-lg ${paymentMethod === "cash" ? "border-primary bg-primary/5" : ""
+                    }`}
                 >
                   <IconCash className="text-primary" size={24} />
                   <span>{t("checkout.cash")}</span>
@@ -582,11 +599,10 @@ function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setPaymentMethod("credit_card")}
-                  className={`flex items-center gap-3 p-4 border rounded-lg ${
-                    paymentMethod === "credit_card"
-                      ? "border-primary bg-primary/5"
-                      : ""
-                  }`}
+                  className={`flex items-center gap-3 p-4 border rounded-lg ${paymentMethod === "credit_card"
+                    ? "border-primary bg-primary/5"
+                    : ""
+                    }`}
                 >
                   <IconCreditCard className="text-primary" size={24} />
                   <span>{t("checkout.card")}</span>
@@ -594,9 +610,8 @@ function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setPaymentMethod("tabby")}
-                  className={`flex items-center gap-3 p-4 border rounded-lg ${
-                    paymentMethod === "tabby" ? "border-primary bg-primary/5" : ""
-                  }`}
+                  className={`flex items-center gap-3 p-4 border rounded-lg ${paymentMethod === "tabby" ? "border-primary bg-primary/5" : ""
+                    }`}
                 >
                   <img src="/imgs/tabby.png" alt="Tabby" className="w-10 h-6" />
                   <span>{t("checkout.tabby")}</span>
@@ -604,11 +619,10 @@ function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setPaymentMethod("tamara")}
-                  className={`flex items-center gap-2 p-4 border rounded-lg ${
-                    paymentMethod === "tamara"
-                      ? "border-primary bg-primary/5"
-                      : ""
-                  }`}
+                  className={`flex items-center gap-2 p-4 border rounded-lg ${paymentMethod === "tamara"
+                    ? "border-primary bg-primary/5"
+                    : ""
+                    }`}
                 >
                   <img src="/imgs/tamara.png" alt="Tamara" className="w-10 h-6" />
                   <span>{t("checkout.tamara")}</span>
@@ -617,7 +631,7 @@ function CheckoutPage() {
             </div>
 
             {/* Cart Items */}
-            {!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId?  null: (
+            {!workerLoading && !serviceLoading && !servicesLoading && workerId && serviceId && parameterId ? null : (
               <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h2 className="text-xl font-semibold mb-4">
                   {t("checkout.order_summary")}
@@ -634,11 +648,10 @@ function CheckoutPage() {
                           backgroundColor:
                             selectedServiceId?.id === item?.id ? "#5A9CFF50" : "",
                         }}
-                        className={`flex p-2  items-center gap-4 border-b pb-4  cursor-pointer border ${
-                          selectedServiceId?.id === item?.id
-                            ? "  border-primary  rounded-lg"
-                            : "last:border-transparent "
-                        }`}
+                        className={`flex p-2  items-center gap-4 border-b pb-4  cursor-pointer border ${selectedServiceId?.id === item?.id
+                          ? "  border-primary  rounded-lg"
+                          : "last:border-transparent "
+                          }`}
                         onClick={() => handleServiceSelect(item)}
                       >
                         {itemData?.imageUrl ||
@@ -678,156 +691,193 @@ function CheckoutPage() {
 
           {/* Order Summary */}
           <div className="">
-          {!workerLoading && !serviceLoading && !servicesLoading &&workerId && serviceId && parameterId?  (
-               <Box className="mb-3">
-               <Grid container spacing={4}>
-                 {/* Service Details */}
-                 <Grid item xs={12}>
-                   <motion.div
-                     initial={{ opacity: 0, y: 20 }}
-                     animate={{ opacity: 1, y: 0 }}
-                     transition={{ duration: 0.5, delay: 0.2 }}
-                     className="bg-white"
-                   >
-                     <Box className="relative bg-white h-48">
-                       <img
-                         src={service.imageUrl}
-                         alt={service.name}
-                         className="w-full h-full object-cover"
-                       />
-                       <Box className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                       <Box className="absolute bottom-4 left-4 text-white">
-                         <Typography variant="h4">{service.name}</Typography>
-                         <Box className="flex items-center gap-2">
-                           <Rating value={service.rating} readOnly precision={0.1} size="small" />
-                           <Typography variant="body2">
-                             ({service.ratingCount} ratings)
-                           </Typography>
-                         </Box>
-                       </Box>
-                     </Box>
-                     <CardContent>
-                       <Grid container spacing={3}>
-                         <Grid item xs={6}>
-                           <Box className="flex items-center gap-2">
-                             <IconClock className="text-blue-600" />
-                             <div>
-                               <Typography variant="body2" color="textSecondary">
-                                 Duration
-                               </Typography>
-                               <Typography variant="h6">
-                                 {service.duration} min
-                               </Typography>
-                             </div>
-                           </Box>
-                         </Grid>
-                         <Grid item xs={6}>
-                           <Box className="flex items-center gap-2">
-                             <IconMedal className="text-purple-600" />
-                             <div>
-                               <Typography variant="body2" color="textSecondary">
-                                 Warranty
-                               </Typography>
-                               <Typography variant="h6">
-                                 {service.warranty} months
-                               </Typography>
-                             </div>
-                           </Box>
-                         </Grid>
-                       </Grid>
-                       <Divider className="my-4" />
-                       <Typography variant="body1" className="mb-4">
-                         {service.description}
-                       </Typography>
-                       <Box className="flex items-center justify-between">
-                         <Typography variant="h4" color="primary">
-                           {service.price} {t("home_service_details_view.price")}
-                         </Typography>
-                         <Chip
-                           icon={<IconStar size={16} />}
-                           label={`${service.rating} Rating`}
-                           color="primary"
-                         />
-                       </Box>
-                     </CardContent>
-                   </motion.div>
-                 </Grid>
-               </Grid>
-             </Box>
-            ) :null}
-          <div className="bg-white rounded-lg p-6 shadow-sm h-fit">
-          
-            <h2 className="text-xl font-semibold mb-4">
-              {t("checkout.order_summary")}
-            </h2>
+            {!workerLoading && !serviceLoading && !servicesLoading && workerId && serviceId && parameterId ? (
+              <Box className="mb-3">
+                <Grid container spacing={4}>
+                  {/* Service Details */}
+                  <Grid item xs={12}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      className="bg-white"
+                    >
+                      <Box className="relative bg-white h-48">
+                        <img
+                          src={service.imageUrl}
+                          alt={service.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <Box className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <Box className="absolute bottom-4 left-4 text-white">
+                          <Typography variant="h4">{service.name}</Typography>
+                          <Box className="flex items-center gap-2">
+                            <Rating value={service.rating} readOnly precision={0.1} size="small" />
+                            <Typography variant="body2">
+                              ({service.ratingCount} ratings)
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                      <CardContent>
+                        <Grid container spacing={3}>
+                          <Grid item xs={6}>
+                            <Box className="flex items-center gap-2">
+                              <IconClock className="text-blue-600" />
+                              <div>
+                                <Typography variant="body2" color="textSecondary">
+                                  Duration
+                                </Typography>
+                                <Typography variant="h6">
+                                  {service.duration} min
+                                </Typography>
+                              </div>
+                            </Box>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Box className="flex items-center gap-2">
+                              <IconMedal className="text-purple-600" />
+                              <div>
+                                <Typography variant="body2" color="textSecondary">
+                                  Warranty
+                                </Typography>
+                                <Typography variant="h6">
+                                  {service.warranty} months
+                                </Typography>
+                              </div>
+                            </Box>
+                          </Grid>
+                        </Grid>
+                        <Divider className="my-4" />
+                        <Typography variant="body1" className="mb-4">
+                          {service.description}
+                        </Typography>
+                        <Box className="flex items-center justify-between">
+                          <Typography variant="h4" color="primary">
+                            {service.price} {t("home_service_details_view.price")}
+                          </Typography>
+                          <Chip
+                            icon={<IconStar size={16} />}
+                            label={`${service.rating} Rating`}
+                            color="primary"
+                          />
+                        </Box>
+                      </CardContent>
+                    </motion.div>
+                  </Grid>
+                </Grid>
+              </Box>
+            ) : null}
+            <div className="bg-white rounded-lg p-6 shadow-sm h-fit">
 
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">
-                  {t("checkout.services_count", {
-                    count: workerId ? 1 : items?.length,
-                  })}
-                </span>
-                <span>{workerId ? 1 : items?.length}</span>
+              <h2 className="text-xl font-semibold mb-4">
+                {t("checkout.order_summary")}
+              </h2>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">
+                    {t("checkout.services_count", {
+                      count: workerId ? 1 : items?.length,
+                    })}
+                  </span>
+                  <span>{workerId ? 1 : items?.length}</span>
+                </div>
+                <div className="flex items-center justify-between font-medium">
+                  <span>{t("checkout.total_amount")}</span>
+                  <span>
+                    {formData.totalAmount} {t("home_service_details_view.price")}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center justify-between font-medium">
-                <span>{t("checkout.total_amount")}</span>
-                <span>
-                  {formData.totalAmount} {t("home_service_details_view.price")}
-                </span>
-              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-600 transition-colors"
+              >
+                {t("checkout.confirm_order")}
+              </button>
             </div>
-
-            <button
-              type="submit"
-              className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-600 transition-colors"
-            >
-              {t("checkout.confirm_order")}
-            </button>
-          </div>
           </div>
         </form>
       </div>
 
       <Dialog open={openPaymentDialog} onClose={handlePaymentDialogClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{t("payment.card_details")}</DialogTitle>
+        <DialogTitle className="flex items-center justify-between">
+          {t("payment.card_details")}
+          <div className="w-10 h-6 relative">
+            <Image
+              src={
+                getCardType(cardDetails.number) === "visa"
+                  ? "/imgs/visa.png"
+                  : getCardType(cardDetails.number) === "mastercard"
+                    ? "/imgs/mastercard.png"
+                    : "/imgs/default.png"
+              }
+              alt="Card Type"
+              fill
+              className="object-contain"
+            />
+          </div>
+        </DialogTitle>
+
         <DialogContent>
-          <div className="space-y-4 mt-4">
-            {paymentError && (
-              <div className="text-red-500 mb-4">{paymentError}</div>
-            )}
+          <div className="space-y-4 mt-2">
+            {paymentError && <div className="text-red-500">{paymentError}</div>}
+
             <TextField
               fullWidth
               label={t("payment.card_number")}
               value={cardDetails.number}
-              onChange={(e) => setCardDetails({ ...cardDetails, number: e.target.value })}
+              onChange={(e) =>
+                setCardDetails({
+                  ...cardDetails,
+                  number: formatCardNumber(e.target.value),
+                })
+              }
+              inputProps={{ maxLength: 19 }}
             />
+
             <div className="grid grid-cols-2 gap-4">
               <TextField
                 label={t("payment.expiry_month")}
                 value={cardDetails.expiryMonth}
-                onChange={(e) => setCardDetails({ ...cardDetails, expiryMonth: e.target.value })}
+                onChange={(e) =>
+                  setCardDetails({ ...cardDetails, expiryMonth: e.target.value })
+                }
+                placeholder="MM"
               />
               <TextField
                 label={t("payment.expiry_year")}
                 value={cardDetails.expiryYear}
-                onChange={(e) => setCardDetails({ ...cardDetails, expiryYear: e.target.value })}
+                onChange={(e) =>
+                  setCardDetails({ ...cardDetails, expiryYear: e.target.value })
+                }
+                placeholder="YY"
               />
             </div>
+
             <TextField
               fullWidth
               label={t("payment.cvc")}
               value={cardDetails.cvc}
-              onChange={(e) => setCardDetails({ ...cardDetails, cvc: e.target.value })}
+              onChange={(e) =>
+                setCardDetails({ ...cardDetails, cvc: e.target.value })
+              }
+              inputProps={{ maxLength: 4 }}
             />
+
             <TextField
               fullWidth
               label={t("payment.name_on_card")}
               value={cardDetails.name}
-              onChange={(e) => setCardDetails({ ...cardDetails, name: e.target.value })}
+              onChange={(e) =>
+                setCardDetails({ ...cardDetails, name: e.target.value })
+              }
             />
           </div>
         </DialogContent>
+
         <DialogActions>
           <Button onClick={handlePaymentDialogClose} disabled={paymentLoading}>
             {t("common.cancel")}
@@ -838,14 +888,11 @@ function CheckoutPage() {
             color="primary"
             disabled={paymentLoading}
           >
-            {paymentLoading ? (
-              <CircularProgress size={24} />
-            ) : (
-              t("payment.pay_now")
-            )}
+            {paymentLoading ? <CircularProgress size={24} /> : t("payment.pay_now")}
           </Button>
         </DialogActions>
       </Dialog>
+
     </>
   );
 }

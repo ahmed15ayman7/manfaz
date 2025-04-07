@@ -9,22 +9,22 @@ import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 
-const getServices = async ({ locale }: { locale: string }) => {
-  let res = await axios.get(`${apiUrl}/categories?type=delivery&lang=${locale}`)
+const getServices = async ({ locale,search }: { locale: string,search:string }) => {
+  let res = await axios.get(`${apiUrl}/categories?type=delivery&lang=${locale}&search=${search}`)
   return res.data.data
 }
 
-const PopularServices = () => {
+const PopularServices = ({search}:{search:string}) => {
   let t = useTranslations('home');
   let { locale } = useStore();
   let { data: services, isLoading, refetch } = useQuery({
     queryKey: ['services'],
-    queryFn: () => getServices({ locale }),
+    queryFn: () => getServices({ locale,search }),
   })
 
   useEffect(() => {
     refetch()
-  }, [locale])
+  }, [locale,search])
 
   const containerVariants = {
     hidden: { opacity: 0 },

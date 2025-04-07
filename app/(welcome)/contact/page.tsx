@@ -112,7 +112,7 @@ export default function ContactPage() {
       <div className="relative h-[40vh] min-h-[400px] bg-primary overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/contact/pattern.svg')] opacity-20" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/90 to-primary" />
-        <div className="container relative z-10 h-full flex flex-col items-center justify-center text-primary-foreground">
+        <div className=" relative z-10 h-full flex flex-col items-center justify-center text-primary-foreground">
           <motion.h1
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -132,7 +132,7 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <div className="container py-12">
+      <div className=" py-12">
         {/* معلومات التواصل */}
         <AnimatedSection className="relative -mt-24 mb-12 z-20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -201,7 +201,7 @@ export default function ContactPage() {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder={t('contact.form.name_placeholder')}
-                      className="pl-4 pr-10"
+                      className="pl-4 pr-10 w-full"
                       required
                     />
                   </div>
@@ -219,7 +219,7 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder={t('contact.form.email_placeholder')}
-                      className="pl-4 pr-10"
+                      className="pl-4 pr-10 w-full"
                       required
                     />
                   </div>
@@ -237,7 +237,7 @@ export default function ContactPage() {
                       value={formData.subject}
                       onChange={handleChange}
                       placeholder={t('contact.form.subject_placeholder')}
-                      className="pl-4 pr-10"
+                      className="pl-4 pr-10 w-full"
                       required
                     />
                   </div>
@@ -252,7 +252,7 @@ export default function ContactPage() {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder={t('contact.form.message_placeholder')}
-                    className="min-h-[150px]"
+                    className="min-h-[150px] w-full"
                     required
                   />
                 </div>

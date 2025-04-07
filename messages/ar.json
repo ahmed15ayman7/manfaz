@@ -310,7 +310,8 @@
     "save_error": "حدث خطأ أثناء حفظ الموقع"
   },
   "common": {
-    "save": "حفظ"
+    "save": "حفظ",
+    "cancel": "إلغاء"
   },
   "search": {
     "stores_placeholder": "ابحث عن متجر",
@@ -444,7 +445,7 @@
     "in_progress_orders": "طلبات قيد التنفيذ",
     "pending_orders": "طلبات قيد الانتظار",
     "no_orders": "لا توجد طلبات",
-    "status":{
+    "status": {
       "pending": "قيد الانتظار",
       "in_progress": "قيد التنفيذ",
       "completed": "مكتمل",
@@ -505,7 +506,6 @@
     "description": "نوفر لك أفضل الخدمات والمتاجر في مكان واحد. اطلب خدمتك الآن بكل سهولة وأمان."
   },
   "our_services": "خدماتنا",
-
   "browse_categories": "تصفح الفئات",
   "categories": {
     "description": "اكتشف مجموعة متنوعة من الفئات المتاحة"
@@ -1117,7 +1117,7 @@
     "services": "الخدمات",
     "categories": "التصنيفات"
   },
-  "Notifications":{
+  "Notifications": {
     "noNotifications": "لا توجد إشعارات حتى الآن",
     "noNotificationsDescription": "ستظهر الإشعارات هنا عند وصول أي جديد."
   },
@@ -1166,5 +1166,19 @@
     "create_failed": "فشل في إنشاء المحفظة",
     "no_wallet": "لا توجد محفظة",
     "initial_balance": "الرصيد الأولي"
+  },
+  "payment": {
+    "card_details": "تفاصيل البطاقة",
+    "card_number": "رقم البطاقة",
+    "expiry_month": "شهر الانتهاء",
+    "expiry_year": "سنة الانتهاء",
+    "cvc": "CVC",
+    "name_on_card": "اسم المالك",
+    "pay_now": "ادفع الآن",
+    "invalid_card_number": "رقم البطاقة غير صالح.",
+    "invalid_expiry_date": "تاريخ الانتهاء غير صالح.",
+    "invalid_cvc": "رمز الأمان غير صالح.",
+    "name_required": "يجب إدخال الاسم على البطاقة.",
+    "invalid_amount": "المبلغ غير صالح."
   }
 }

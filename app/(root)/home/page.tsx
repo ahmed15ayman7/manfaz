@@ -77,7 +77,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <PopularServices />
+        <PopularServices search={search} />
       </motion.div>
 
       <motion.div
@@ -85,7 +85,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <Categories />
+        <Categories search={search} />
       </motion.div>
 
       <motion.div

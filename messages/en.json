@@ -83,7 +83,7 @@
     }
   },
   "bottom_nav": {
-    "wallet":"Wallet",
+    "wallet": "Wallet",
     "home": "Home",
     "orders": "Orders",
     "notification": "Notifications",
@@ -200,7 +200,7 @@
     "invalid_phone": "Invalid phone number"
   },
   "stores": {
-     "description": "Shop from the best local stores.",
+    "description": "Shop from the best local stores.",
     "available_stores": "Available Stores",
     "offers": "Offers",
     "discounts": "Discounts",
@@ -322,7 +322,8 @@
     "save_error": "Error saving location"
   },
   "common": {
-    "save": "Save"
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "search": {
     "stores_placeholder": "Search for stores",
@@ -456,7 +457,7 @@
     "in_progress_orders": "In Progress Orders",
     "pending_orders": "Pending Orders",
     "no_orders": "No orders found",
-    "status":{
+    "status": {
       "pending": "Pending",
       "in_progress": "In Progress",
       "completed": "Completed",
@@ -522,7 +523,6 @@
     "description": "Discover a variety of available categories."
   },
   "featured_stores": "Featured Stores",
-
   "cta": {
     "title": "Get the App Now",
     "description": "Download the Manfadh app and enjoy a smooth and secure shopping experience."
@@ -748,77 +748,76 @@
       "a4": "Go to 'My Addresses' in the settings menu, then click 'Add New Address' and follow the steps.",
       "q5": "Can I delete my account?",
       "a5": "Yes, you can request account deletion by contacting customer service. All your data will be permanently deleted."
+    }
+  },
+  "terms": {
+    "title": "Terms and Conditions",
+    "description": "Please read these terms and conditions carefully before using our services.",
+    "last_updated": "Last Updated",
+    "questions": "Have any questions?",
+    "contact_us": "Contact Us",
+    "support": "Technical Support",
+    "support_phone": "+966500000000",
+    "view_privacy": "Privacy Policy",
+    "contact_support": "Contact Support",
+    "agreement": {
+      "title": "Your Agreement to the Terms",
+      "description": "By using our services, you agree to these terms and conditions. If you have any questions, please contact us."
     },
-    "terms": {
-      "title": "Terms and Conditions",
-      "description": "Please read these terms and conditions carefully before using our services.",
-      "last_updated": "Last Updated",
-      "questions": "Have any questions?",
-      "contact_us": "Contact Us",
-      "support": "Technical Support",
-      "support_phone": "+966500000000",
-      "view_privacy": "Privacy Policy",
-      "contact_support": "Contact Support",
-      "agreement": {
-        "title": "Your Agreement to the Terms",
-        "description": "By using our services, you agree to these terms and conditions. If you have any questions, please contact us."
+    "introduction": {
+      "title": "Introduction",
+      "content": "Welcome to Manfaz. These terms and conditions govern your use of our platform and services. By using our services, you agree to comply with these terms."
+    },
+    "user_agreement": {
+      "title": "User Agreement",
+      "content": "This agreement defines the relationship between you and Manfaz and outlines your rights and responsibilities as a user.",
+      "eligibility": {
+        "title": "Eligibility",
+        "content": "You must be at least 18 years old to use our services. If you represent a company, you must be authorized to act on its behalf."
       },
-      "introduction": {
-        "title": "Introduction",
-        "content": "Welcome to Manfaz. These terms and conditions govern your use of our platform and services. By using our services, you agree to comply with these terms."
+      "account": {
+        "title": "Account",
+        "content": "You are responsible for maintaining the confidentiality of your account information and password. You must notify us immediately of any unauthorized use."
       },
-      "user_agreement": {
-        "title": "User Agreement",
-        "content": "This agreement defines the relationship between you and Manfaz and outlines your rights and responsibilities as a user.",
-        "eligibility": {
-          "title": "Eligibility",
-          "content": "You must be at least 18 years old to use our services. If you represent a company, you must be authorized to act on its behalf."
-        },
-        "account": {
-          "title": "Account",
-          "content": "You are responsible for maintaining the confidentiality of your account information and password. You must notify us immediately of any unauthorized use."
-        },
-        "responsibilities": {
-          "title": "Responsibilities",
-          "content": "You must use the service legally and ethically, without violating others' rights or applicable laws."
-        }
+      "responsibilities": {
+        "title": "Responsibilities",
+        "content": "You must use the service legally and ethically, without violating others' rights or applicable laws."
+      }
+    },
+    "privacy": {
+      "title": "Privacy",
+      "content": "We respect your privacy and are committed to protecting your personal data in accordance with our privacy policy.",
+      "data_collection": {
+        "title": "Data Collection",
+        "content": "We collect certain information to provide our services and improve your experience."
       },
-      "privacy": {
-        "title": "Privacy",
-        "content": "We respect your privacy and are committed to protecting your personal data in accordance with our privacy policy.",
-        "data_collection": {
-          "title": "Data Collection",
-          "content": "We collect certain information to provide our services and improve your experience."
-        },
-        "data_usage": {
-          "title": "Data Usage",
-          "content": "We use your data to deliver and enhance our services in accordance with our privacy policy."
-        },
-        "data_protection": {
-          "title": "Data Protection",
-          "content": "We take appropriate security measures to protect your data from unauthorized access."
-        }
+      "data_usage": {
+        "title": "Data Usage",
+        "content": "We use your data to deliver and enhance our services in accordance with our privacy policy."
       },
-      "payment": {
-        "title": "Payment",
-        "content": "We offer multiple secure payment methods to facilitate your transactions.",
-        "methods": {
-          "title": "Payment Methods",
-          "content": "We accept credit cards, Mada, and other electronic payment methods."
-        },
-        "fees": {
-          "title": "Fees",
-          "content": "Service or delivery fees may apply. You will be informed of all charges before completing your order."
-        },
-        "refunds": {
-          "title": "Refund Policy",
-          "content": "We apply a fair refund policy based on..."
-        }
+      "data_protection": {
+        "title": "Data Protection",
+        "content": "We take appropriate security measures to protect your data from unauthorized access."
+      }
+    },
+    "payment": {
+      "title": "Payment",
+      "content": "We offer multiple secure payment methods to facilitate your transactions.",
+      "methods": {
+        "title": "Payment Methods",
+        "content": "We accept credit cards, Mada, and other electronic payment methods."
+      },
+      "fees": {
+        "title": "Fees",
+        "content": "Service or delivery fees may apply. You will be informed of all charges before completing your order."
+      },
+      "refunds": {
+        "title": "Refund Policy",
+        "content": "We apply a fair refund policy based on..."
       }
     },
     "prohibited": {
       "title": "Prohibited",
-
       "content": {
         "title": "Prohibited Content",
         "content": "It is prohibited to publish any illegal or harmful content."
@@ -1128,7 +1127,7 @@
     "services": "Services",
     "categories": "Categories"
   },
-  "Notifications":{
+  "Notifications": {
     "noNotifications": "No notifications yet",
     "noNotificationsDescription": "Your notifications will appear here once you have any."
   },
@@ -1175,6 +1174,19 @@
     "create_failed": "Wallet creation failed",
     "no_wallet": "No Wallet",
     "initial_balance": "Initial Balance"
-    
+  },
+  "payment": {
+    "card_details": "Card Details",
+    "card_number": "Card Number",
+    "expiry_month": "Expiry Month",
+    "expiry_year": "Expiry Year",
+    "cvc": "CVC",
+    "name_on_card": "Name on Card",
+    "pay_now": "Pay Now",
+    "invalid_card_number": "Invalid card number.",
+    "invalid_expiry_date": "Invalid expiry date.",
+    "invalid_cvc": "Invalid CVC.",
+    "name_required": "Name on card is required.",
+    "invalid_amount": "Invalid amount."
   }
 }

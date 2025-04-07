@@ -61,7 +61,7 @@ const SearchBar = ({ placeholder, setSearch }: { placeholder: string, setSearch:
           />
         </motion.div>
 
-        <AnimatePresence>
+        {/* <AnimatePresence>
           {showSuggestions && searchTerm.length > 2 && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -111,7 +111,7 @@ const SearchBar = ({ placeholder, setSearch }: { placeholder: string, setSearch:
               </Paper>
             </motion.div>
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
       </div>
     </ClickAwayListener>
   );

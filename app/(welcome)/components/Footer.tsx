@@ -41,13 +41,13 @@ export default function Footer() {
   const t = useTranslations()
 
   return (
-    <footer className="bg-background border-t">
-      <div className="container py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-background border-t flex justify-center">
+      <div className="container p-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
           {/* Logo and Social Links */}
           <div className="space-y-4">
             <Link href="/" className="text-2xl font-bold">
-              منفذ
+            {t("manfaz")}
             </Link>
             <p className="text-sm text-muted-foreground">
               {t('footer.description')}
