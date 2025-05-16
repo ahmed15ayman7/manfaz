@@ -1,6 +1,6 @@
 import { Bell, LogOut, User } from "lucide-react";
 import Link from "next/link";
-import { apiUrl } from "@/constant";
+import { BASE_URL } from '@/lib/config';
 
 const Topbar = () => {
   return (

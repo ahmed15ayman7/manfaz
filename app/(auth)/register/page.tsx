@@ -10,7 +10,7 @@ import 'react-phone-input-2/lib/style.css';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import { toast } from 'react-toastify';
 import { setUserData } from '@/lib/actions/user.action';
-import { apiUrl } from '@/constant';
+import { BASE_URL } from '@/lib/config';
 import axios from 'axios';
 import { FormControl, Select, MenuItem } from '@mui/material';
 
@@ -47,7 +47,7 @@ const RegisterView: React.FC = () => {
     event.preventDefault();
     let toastId = toast.loading(t('please_wait'));
     try {
-      const response = await axios.post(`${apiUrl}/auth/register?lang=${locale}`, {
+      const response = await axios.post(`${BASE_URL}/auth/register?lang=${locale}`, {
         name: fullName,
         email,
         password,

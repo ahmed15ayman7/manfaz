@@ -47,7 +47,8 @@ const StoreCard = ({ store, isLoading = false }: StoreCardProps) => {
 
         if (!todayHours || !todayHours.isOpen) return false;
 
-        return currentTime.localeCompare(todayHours.openTime) >= 0 && currentTime.localeCompare(todayHours.closeTime) < 0;
+        // return currentTime.localeCompare(todayHours.openTime) >= 0 && currentTime.localeCompare(todayHours.closeTime) < 0;
+        return true
     }, [store.status, store.workingHours]);
 
     // الحصول على وقت الفتح القادم
@@ -159,14 +160,14 @@ const StoreCard = ({ store, isLoading = false }: StoreCardProps) => {
                             ({store.reviewsCount})
                         </Typography>
                     </Box>
-                   
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-                            <IconMapPin size={16} />
-                            <Typography variant="body2" color="text.secondary">
-                                {nearestLocation && nearestLocation.distance || 0} {t('stores.km_away')}
-                            </Typography>
-                        </Box>
-                  
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                        <IconMapPin size={16} />
+                        <Typography variant="body2" color="text.secondary">
+                            {nearestLocation && nearestLocation.distance || 0} {t('stores.km_away')}
+                        </Typography>
+                    </Box>
+
                     {hasActiveDiscounts && (
                         <Chip
                             label={t('stores.discounts_available')}

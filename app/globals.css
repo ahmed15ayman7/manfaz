@@ -49,7 +49,9 @@
     --foreground: #ededed;
   }
 } */
-
+*{
+  box-sizing: border-box;
+}
 body {
   color: var(--foreground);
   background: var(--background);

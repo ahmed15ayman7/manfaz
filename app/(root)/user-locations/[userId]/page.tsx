@@ -4,7 +4,7 @@ import { Container, Typography, Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
-import { apiUrl } from '@/constant';
+import { BASE_URL } from '@/lib/config';
 import LocationForm from '@/components/map/LocationForm';
 import { UserLocation } from '@/interfaces';
 import { useRouter } from 'next/navigation';
@@ -22,7 +22,7 @@ const UserLocationPage = () => {
         if (params.locationId) {
             const fetchLocation = async () => {
                 try {
-                    const response = await axiosInstance.get(API_ENDPOINTS.userLocations.getAll(params.userId as string,{},false));
+                    const response = await axiosInstance.get(API_ENDPOINTS.userLocations.getAll(params.userId as string, {}, false));
                     setInitialData(response.data.data?.[0]);
                 } catch (error) {
                     console.error('Error fetching location:', error);

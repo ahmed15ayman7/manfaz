@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import axios from 'axios'
-import { apiUrl } from '@/constant'
+import { BASE_URL } from '@/lib/config'
 import useStore from '@/store/useLanguageStore'
 import useCartStore from '@/store/useCartStore'
 
@@ -27,7 +27,7 @@ interface ServiceParameter {
 }
 
 const getServiceParameter = async ({ id, locale }: { id: string; locale: string }) => {
-  const res = await axios.get(`${apiUrl}/service-parameters/${id}?lang=${locale}`)
+  const res = await axios.get(`${BASE_URL}/service-parameters/${id}?lang=${locale}`)
   return res.data
 }
 
@@ -40,18 +40,18 @@ export default function ServiceParameterPage() {
   const t2 = useTranslations('')
   const id = params.id as string
 
-  const { data: parameterData, isLoading,refetch } = useQuery({
+  const { data: parameterData, isLoading, refetch } = useQuery({
     queryKey: ['service-parameter', id],
     queryFn: () => getServiceParameter({ id, locale }),
   })
-useEffect(() => {
-  refetch()
-},[locale])
+  useEffect(() => {
+    refetch()
+  }, [locale])
   const parameter: ServiceParameter = parameterData?.data
 
   const handleAddToCart = () => {
     if (!parameter) return
-    
+
     addItem({
       id: parameter.id,
       type: 'service',
@@ -150,16 +150,16 @@ useEffect(() => {
                 <details key={index} className="group">
                   <summary className="flex items-center justify-between cursor-pointer list-none p-4 bg-gray-50 rounded-lg">
                     <span className="font-medium">{faq.question}</span>
-                    <svg 
-  xmlns="http://www.w3.org/2000/svg" 
-  fill="none" 
-  viewBox="0 0 24 24" 
-  strokeWidth={1.5} 
-  stroke="currentColor" 
-  className="w-5 h-5 transition-transform group-open:rotate-180"
->
-  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-</svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5 transition-transform group-open:rotate-180"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
                   </summary>
                   <div className="p-4 text-gray-600">
                     {faq.answer}

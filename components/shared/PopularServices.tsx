@@ -2,29 +2,29 @@
 import ServicesCard from "../cards/ServicesCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { apiUrl } from "@/constant";
+import { BASE_URL } from '@/lib/config';
 import useStore from '@/store/useLanguageStore';
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 
-const getServices = async ({ locale,search }: { locale: string,search:string }) => {
-  let res = await axios.get(`${apiUrl}/categories?type=delivery&lang=${locale}&search=${search}`)
+const getServices = async ({ locale, search }: { locale: string, search: string }) => {
+  let res = await axios.get(`${BASE_URL}/categories?type=delivery&lang=${locale}&search=${search}`)
   return res.data.data
 }
 
-const PopularServices = ({search}:{search:string}) => {
+const PopularServices = ({ search }: { search: string }) => {
   let t = useTranslations('home');
   let { locale } = useStore();
   let { data: services, isLoading, refetch } = useQuery({
     queryKey: ['services'],
-    queryFn: () => getServices({ locale,search }),
+    queryFn: () => getServices({ locale, search }),
   })
 
   useEffect(() => {
     refetch()
-  }, [locale,search])
+  }, [locale, search])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -54,7 +54,7 @@ const PopularServices = ({search}:{search:string}) => {
         animate={{ opacity: 1, y: 0 }}
         className="flex justify-between items-center"
       >
-        <h2 className="text-lg font-semibold">{t('popular_services')}</h2>
+        {/* <h2 className="text-lg font-semibold">{t('popular_services')}</h2> */}
         {!isLoading && services?.length > 3 && (
           <motion.div
             whileHover={{ scale: 1.05 }}

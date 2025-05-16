@@ -3,14 +3,14 @@ import React, { Suspense, useEffect, useState } from 'react'
 import useStore from '@/store/useLanguageStore';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { apiUrl } from '@/constant';
+import { BASE_URL } from '@/lib/config';
 import SearchBar from '@/components/shared/SearchBar';
 import ServicesCard from '@/components/cards/ServicesCard';
 import CategoriesCard from '@/components/cards/CategoryCard';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 const getCategories = async ({ locale, type, page, limit, search }: { locale: string, type: string, page: number, limit: number, search: string }) => {
-    const res = await axios.get(`${apiUrl}/categories?type=${type}&lang=${locale}&page=${page}&limit=${limit}&search=${search}`);
+    const res = await axios.get(`${BASE_URL}/categories?type=${type}&lang=${locale}&page=${page}&limit=${limit}&search=${search}`);
     return res.data;
 }
 function CategoriesPage() {

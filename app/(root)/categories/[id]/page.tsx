@@ -2,7 +2,6 @@
 import React, { use, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { apiUrl } from '@/constant'
 import Loading from '@/components/shared/Loading'
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -16,23 +15,26 @@ import SearchBar from '@/components/shared/SearchBar';
 import { Pagination } from '@mui/material';
 import BottomSheet from '@/components/shared/BottomSheet'
 import { getCategories } from '@/lib/actions/store.action'
-
-const getStores = async (id: string, locale: string, page: number = 1, limit: number = 10, search?: string,filter?:string) => {
-    const res = await axios.get(
-        `${apiUrl}/stores?categoryId=${id}&lang=${locale}${search ? `&search=${search}` : ''}&page=${page}&limit=${limit}${filter ? `&filter=${filter}` : ''}`
-    );
+import { BASE_URL } from '@/lib/config'
+import { useLocationStore } from '@/store/useLocationStore'
+const getStores = async (id: string, locale: string, page: number = 1, limit: number = 10, search?: string, filter?: string, currentLocation?: any) => {
+    const res = currentLocation !== null ? await axios.get(
+        `${BASE_URL}/stores?categoryId=${id}&lang=${locale}${search ? `&search=${search}` : ''}&page=${page}&limit=${limit}${filter ? `&filter=${filter}` : ''}${currentLocation ? `&longitude=${currentLocation.longitude}&latitude=${currentLocation.latitude}` : ''}`
+    ) : { data: [] };
     return res.data;
 }
 
 const getServices = async (id: string, locale: string, type: string, page: number = 1, limit: number = 10, search?: string) => {
     const res = await axios.get(
-        `${apiUrl}/services?categoryId=${id}&lang=${locale}&type=${type}${search ? `&search=${search}` : ''}&page=${page}&limit=${limit}`
+        `${BASE_URL}/services?categoryId=${id}&lang=${locale}&type=${type}${search ? `&search=${search}` : ''}&page=${page}&limit=${limit}`
     );
     return res.data;
 }
 
+
 const CategoryPage = ({ params, searchParams }: { params: { id: string }, searchParams: { [key: string]: string | string[] | undefined } }) => {
     const { id } = params;
+    let { userLocation } = useLocationStore()
     const { type, type2 } = searchParams;
     const t = useTranslations();
     const router = useRouter();
@@ -49,8 +51,8 @@ const CategoryPage = ({ params, searchParams }: { params: { id: string }, search
 
     const { data: stores, isLoading, refetch } = useQuery({
         queryKey: ['stores', id, activeFilter, page, limit, search],
-        queryFn: () => getStores(id, locale, page, limit, search,activeFilter),
-        enabled: type === 'delivery' && type2 === 'products'
+        queryFn: () => getStores(id, locale, page, limit, search, activeFilter, userLocation),
+        enabled: type === 'delivery' && type2 === 'products' && userLocation !== null
     });
 
     const { addItem } = useCart();
@@ -64,6 +66,9 @@ const CategoryPage = ({ params, searchParams }: { params: { id: string }, search
         // setShowCart(true)
         service && router.push('/checkout')
     }
+
+
+
 
     const handleSearch = (searchTerm: string) => {
         setSearch(searchTerm);
@@ -161,57 +166,70 @@ const CategoryPage = ({ params, searchParams }: { params: { id: string }, search
             {/* <Typography variant="h4" sx={{ mb: 3 }}>
                 {t('stores.available_stores')}
             </Typography> */}
+            {stores?.data?.stores.length > 0 ?
+                <Box sx={{ width: '100%' }}>
+                    <Box sx={{ mb: 3 }}>
+                        <SearchBar setSearch={handleSearch} placeholder={t('search.stores_placeholder')} />
+                    </Box>
 
-            <Box sx={{ mb: 3 }}>
-                <SearchBar setSearch={handleSearch} placeholder={t('search.stores_placeholder')} />
-            </Box>
+                    <StoreFilters categoryId={id} onFilterChange={setActiveFilter} selectedFilter={activeFilter} showAll={showAll} setShowAll={setShowAll} currentLocation={userLocation} />
 
-            <StoreFilters categoryId={id} onFilterChange={setActiveFilter} selectedFilter={activeFilter} showAll={showAll} setShowAll={setShowAll} />
-
-            <Grid container spacing={3}>
-                {isLoading ? [1, 2, 3, 4, 5, 6, 7].map(e =>
-                    <Grid item xs={12} sm={6} md={4} key={e}>
-                        <StoreCardSkeleton key={e} />
+                    <Grid container spacing={3}>
+                        {isLoading ? [1, 2, 3, 4, 5, 6, 7].map(e =>
+                            <Grid item xs={12} sm={6} md={4} key={e}>
+                                <StoreCardSkeleton key={e} />
+                            </Grid>
+                        ) : stores?.data?.stores.map((store: any) => (
+                            <Grid item xs={12} sm={6} md={4} key={store.id}>
+                                <StoreCard store={store} />
+                            </Grid>
+                        ))}
                     </Grid>
-                ) : stores?.data?.stores.map((store: any) => (
-                    <Grid item xs={12} sm={6} md={4} key={store.id}>
-                        <StoreCard store={store} />
-                    </Grid>
-                ))}
-            </Grid>
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                <Pagination
-                    count={Math.ceil((stores?.total || 0) / limit)}
-                    page={page}
-                    onChange={handlePageChange}
-                    color="primary"
-                />
-            </Box>
-            {showAll && <BottomSheet isOpen={showAll} onClose={() => setShowAll(false)} >
-                <div>
-                    <ShowAllCategories locale={locale} onFilterChange={setActiveFilter} selectedFilter={activeFilter} categoryId={id} />
-                </div>
-            </BottomSheet>}
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                        <Pagination
+                            count={Math.ceil((stores?.total || 0) / limit)}
+                            page={page}
+                            onChange={handlePageChange}
+                            color="primary"
+                        />
+                    </Box>
+                    {showAll && <BottomSheet isOpen={showAll} onClose={() => setShowAll(false)} >
+                        <div>
+                            <ShowAllCategories locale={locale} onFilterChange={setActiveFilter} selectedFilter={activeFilter} categoryId={id} currentLocation={userLocation} />
+                        </div>
+                    </BottomSheet>}
+                </Box> :
+                <Box>
+                    <img src="/no_stores.svg" alt="no-stores" className='w-full h-[50vh]' />
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                        <Typography variant="h6" sx={{ color: 'text.secondary' }}>
+                            {t('stores.no_stores_found')}
+                        </Typography>
+                    </Box>
+                </Box>
+            }
         </Box>
     )
 }
 
 export default CategoryPage
 
-let ShowAllCategories = ({ locale, onFilterChange, selectedFilter, categoryId }: { locale: string, onFilterChange: (filter: string) => void, selectedFilter: string, categoryId: string }) => {
+let ShowAllCategories = ({ locale, onFilterChange, selectedFilter, categoryId, currentLocation }: { locale: string, onFilterChange: (filter: string) => void, selectedFilter: string, categoryId: string, currentLocation: any }) => {
     const [page, setPage] = useState<number>(1);
     const [limit, setLimit] = useState<number>(14);
     const [search, setSearch] = useState<string>('');
     const t = useTranslations();
+
     let { data: categories, isLoading } = useQuery({
-        queryKey: ['categories', page, limit, search,categoryId],
-        queryFn: () => getCategories(locale, limit, page, search,categoryId)
+        queryKey: ['categories', page, limit, search, categoryId],
+        queryFn: () => getCategories(locale, limit, page, search, categoryId, currentLocation)
     })
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+
     return (
         <Box sx={{ p: 2 }} className='max-w-[99vw]'>
             <SearchBar setSearch={setSearch} placeholder={t('all_stores_categories')} />

@@ -1,10 +1,10 @@
-import { apiUrl } from "@/constant";
+import { BASE_URL } from '@/lib/config';
 import { toast } from "react-toastify";
 
 export const verifyOTP = async (userId: string, otp: string) => {
     let toastId = toast.loading("يتم التحقق...");
     try {
-        const response = await fetch(`${apiUrl}/auth/verify-account`, {
+        const response = await fetch(`${BASE_URL}/auth/verify-account`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export const verifyOTP = async (userId: string, otp: string) => {
 export const resendOTP = async (userId: string) => {
     let toastId = toast.loading("يتم إرسال الرمز...");
     try {
-        const response = await fetch(`${apiUrl}/auth/resend-verification-code`, {
+        const response = await fetch(`${BASE_URL}/auth/resend-verification-code`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

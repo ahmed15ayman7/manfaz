@@ -200,6 +200,7 @@
     "invalid_phone": "Invalid phone number"
   },
   "stores": {
+    "no_stores_found": "No stores found",
     "description": "Shop from the best local stores.",
     "available_stores": "Available Stores",
     "offers": "Offers",
@@ -286,6 +287,10 @@
         "busy": "Busy",
         "away": "Away"
       },
+      "search": {
+        "stores_placeholder": "Search in store",
+        "services_placeholder": "Search in services"
+      },
       "reviews": "Reviews",
       "off": "Off",
       "km_away": "km",
@@ -309,7 +314,10 @@
     "type": "Type",
     "type_home": "Home",
     "type_work": "Work",
-    "type_other": "Other",
+    "type_club": "Club",
+    "type_hotel": "Hotel",
+    "type_school": "School",
+    "type_party": "Party",
     "address": "Address",
     "building": "Building",
     "apartment": "Apartment",
@@ -380,6 +388,7 @@
     }
   },
   "workers": {
+    "no_workers_available": "No workers available",
     "available_workers": "Available Workers",
     "success_rate": "Success Rate",
     "earned": "Earned",
@@ -1188,5 +1197,55 @@
     "invalid_cvc": "Invalid CVC.",
     "name_required": "Name on card is required.",
     "invalid_amount": "Invalid amount."
+  },
+  "offers": {
+    "title": "Your Offers",
+    "description": "Discover the best offers available to us",
+    "view_all": "View All",
+    "no_offers": "No offers available",
+    "no_offers_description": "Your offers will appear here when you have any.",
+    "addToCart": "Add To Cart",
+    "included_products": "Included Products",
+    "original_price": "Original Price",
+    "discount": "Discount",
+    "final_price": "Final Price",
+    "valid_until": "Valid Until",
+    "off": "Off"
+  },
+  "welcome_user": {
+    "search_placeholder": "What are you looking for?",
+    "morning": "Good morning, {name}!",
+    "evening": "Good evening, {name}!"
+  },
+  "locations": {
+    "title": "Choose your location",
+    "no_locations": "No locations",
+    "new_address": "New Address"
+  },
+  "confirm_location": {
+    "confirmLocation": "Confirm Location",
+    "searchMap": "Search in the map",
+    "address": "Address",
+    "choose": "Choose",
+    "openLocationDialog": "Open Location Dialog",
+    "loading": "Loading...",
+    "locationSaved": "Location saved successfully",
+    "locationNotSaved": "Location not saved"
+  },
+  "save_location": {
+    "extra_details": "Additional details",
+    "extra_details_hint": "Building number, apartment number, landmark (near school)",
+    "extra_details_placeholder": "Enter extra details (optional)",
+    "add_photo": "Add a photo of the home or entrance",
+    "save_for_later": "Save this place for later use",
+    "home": "Home",
+    "work": "Work",
+    "hotel": "Hotel",
+    "party": "Party",
+    "school": "School",
+    "club": "Club",
+    "custom_name_placeholder": "Give this location a name (optional)",
+    "save_location": "Save Location",
+    "cancel": "Cancel"
   }
 }

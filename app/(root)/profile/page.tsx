@@ -1,88 +1,142 @@
 "use client";
+import { useTranslations } from 'next-intl';
+import { Box, Paper, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import WalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import StarIcon from '@mui/icons-material/Star';
+import NotesIcon from '@mui/icons-material/Notes';
+import PercentIcon from '@mui/icons-material/Percent';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import BusinessIcon from '@mui/icons-material/Business';
+import SettingsIcon from '@mui/icons-material/Settings';
+import InfoIcon from '@mui/icons-material/Info';
+import Link from 'next/link';
 
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
-import { Box, Container, Paper, Typography, CircularProgress } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import API_ENDPOINTS from "@/lib/apis";
-import axios from "axios";
-import { User } from "@/interfaces";
-import ProfileForm from "./components/ProfileForm";
-import ProfileHeader from "./components/ProfileHeader";
-import ProfileProgress from "./components/ProfileProgress";
-import { useSnackbar } from "@/hooks/useSnackbar";
-import { Suspense } from "react";
-import { SkeletonLoader } from "@/components/shared/skeleton-loader";
-function ProfilePage() {
-  const searchParams = useSearchParams();
-  const userId = searchParams.get("id");
-  const { showSnackbar } = useSnackbar();
-  const [profileCompletion, setProfileCompletion] = useState(0);
-
-  const { data: user, isLoading, error, refetch } = useQuery({
-    queryKey: ["user", userId],
-    queryFn: async () => {
-      const response = await axios.get(API_ENDPOINTS.users.getById(userId || "",{}));
-      return response.data.data as User;
-    },
-    enabled: !!userId,
-  });
-
-  useEffect(() => {
-    if (user) {
-      calculateProfileCompletion(user);
-    }
-  }, [user]);
-
-  const calculateProfileCompletion = (user: User) => {
-    let completion = 0;
-    const fields = [
-      user.name,
-      user.email,
-      user.phone,
-      user.imageUrl,
-      user.locations?.length > 0,
-    ];
-    
-    completion = (fields.filter(Boolean).length / fields.length) * 100;
-    setProfileCompletion(completion);
-  };
-
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    showSnackbar("حدث خطأ أثناء تحميل البيانات", "error");
-    return null;
-  }
-
+export default function ProfilePage() {
+  const t = useTranslations();
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Paper elevation={0} sx={{ p: 4, borderRadius: 2 }}>
-          <ProfileHeader user={user} refetch={refetch} />
-          <ProfileProgress value={profileCompletion} />
-          <ProfileForm user={user} />
-        </Paper>
-      </motion.div>
-    </Container>
+    <Box sx={{ py: 4 }}>
+      <Paper sx={{ p: 3, borderRadius: 2 }}>
+        <List>
+          <ListItem component={Link} href="/profile/wallet">
+            <ListItemIcon><WalletIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.wallet')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/delivery-balance">
+            <ListItemIcon><LocalShippingIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.delivery_balance')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/orders">
+            <ListItemIcon><ListAltIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.orders')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/addresses">
+            <ListItemIcon><LocationOnIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.saved_addresses')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/ratings">
+            <ListItemIcon><StarIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.ratings')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/notes">
+            <ListItemIcon><NotesIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.user_notes')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/coupons">
+            <ListItemIcon><PercentIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.add_coupon')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/support">
+            <ListItemIcon><SupportAgentIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.customer_support')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/offers">
+            <ListItemIcon><BusinessIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.corporate_offers')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/settings">
+            <ListItemIcon><SettingsIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('profile_tab.settings')} />
+          </ListItem>
+          <ListItem component={Link} href="/profile/about">
+            <ListItemIcon><InfoIcon color="primary" /></ListItemIcon>
+            <ListItemText primary={t('about.title')} />
+          </ListItem>
+        </List>
+      </Paper>
+    </Box>
   );
 }
+// "use client";
+// import { useTranslations } from 'next-intl';
+// import { Box, Paper, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+// import WalletIcon from '@mui/icons-material/AccountBalanceWallet';
+// import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+// import ListAltIcon from '@mui/icons-material/ListAlt';
+// import LocationOnIcon from '@mui/icons-material/LocationOn';
+// import StarIcon from '@mui/icons-material/Star';
+// import NotesIcon from '@mui/icons-material/Notes';
+// import PercentIcon from '@mui/icons-material/Percent';
+// import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+// import BusinessIcon from '@mui/icons-material/Business';
+// import SettingsIcon from '@mui/icons-material/Settings';
+// import InfoIcon from '@mui/icons-material/Info';
+// import Link from 'next/link';
 
-export default function Page() {
-  return (
-    <Suspense fallback={<SkeletonLoader type="details" />}>
-      <ProfilePage />
-    </Suspense>
-  );
-}
+// export default function ProfilePage() {
+//   const t = useTranslations();
+//   return (
+//     <Box sx={{ py: 4 }}>
+//       <Paper sx={{ p: 3, borderRadius: 2 }}>
+//         <List>
+//           <ListItem component={Link} href="/profile/wallet">
+//             <ListItemIcon><WalletIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.wallet')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/delivery-balance">
+//             <ListItemIcon><LocalShippingIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.delivery_balance')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/orders">
+//             <ListItemIcon><ListAltIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.orders')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/addresses">
+//             <ListItemIcon><LocationOnIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.saved_addresses')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/ratings">
+//             <ListItemIcon><StarIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.ratings')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/notes">
+//             <ListItemIcon><NotesIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.user_notes')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/coupons">
+//             <ListItemIcon><PercentIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.add_coupon')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/support">
+//             <ListItemIcon><SupportAgentIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.customer_support')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/offers">
+//             <ListItemIcon><BusinessIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.corporate_offers')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/settings">
+//             <ListItemIcon><SettingsIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('profile_tab.settings')} />
+//           </ListItem>
+//           <ListItem component={Link} href="/profile/about">
+//             <ListItemIcon><InfoIcon color="primary" /></ListItemIcon>
+//             <ListItemText primary={t('about.title')} />
+//           </ListItem>
+//         </List>
+//       </Paper>
+//     </Box>
+//   );
+// }

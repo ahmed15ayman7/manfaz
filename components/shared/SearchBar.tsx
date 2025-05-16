@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import useStore from '@/store/useLanguageStore';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { apiUrl } from '@/constant';
+import { BASE_URL } from '@/lib/config';
 
 interface SearchSuggestion {
   id: string;
@@ -25,7 +25,7 @@ const SearchBar = ({ placeholder, setSearch }: { placeholder: string, setSearch:
     queryKey: ['search-suggestions', searchTerm],
     queryFn: async () => {
       if (!searchTerm) return { data: [] };
-      const res = await axios.get(`${apiUrl}/categories/search?query=${searchTerm}&lang=${locale}`);
+      const res = await axios.get(`${BASE_URL}/categories/search?query=${searchTerm}&lang=${locale}`);
       return res.data;
     },
     enabled: searchTerm.length > 2,

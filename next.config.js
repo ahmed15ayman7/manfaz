@@ -1,5 +1,8 @@
+import createNextIntlPlugin from 'next-intl/plugin';
 
+const withNextIntl = createNextIntlPlugin();
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   /* config options here */
   i18n: {
@@ -30,6 +33,7 @@ const nextConfig = {
         hostname: '*',
       },
     ],
+    domains: ['localhost', "https://almanafth.com/"],
   },
   webpack: (config, { isServer }) => {
     // تجاهل تحذير punycode
@@ -41,4 +45,4 @@ const nextConfig = {
   }
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

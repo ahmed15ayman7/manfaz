@@ -96,11 +96,14 @@ const LocationForm = ({ onSubmit, initialData, isEdit }: LocationFormProps) => {
                         <InputLabel>{t('location.type')}</InputLabel>
                         <Select
                             value={formData.type}
-                            onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as "home" | "work" | "other" }))}
+                            onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as "home" | "work" | "club" | "hotel" | "school" | "party" }))}
                         >
                             <MenuItem value="home">{t('location.type_home')}</MenuItem>
                             <MenuItem value="work">{t('location.type_work')}</MenuItem>
-                            <MenuItem value="other">{t('location.type_other')}</MenuItem>
+                            <MenuItem value="club">{t('location.type_club')}</MenuItem>
+                            <MenuItem value="hotel">{t('location.type_hotel')}</MenuItem>
+                            <MenuItem value="school">{t('location.type_school')}</MenuItem>
+                            <MenuItem value="party">{t('location.type_party')}</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>

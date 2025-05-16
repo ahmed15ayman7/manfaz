@@ -3,9 +3,9 @@ import BottomSheet from './BottomSheet'
 import useCartStore from '@/store/useCartStore'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { apiUrl } from '@/constant'
+import { BASE_URL } from '@/lib/config'
 import axios from 'axios'
-import  useStore  from '@/store/useLanguageStore';
+import useStore from '@/store/useLanguageStore';
 import LoadingComponent from './LoadingComponent'
 
 
@@ -14,26 +14,26 @@ interface CartBottomSheetProps {
   onClose: () => void
 }
 let getService = async ({ id, locale, type }: { id: string, locale: string, type: string }) => {
-  const res = await axios.get(`${apiUrl}/services/${id}?lang=${locale}&type=${type}`)
+  const res = await axios.get(`${BASE_URL}/services/${id}?lang=${locale}&type=${type}`)
   return res.data.data
 }
 const CartBottomSheet = ({ isOpen, onClose }: CartBottomSheetProps) => {
   const router = useRouter()
   const { items } = useCartStore()
 
-  const {locale} = useStore();
-  let {data:serviceData,isLoading} = useQuery({
-    queryKey:['service'],
-    queryFn:() => getService({ id: items[0].id, locale, type: 'delivery' })
+  const { locale } = useStore();
+  let { data: serviceData, isLoading } = useQuery({
+    queryKey: ['service'],
+    queryFn: () => getService({ id: items[0].id, locale, type: 'delivery' })
   })
   const handleCheckout = () => {
     router.push('/checkout')
     onClose()
   }
-if (isLoading) {
-  return <LoadingComponent />
-}
-console.log(serviceData)
+  if (isLoading) {
+    return <LoadingComponent />
+  }
+  console.log(serviceData)
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose}>
       <div className="bg-primary-600 -m-6 p-6">
@@ -41,7 +41,7 @@ console.log(serviceData)
           <h2 className="text-xl font-bold text-white">السلة</h2>
           <span className="text-white">{items.length} خدمات</span>
         </div>
-        
+
         <div className="space-y-4 mb-6">
           {[serviceData].map((item, index) => (
             <div key={index} className="bg-white rounded-lg p-4">

@@ -34,7 +34,7 @@ export interface UserLocation {
     latitude: number;
     longitude: number;
     isDefault: boolean;
-    type: "home" | "work" | "other";
+    type: "home" | "work" | "club" | "hotel" | "school" | "party";
     notes?: string;
     createdAt: Date;
     updatedAt: Date;
@@ -76,7 +76,7 @@ export interface Category {
     updatedAt: Date;
     Service: Service[]; // Array of related services
     Store: Store[]; // Array of related stores
-    WorkerCategory:WorkerCategory[]
+    WorkerCategory: WorkerCategory[]
 }
 export interface WorkerCategory {
     id: string;
@@ -84,7 +84,7 @@ export interface WorkerCategory {
     category: Category; // Array of related stores
     workerId: string;
     categoryId: string;
-  }
+}
 export interface Service {
     id: string;
     name: string;
@@ -152,15 +152,15 @@ export interface OrdersStore {
     storeId: string;
     store?: Store;
     products: ProductsOrder[]
-  }
-  export interface ProductsOrder{
+}
+export interface ProductsOrder {
     id: string;
     orderId: string;
     orders?: OrdersStore;
     productId: string;
     product?: Product;
-    quantity : number
-  }
+    quantity: number
+}
 export interface Order {
     id: string;
     userId: string;
@@ -217,16 +217,16 @@ export interface Worker {
     Order: Order[];
     earnings: Earning[];
     schedule: Schedule[];
-    WorkerCategory:WorkerCategory[]
+    WorkerCategory: WorkerCategory[]
 }
 export interface Earning {
-    id          : string;
-    amount      : number;
-    createdAt   : Date;
-    updatedAt   : Date;
-    worker      : Worker;
-    workerId    : string;
-  }
+    id: string;
+    amount: number;
+    createdAt: Date;
+    updatedAt: Date;
+    worker: Worker;
+    workerId: string;
+}
 // Enums
 export enum StatusEnum {
     SCHEDULED = "SCHEDULED",
@@ -352,19 +352,29 @@ export interface StoreLocation {
     longitude: number;
     phone?: string; // رقم الهاتف
 }
+export interface StoreOfferProduct {
+    id: string;
+    storeOfferId: string;
+    storeOffer: StoreOffer;
+    productId: string;
+    product: Product;
+}
 // العروض الخاصة بالمتجر
 export interface StoreOffer {
-    id: string;
-    title: string; // عنوان العرض
-    description?: string; // وصف العرض
-    discountPercentage?: number; // نسبة الخصم
-    discountAmount?: number; // قيمة الخصم
-    applicableProducts?: string[]; // قائمة المنتجات التي يشملها العرض
-    applicableCategories?: string[]; // قائمة التصنيفات التي يشملها العرض
-    startDate: Date; // تاريخ بدء العرض
-    endDate: Date; // تاريخ انتهاء العرض
-    isActive: boolean; // هل العرض متاح حاليًا
-    image?: string; // صورة العرض
+    id: string
+    storeId: string
+    store: Store
+    name: string // اسم العرض
+    description?: string // وصف العرض
+    type: string // نوع العرض (مثل: عروض رمضان، عروض اللمة)
+    image?: string // صورة العرض
+    startDate?: Date // تاريخ بداية العرض
+    endDate?: Date // تاريخ نهاية العرض
+    discount?: Number // قيمة الخصم
+    isActive: Boolean
+    products: StoreOfferProduct[] // المنتجات التي يطبق عليها العرض
+    createdAt: Date
+    updatedAt: Date
 }
 
 // أوقات العمل
@@ -421,9 +431,10 @@ export interface Product {
     reviewsCount: number; // عدد التقييمات
     createdAt: Date;
     updatedAt: Date;
+    StoreOfferProduct: StoreOfferProduct[];
 }
 type Json = {
-    [key: string]: Json|Json[]
+    [key: string]: Json | Json[]
 }
 // الكوبونات (كود خصم)
 export interface Coupon {
@@ -466,26 +477,25 @@ export interface Reward {
     createdAt: Date;
 }
 export interface Notification {
-    id :string;    
-    title :string;
-    message :string;
-    type :NotificationType
-    relatedId :string;    
-    senderId :string;    
-    orderId :string;    
-    isRead :boolean;    
-    createdAt :Date;    
-    updatedAt :Date;    
-  
+    id: string;
+    title: string;
+    message: string;
+    type: NotificationType
+    relatedId: string;
+    senderId: string;
+    orderId: string;
+    isRead: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+
     // العلاقات الاختيارية مع النماذج المختلفة
-    user? :User
-    sender? : User
+    user?: User
+    sender?: User
     order?: Order
-  }
-  
-  export enum NotificationType {
+}
+
+export enum NotificationType {
     user,
     employee,
     worker
-  }
-  
+}

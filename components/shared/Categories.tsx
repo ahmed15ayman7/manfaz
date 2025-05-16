@@ -5,23 +5,23 @@ import CategoryCard from "../cards/CategoryCard";
 import useStore from '@/store/useLanguageStore';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import { apiUrl } from "@/constant";
+import { BASE_URL } from '@/lib/config';
 import axios from "axios";
 import BottomSheet from './BottomSheet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tab } from '@headlessui/react';
 
-const getCategories = async ({ locale, type = 'all',search }: { locale: string, type?: string ,search:string}) => {
-  let res = await axios.get(`${apiUrl}/categories?type=${type}&lang=${locale}`)
+const getCategories = async ({ locale, type = 'all', search }: { locale: string, type?: string, search: string }) => {
+  let res = await axios.get(`${BASE_URL}/categories?type=${type}&lang=${locale}`)
   return res.data
 }
 
-const getServices = async ({ categoryId, locale, type,search }: { categoryId: string, locale: string, type: string ,search:string}) => {
-  let res = await axios.get(`${apiUrl}/services?categoryId=${categoryId}&lang=${locale}&type=${type}`)
+const getServices = async ({ categoryId, locale, type, search }: { categoryId: string, locale: string, type: string, search: string }) => {
+  let res = await axios.get(`${BASE_URL}/services?categoryId=${categoryId}&lang=${locale}&type=${type}`)
   return res.data
 }
 
-const Categories = ({search}:{search:string}) => {
+const Categories = ({ search }: { search: string }) => {
   const router = useRouter();
   const { locale } = useStore();
   const t = useTranslations('home');
@@ -30,12 +30,12 @@ const Categories = ({search}:{search:string}) => {
 
   const { data: categoriesData, isLoading, refetch } = useQuery({
     queryKey: ['categories', selectedTab],
-    queryFn: () => getCategories({ locale, type: selectedTab === 0 ? 'service' : 'delivery',search }),
+    queryFn: () => getCategories({ locale, type: selectedTab === 0 ? 'service' : 'delivery', search }),
   });
 
   const { data: servicesData, isLoading: isLoadingServices, refetch: refetchServices } = useQuery({
     queryKey: ['services', selectedCategory?.id],
-    queryFn: () => selectedCategory ? getServices({ categoryId: selectedCategory.id, locale, type: selectedCategory.type ,search}) : null,
+    queryFn: () => selectedCategory ? getServices({ categoryId: selectedCategory.id, locale, type: selectedCategory.type, search }) : null,
     enabled: !!selectedCategory,
   });
 
@@ -54,7 +54,7 @@ const Categories = ({search}:{search:string}) => {
   useEffect(() => {
     refetch();
     refetchServices();
-  }, [locale, selectedTab,search]);
+  }, [locale, selectedTab, search]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -76,9 +76,9 @@ const Categories = ({search}:{search:string}) => {
 
   return (
     <div className="px-4 mt-4">
-      <h2 className="text-lg font-semibold mb-4">{t('categories')}</h2>
+      {/* <h2 className="text-lg font-semibold mb-4">{t('categories')}</h2> */}
 
-      <Tab.Group onChange={setSelectedTab}>
+      {/* <Tab.Group onChange={setSelectedTab}>
         <Tab.List className="flex space-x-4 mb-6 p-1 bg-gray-100 rounded-xl">
           <Tab className={({ selected }) =>
             `w-full py-2.5 text-sm font-medium leading-5 rounded-lg transition-all duration-300
@@ -92,47 +92,47 @@ const Categories = ({search}:{search:string}) => {
           }>
             {t('delivery')}
           </Tab> */}
-        </Tab.List>
+      {/* </Tab.List> */}
 
-        <Tab.Panels>
-          <AnimatePresence mode="wait">
-            <Tab.Panel>
+      {/* <Tab.Panels> */}
+      <AnimatePresence mode="wait">
+        {/* <Tab.Panel> */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-4 gap-3 mt-2 max-xl:grid-cols-3"
+        >
+          {isLoading ? (
+            Array(4).fill(0).map((_, i) => (
               <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                className="grid grid-cols-4 gap-3 mt-2 max-xl:grid-cols-3"
+                key={i}
+                className="w-full h-24 bg-gray-100 rounded-md animate-pulse"
+                variants={itemVariants}
+              />
+            ))
+          ) : (
+            categoriesData?.data?.categories?.map((category: any) => (
+              <motion.div
+                key={category.id}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02, boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+                className="transition-all duration-300"
               >
-                {isLoading ? (
-                  Array(4).fill(0).map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="w-full h-24 bg-gray-100 rounded-md animate-pulse"
-                      variants={itemVariants}
-                    />
-                  ))
-                ) : (
-                  categoriesData?.data?.categories?.map((category: any) => (
-                    <motion.div
-                      key={category.id}
-                      variants={itemVariants}
-                      whileHover={{ scale: 1.02, boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
-                      className="transition-all duration-300"
-                    >
-                      <CategoryCard
-                        category={category.name}
-                        image={category.imageUrl}
-                        categoryId={category.id}
-                        onClick={() => handleCategoryClick(category)}
-                      />
-                    </motion.div>
-                  ))
-                )}
+                <CategoryCard
+                  category={category.name}
+                  image={category.imageUrl}
+                  categoryId={category.id}
+                  onClick={() => handleCategoryClick(category)}
+                />
               </motion.div>
-            </Tab.Panel>
-          </AnimatePresence>
-        </Tab.Panels>
-      </Tab.Group>
+            ))
+          )}
+        </motion.div>
+        {/* </Tab.Panel> */}
+      </AnimatePresence>
+      {/* </Tab.Panels> */}
+      {/* </Tab.Group> */}
 
       <BottomSheet
         isOpen={!!selectedCategory}
@@ -163,7 +163,7 @@ const Categories = ({search}:{search:string}) => {
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
                 onClick={() => handleServiceClick(service.id)}
-                className="p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-all duration-300"
+                className="p-4 bg-gray-50 rounded-3xl cursor-pointer hover:bg-gray-100 transition-all duration-300"
               >
                 <div className="flex items-center gap-3 flex-col">
                   {service.iconUrl && (

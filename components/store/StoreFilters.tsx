@@ -7,16 +7,16 @@ import useStore from '@/store/useLanguageStore';
 import { useEffect, useState } from 'react';
 import { getCategories } from '@/lib/actions/store.action';
 
-const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll,categoryId }: { onFilterChange: (filter: string) => void, selectedFilter: string, showAll: boolean, setShowAll: (showAll: boolean) => void,categoryId?:string }) => {
+const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll, categoryId, currentLocation }: { onFilterChange: (filter: string) => void, selectedFilter: string, showAll: boolean, setShowAll: (showAll: boolean) => void, categoryId?: string, currentLocation?: any }) => {
     const t = useTranslations();
     let { locale } = useStore();
     let { data: categories, isLoading: isLoadingCategories, refetch } = useQuery({
         queryKey: ['categories'],
-        queryFn: () => getCategories(locale,10,1,'',categoryId)
+        queryFn: () => getCategories(locale, 10, 1, '', categoryId, currentLocation)
     })
     useEffect(() => {
         refetch()
-    }, [locale,categoryId])
+    }, [locale, categoryId])
     const handleShowAll = () => {
         setShowAll(!showAll)
     }
@@ -87,7 +87,7 @@ const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll,cate
                         clickable
                     />
                 ))
-                ,categories?.data?.length > 5 && !showAll ? <Chip
+                , categories?.data?.length > 5 && !showAll ? <Chip
                     key={1000000}
                     icon={<IconDiscount size={20} />}
                     label={t('home.see_all')}
@@ -98,7 +98,7 @@ const StoreFilters = ({ onFilterChange, selectedFilter, showAll, setShowAll,cate
                     clickable
                     onClick={handleShowAll}
                     color={showAll ? 'primary' : 'default'}
-                />:undefined]}
+                /> : undefined]}
         </Stack>
     );
 };

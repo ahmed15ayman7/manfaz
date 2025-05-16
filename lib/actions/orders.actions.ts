@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apiUrl } from "@/constant";
+import { BASE_URL } from '@/lib/config';
 import { Order, OrderStatus, PaymentStatus } from "@/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -25,7 +25,7 @@ export const getOrders = async (
 ): Promise<OrdersResponse> => {
     try {
         const response = await axiosInstance.get(
-            API_ENDPOINTS.orders.getAll({userId, role, limit, page, search, status, paymentStatus, date},false)
+            API_ENDPOINTS.orders.getAll({ userId, role, limit, page, search, status, paymentStatus, date }, false)
         );
         return response.data.data;
     } catch (error) {
@@ -47,7 +47,7 @@ export const useOrders = (
     search: string = '',
     status: OrderStatus | "",
     paymentStatus: PaymentStatus,
-    date?:string 
+    date?: string
 ) => {
     return useQuery<OrdersResponse, Error>({
         queryKey: ['orders', userId, role, limit, page, search, status, paymentStatus, date],
@@ -57,7 +57,7 @@ export const useOrders = (
 
 export const getOrder = async (orderId: string): Promise<Order> => {
     try {
-        const response = await axios.get(`${apiUrl}/orders/${orderId}`);
+        const response = await axios.get(`${BASE_URL}/orders/${orderId}`);
         return response.data;
     }
     catch (error) {
@@ -72,12 +72,12 @@ export const useOrder = (orderId: string) => {
     });
 };
 
-export const createOrder = async (order: Order,type: string): Promise<Order> => {
+export const createOrder = async (order: Order, type: string): Promise<Order> => {
     let toastId = toast.loading("Creating order...");
     try {
 
-        const response = await axiosInstance.post(API_ENDPOINTS.orders.create({},false), {...order,type});
-        response.data.status ? toast.update(toastId, { render: response.data.message || "Order created successfully", type: "success", isLoading: false, autoClose: 2000 }): toast.update(toastId, { render: response.data.message || "Something went wrong", type: "error", isLoading: false, autoClose: 2000 });
+        const response = await axiosInstance.post(API_ENDPOINTS.orders.create({}, false), { ...order, type });
+        response.data.status ? toast.update(toastId, { render: response.data.message || "Order created successfully", type: "success", isLoading: false, autoClose: 2000 }) : toast.update(toastId, { render: response.data.message || "Something went wrong", type: "error", isLoading: false, autoClose: 2000 });
         return response.data;
     }
     catch (error: any) {
@@ -90,8 +90,8 @@ export const createOrder = async (order: Order,type: string): Promise<Order> => 
 export const updateOrder = async (orderId: string, order: Order): Promise<Order> => {
     let toastId = toast.loading("Updating order...");
     try {
-        const response = await axios.put(`${apiUrl}/orders/${orderId}`, order);
-        response.data ? toast.update(toastId, { render: response.data.message || "Order updated successfully", type: "success", isLoading: false, autoClose: 2000 }): toast.update(toastId, { render: response.data.message || "Something went wrong", type: "error", isLoading: false, autoClose: 2000 });
+        const response = await axios.put(`${BASE_URL}/orders/${orderId}`, order);
+        response.data ? toast.update(toastId, { render: response.data.message || "Order updated successfully", type: "success", isLoading: false, autoClose: 2000 }) : toast.update(toastId, { render: response.data.message || "Something went wrong", type: "error", isLoading: false, autoClose: 2000 });
         return response.data;
     }
     catch (error: any) {

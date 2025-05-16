@@ -2,7 +2,7 @@
 import React, { use, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { apiUrl } from '@/constant'
+import { BASE_URL } from '@/lib/config'
 import Loading from '@/components/shared/Loading'
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -17,9 +17,9 @@ import { Pagination } from '@mui/material';
 import BottomSheet from '@/components/shared/BottomSheet'
 import { getCategories } from '@/lib/actions/store.action'
 
-const getStores = async (locale: string, page: number = 1, limit: number = 10, search?: string,filter?:string) => {
+const getStores = async (locale: string, page: number = 1, limit: number = 10, search?: string, filter?: string) => {
     const res = await axios.get(
-        `${apiUrl}/stores?lang=${locale}${search ? `&search=${search}` : ''}&page=${page}&limit=${limit}${filter ? `&filter=${filter}` : ''}`
+        `${BASE_URL}/stores?lang=${locale}${search ? `&search=${search}` : ''}&page=${page}&limit=${limit}${filter ? `&filter=${filter}` : ''}`
     );
     return res.data;
 }
@@ -37,8 +37,8 @@ const CategoryPage = () => {
 
     const { data: stores, isLoading, refetch } = useQuery({
         queryKey: ['stores', activeFilter, page, limit, search],
-        queryFn: () => getStores( locale, page, limit, search,activeFilter),
-        
+        queryFn: () => getStores(locale, page, limit, search, activeFilter),
+
     });
 
     const handleSearch = (searchTerm: string) => {
@@ -66,7 +66,7 @@ const CategoryPage = () => {
                 <SearchBar setSearch={handleSearch} placeholder={t('search.stores_placeholder')} />
             </Box>
 
-            <StoreFilters  onFilterChange={setActiveFilter} selectedFilter={activeFilter} showAll={showAll} setShowAll={setShowAll} />
+            <StoreFilters onFilterChange={setActiveFilter} selectedFilter={activeFilter} showAll={showAll} setShowAll={setShowAll} />
 
             <Grid container spacing={3}>
                 {isLoading ? [1, 2, 3, 4, 5, 6, 7].map(e =>
@@ -105,8 +105,8 @@ let ShowAllCategories = ({ locale, onFilterChange, selectedFilter, categoryId }:
     const [search, setSearch] = useState<string>('');
     const t = useTranslations();
     let { data: categories, isLoading } = useQuery({
-        queryKey: ['categories', page, limit, search,categoryId],
-        queryFn: () => getCategories(locale, limit, page, search,categoryId)
+        queryKey: ['categories', page, limit, search, categoryId],
+        queryFn: () => getCategories(locale, limit, page, search, categoryId)
     })
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);

@@ -7,16 +7,16 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Tab } from '@headlessui/react'
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock, 
-  Star, 
-  Tag, 
-  Gift, 
-  Ticket, 
-  ArrowLeft, 
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  Star,
+  Tag,
+  Gift,
+  Ticket,
+  ArrowLeft,
   Search,
   ChevronRight,
   Info,
@@ -85,7 +85,7 @@ export default function StoreDetailsPage() {
       setLocations(user?.locations || [])
     }
   }, [status])
-console.log(store)
+  console.log(store)
   const filteredProducts = (categoryId: string) => {
     return store?.products.filter(product => {
       const matchesCategory = product.categoryId === categoryId
@@ -131,71 +131,71 @@ console.log(store)
   }
   // التحقق من حالة المتجر وساعات العمل
   const isOpen = useMemo(() => {
-      if (store?.status !== 'active') return false;
+    if (store?.status !== 'active') return false;
 
-      const now = new Date();
-      const dayOfWeek = now.getDay(); // 0 للأحد، 1 للاثنين، إلخ
-      const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    const now = new Date();
+    const dayOfWeek = now.getDay(); // 0 للأحد، 1 للاثنين، إلخ
+    const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-      const todayHours = store.workingHours?.find(hours => hours.dayOfWeek === dayOfWeek);
+    const todayHours = store.workingHours?.find(hours => hours.dayOfWeek === dayOfWeek);
 
-      if (!todayHours || !todayHours.isOpen) return false;
+    if (!todayHours || !todayHours.isOpen) return false;
 
-      return currentTime.localeCompare(todayHours.openTime) >= 0 && currentTime.localeCompare(todayHours.closeTime) < 0;
+    return currentTime.localeCompare(todayHours.openTime) >= 0 && currentTime.localeCompare(todayHours.closeTime) < 0;
   }, [store?.status, store?.workingHours]);
 
   // الحصول على وقت الفتح القادم
   const nextOpenTime = useMemo(() => {
-      if (isOpen) return null;
+    if (isOpen) return null;
 
-      const now = new Date();
-      const dayOfWeek = now.getDay();
-      const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-      const todayHours = store?.workingHours?.find(hours => hours.dayOfWeek === dayOfWeek);
-      
-      if (todayHours && todayHours.isOpen && currentTime < todayHours.openTime) {
-        return todayHours.openTime;
+    const todayHours = store?.workingHours?.find(hours => hours.dayOfWeek === dayOfWeek);
+
+    if (todayHours && todayHours.isOpen && currentTime < todayHours.openTime) {
+      return todayHours.openTime;
+    }
+
+    // البحث عن اليوم التالي المفتوح
+    for (let i = 1; i <= 7; i++) {
+      const nextDay = (dayOfWeek + i) % 7;
+      const nextDayHours = store?.workingHours?.find(hours => hours.dayOfWeek === nextDay);
+
+      if (nextDayHours?.isOpen) {
+        return nextDayHours.openTime;
       }
-      
-      // البحث عن اليوم التالي المفتوح
-      for (let i = 1; i <= 7; i++) {
-        const nextDay = (dayOfWeek + i) % 7;
-        const nextDayHours = store?.workingHours?.find(hours => hours.dayOfWeek === nextDay);
-        
-        if (nextDayHours?.isOpen) {
-          return nextDayHours.openTime;
-        }
-      }
-      
-      return null;
-    }, [isOpen, store?.workingHours]);
-    
-      if (isLoading) {
-        return (
-          <div className="container mx-auto p-4 animate-pulse">
-            <div className="h-64 bg-gray-200 rounded-lg mb-8" />
-            <div className="h-8 w-48 bg-gray-200 rounded mb-4" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="h-32 bg-gray-200 rounded" />
-              <div className="h-32 bg-gray-200 rounded" />
-              <div className="h-32 bg-gray-200 rounded" />
-            </div>
-          </div>
-        )
-      }
-    
-      if (!store) {
-        return (
-          <div className="container mx-auto p-4">
-            <div className="text-center">
-              <h1 className="text-2xl font-bold text-gray-800">{t('store_not_found')}</h1>
-              <p className="text-gray-600 mt-2">{t('store_not_found_description')}</p>
-            </div>
-          </div>
-        )
-      }
+    }
+
+    return null;
+  }, [isOpen, store?.workingHours]);
+
+  if (isLoading) {
     return (
+      <div className="container mx-auto p-4 animate-pulse">
+        <div className="h-64 bg-gray-200 rounded-lg mb-8" />
+        <div className="h-8 w-48 bg-gray-200 rounded mb-4" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="h-32 bg-gray-200 rounded" />
+          <div className="h-32 bg-gray-200 rounded" />
+          <div className="h-32 bg-gray-200 rounded" />
+        </div>
+      </div>
+    )
+  }
+
+  if (!store) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800">{t('store_not_found')}</h1>
+          <p className="text-gray-600 mt-2">{t('store_not_found_description')}</p>
+        </div>
+      </div>
+    )
+  }
+  return (
     <div className="min-h-screen bg-gray-50 rounded-3xl">
       {/* Cover Image */}
       <div className="relative h-60 md:h-64 rounded-t-3xl">
@@ -246,8 +246,8 @@ console.log(store)
               </span>
             </div>
             <Chip
-              label={t(`store_status.${store.status}`)}
-              color={isOpen? 'success' : 'default'}
+              label={t(`store_status.${store.status == "active" ? "open" : "closed"}`)}
+              color={isOpen ? 'success' : 'default'}
               variant="outlined"
               size="small"
             />
@@ -312,15 +312,15 @@ console.log(store)
             scrollButtons="auto"
           >
             <Tab.Group >
-            {store.categories.map((category) => (
-              <Tab
-                key={category.id}
-                value={category.id}
-                title={category.name}
-                className="min-w-[120px]"
-              />
-            ))}
-</Tab.Group >
+              {store.categories.map((category) => (
+                <Tab
+                  key={category.id}
+                  value={category.id}
+                  title={category.name}
+                  className="min-w-[120px]"
+                />
+              ))}
+            </Tab.Group >
           </Tabs>
         </div>
       </div>
@@ -435,7 +435,7 @@ console.log(store)
                       <div className="relative h-48">
                         <Image
                           src={offer.image}
-                          alt={offer.title}
+                          alt={offer.name}
                           fill
                           className="object-cover"
                         />
@@ -444,18 +444,18 @@ console.log(store)
                     <div className="p-4">
                       <div className="flex items-center mb-2">
                         <Tag className="w-5 h-5 text-primary mr-2" />
-                        <h3 className="font-medium">{offer.title}</h3>
+                        <h3 className="font-medium">{offer.name}</h3>
                       </div>
                       <p className="text-sm text-gray-500">{offer.description}</p>
                       <div className="mt-3 text-sm text-gray-600">
                         <div className="flex items-center justify-between">
                           <span>{t('valid_until')}</span>
-                          <span>{formatDate(offer.endDate, locale)}</span>
+                          <span>{formatDate(offer.endDate || new Date(), locale)}</span>
                         </div>
-                        {offer.discountPercentage && (
+                        {offer.discount && (
                           <div className="flex items-center mt-1">
                             <span className="text-primary font-bold">
-                              {offer.discountPercentage}% {t('off')}
+                              {String(offer?.discount)}% {t('off')}
                             </span>
                           </div>
                         )}

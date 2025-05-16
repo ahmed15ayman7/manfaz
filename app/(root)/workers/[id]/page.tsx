@@ -6,13 +6,13 @@ import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import axios from 'axios'
 import Image from 'next/image'
-import { apiUrl } from '@/constant'
+import { BASE_URL } from '@/lib/config'
 import useStore from '@/store/useLanguageStore'
 import { Worker, Review } from '@/interfaces'
 import { formatDate } from '@/lib/utils'
 
 const getWorker = async ({ id, locale }: { id: string; locale: string }) => {
-  const res = await axios.get(`${apiUrl}/workers/${id}?lang=${locale}`)
+  const res = await axios.get(`${BASE_URL}/workers/${id}?lang=${locale}`)
   return res.data
 }
 
@@ -54,9 +54,8 @@ export default function WorkerProfilePage() {
               src={worker.user?.imageUrl || '/imgs/default-avatar.png'}
               alt={worker.user?.name || ''}
               fill
-              className={`object-cover rounded-full border-4 border-white ${
-                !worker.isAvailable ? 'grayscale' : ''
-              }`}
+              className={`object-cover rounded-full border-4 border-white ${!worker.isAvailable ? 'grayscale' : ''
+                }`}
             />
             {worker.isAvailable && (
               <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white" />

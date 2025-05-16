@@ -188,6 +188,7 @@
     "invalid_phone": "رقم الجوال غير صحيح"
   },
   "stores": {
+    "no_stores_found": "لا يوجد متاجر متاحة",
     "available_stores": "المتاجر المتاحة",
     "offers": "العروض",
     "discounts": "التخفيضات",
@@ -275,6 +276,10 @@
         "busy": "مشغول",
         "away": "غير متاح"
       },
+      "search": {
+        "stores_placeholder": "ابحث في المتجر",
+        "services_placeholder": "ابحث في الخدمات"
+      },
       "reviews": "التقييمات",
       "off": "خصم",
       "km_away": "كم",
@@ -297,7 +302,10 @@
     "type": "نوع الموقع",
     "type_home": "المنزل",
     "type_work": "العمل",
-    "type_other": "آخر",
+    "type_club": "نادي",
+    "type_hotel": "فندق",
+    "type_school": "مدرسة",
+    "type_party": "مناسبة",
     "address": "العنوان",
     "building": "رقم المبنى",
     "apartment": "رقم الشقة",
@@ -311,7 +319,13 @@
   },
   "common": {
     "save": "حفظ",
-    "cancel": "إلغاء"
+    "cancel": "إلغاء",
+    "welcome": "مرحباً بك",
+    "home": "الرئيسية",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "orders": "الطلبات",
+    "wallet": "المحفظة"
   },
   "search": {
     "stores_placeholder": "ابحث عن متجر",
@@ -368,6 +382,7 @@
     }
   },
   "workers": {
+    "no_workers_available": "لا يوجد عمال متاحون",
     "available_workers": "العمال المتاحون",
     "success_rate": "معدل النجاح",
     "earned": "الأرباح",
@@ -1180,5 +1195,55 @@
     "invalid_cvc": "رمز الأمان غير صالح.",
     "name_required": "يجب إدخال الاسم على البطاقة.",
     "invalid_amount": "المبلغ غير صالح."
+  },
+  "offers": {
+    "title": "عروضك",
+    "description": "اكتشف أفضل العروض المتاحة لدينا",
+    "view_all": "عرض الكل",
+    "no_offers": "لا توجد عروض متاحة",
+    "no_offers_description": "ستظهر عروضك هنا عندما تتوفر أي عروض.",
+    "addToCart": "أضف إلى السلة",
+    "included_products": "المنتجات المضمنة",
+    "original_price": "السعر الأصلي",
+    "discount": "الخصم",
+    "final_price": "السعر النهائي",
+    "valid_until": "صالح حتى",
+    "off": "خصم"
+  },
+  "welcome_user": {
+    "search_placeholder": "عن ماذا تبحث؟",
+    "morning": "صباح الخير {name}!",
+    "evening": "مساء الخير {name}!"
+  },
+  "locations": {
+    "title": "اختر موقعك",
+    "no_locations": "لا توجد مواقع",
+    "new_address": "عنوان جديد"
+  },
+  "confirm_location": {
+    "confirmLocation": "تأكيد موقعك",
+    "searchMap": "ابحث في الخريطة",
+    "address": "العنوان",
+    "choose": "اختر",
+    "openLocationDialog": "افتح نافذة الموقع",
+    "loading": "جاري التحميل",
+    "locationSaved": "تم حفظ الموقع بنجاح",
+    "locationNotSaved": "فشل حفظ الموقع"
+  },
+  "save_location": {
+    "extra_details": "تفاصيل اضافية",
+    "extra_details_hint": "رقم العمارة، رقم الشقة، علامة مميزة (بالقرب من مدرسة)",
+    "extra_details_placeholder": "اكتب تفاصيل إضافية (اختياري)",
+    "add_photo": "قم بإضافة صورة المنزل او مدخل المنزل",
+    "save_for_later": "حفظ المكان لاستخدامه لاحقاً",
+    "home": "المنزل",
+    "work": "العمل",
+    "hotel": "فندق",
+    "party": "مناسبة",
+    "school": "مدرسة",
+    "club": "منتزه",
+    "custom_name_placeholder": "أعطِ هذا الموقع اسماً (اختياري)",
+    "save_location": "حفظ الموقع",
+    "cancel": "إلغاء"
   }
 }

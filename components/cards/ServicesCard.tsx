@@ -6,7 +6,7 @@ import { Service } from '@/interfaces'
 const ServicesCard = ({ service, id }: { id: string, service: Service }) => {
   const router = useRouter()
   return (
-    <Card key={service.id} onClick={() => service.subType==="delivery_service"? router.push(`/delivery-service`):router.push(`/categories/${id}?type=${service.type}&type2=products`)} className="p-4 min-w-[160px] max-xl:min-w-[120px]  rounded-lg shadow-md cursor-pointer">
+    <Card key={service.id} sx={{ borderRadius: '25px' }} onClick={() => service.subType === "delivery_service" ? router.push(`/delivery-service`) : router.push(`/categories/${id}?type=${service.type}&type2=products`)} className="p-4 min-w-[160px] max-xl:min-w-[120px]  rounded-3xl shadow-md cursor-pointer">
       <img src={service.imageUrl} alt={service.name} className="w-16 h-16 mx-auto" />
       <Typography variant="subtitle1" className="font-semibold text-center mt-2">
         {service.name}

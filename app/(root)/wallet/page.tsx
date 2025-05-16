@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '@/lib/axios';
 import API_ENDPOINTS from '@/lib/apis';
-import {useUser} from '@/hooks/useUser';
+import { useUser } from '@/hooks/useUser';
 import WalletCard from '@/app/components/wallet/WalletCard';
 import TransactionsTable from '@/app/components/wallet/TransactionsTable';
 import { useEffect, useState } from 'react';
@@ -12,10 +12,12 @@ import { useLocale } from 'next-intl';
 import { toast } from 'react-toastify';
 
 const WalletPage = () => {
-  let {user,status}=useUser()
+  let { user, status } = useUser()
   const t = useTranslations('wallet');
+  const t2 = useTranslations('common');
   const queryClient = useQueryClient();
   let locale = useLocale();
+  const [paymentIframeUrl, setPaymentIframeUrl] = useState<string | null>(null);
 
   // حالة حوار إنشاء المحفظة
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -27,20 +29,20 @@ const WalletPage = () => {
   });
 
   // استعلام لجلب بيانات المحفظة
-  const { data: wallet, isLoading: isLoadingWallet,refetch: refetchWallet } = useQuery({
-    queryKey: ['wallet',user?.id],
+  const { data: wallet, isLoading: isLoadingWallet, refetch: refetchWallet } = useQuery({
+    queryKey: ['wallet', user?.id],
     queryFn: async () => {
-      const response = await axiosInstance.get(API_ENDPOINTS.wallets.getByUserId(user?.id || "",{},false));
+      const response = await axiosInstance.get(API_ENDPOINTS.wallets.getByUserId(user?.id || "", {}, false));
       return response.data.data;
     },
   });
 
   // استعلام لجلب المعاملات
-  const { data: transactions, isLoading: isLoadingTransactions,refetch: refetchTransactions } = useQuery({
-    queryKey: ['wallet-transactions',user?.id],
+  const { data: transactions, isLoading: isLoadingTransactions, refetch: refetchTransactions } = useQuery({
+    queryKey: ['wallet-transactions', user?.id],
     queryFn: async () => {
       const response = await axiosInstance.get(
-        API_ENDPOINTS.payments.wallet.getTransactions(wallet?.id || "",{},false)
+        API_ENDPOINTS.payments.wallet.getTransactions(wallet?.id || "", {}, false)
       );
       return response.data;
     },
@@ -49,20 +51,20 @@ const WalletPage = () => {
   // تنفيذ عملية الإيداع
   const depositMutation = useMutation({
     mutationFn: async (amount: number) => {
-      const response = await axiosInstance.post(API_ENDPOINTS.payments.wallet.deposit({},false), {
+      const response = await axiosInstance.post(API_ENDPOINTS.payments.wallet.deposit({}, false), {
         amount,
         userId: user?.id || "",
       });
       return response.data.data;
     },
     onSuccess: (data) => {
-      
-      queryClient.invalidateQueries({queryKey:['wallet']});
-      queryClient.invalidateQueries({queryKey:['wallet-transactions']});
+
+      queryClient.invalidateQueries({ queryKey: ['wallet'] });
+      queryClient.invalidateQueries({ queryKey: ['wallet-transactions'] });
       // toast.success(t('messages.deposit_success'));
       console.log(data)
-      if (data.payment.transaction.url) {
-        window.location.href = data.payment.transaction.url;
+      if (data.payment.paymentLink) {
+        setPaymentIframeUrl(data.payment.paymentLink);
       }
 
     },
@@ -74,19 +76,19 @@ const WalletPage = () => {
   // تنفيذ عملية السحب
   const withdrawMutation = useMutation({
     mutationFn: async (amount: number) => {
-     let res= await axiosInstance.post(API_ENDPOINTS.payments.wallet.withdraw({},false), {
+      let res = await axiosInstance.post(API_ENDPOINTS.payments.wallet.withdraw({}, false), {
         amount,
-        userId:user?.id || "",
+        userId: user?.id || "",
       });
       return res.data.data
     },
-    
+
     onSuccess: (data) => {
-      queryClient.invalidateQueries({queryKey:['wallet']});
-      queryClient.invalidateQueries({queryKey:['wallet-transactions']});
+      queryClient.invalidateQueries({ queryKey: ['wallet'] });
+      queryClient.invalidateQueries({ queryKey: ['wallet-transactions'] });
       console.log(data)
-      if (data.payment.transaction.url) {
-        window.location.href = data.payment.transaction.url;
+      if (data.payment.paymentLink) {
+        setPaymentIframeUrl(data.payment.paymentLink);
       }
 
       toast.success(t('messages.withdraw_success'));
@@ -103,7 +105,7 @@ const WalletPage = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:['wallet']});
+      queryClient.invalidateQueries({ queryKey: ['wallet'] });
       handleCreateDialogClose();
       refetchWallet();
       refetchTransactions();
@@ -154,14 +156,14 @@ const WalletPage = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     refetchWallet()
     refetchTransactions()
     setWalletData({
       userId: user?.id || "",
       balance: 0
     })
-  },[locale,user?.id,status])
+  }, [locale, user?.id, status])
 
   return (
     <Container maxWidth="lg">
@@ -172,9 +174,9 @@ const WalletPage = () => {
               {t('title')}
             </Typography>
             {!wallet && (
-              <Button 
-                variant="contained" 
-                color="primary" 
+              <Button
+                variant="contained"
+                color="primary"
                 onClick={handleCreateDialogOpen}
               >
                 {t('create_wallet')}
@@ -244,6 +246,19 @@ const WalletPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {paymentIframeUrl && (
+        <Dialog open={!!paymentIframeUrl} onClose={() => setPaymentIframeUrl(null)} maxWidth="sm" fullWidth>
+          <DialogTitle>{t('payment_iframe')}</DialogTitle>
+          <DialogContent>
+            <iframe src={paymentIframeUrl} width="100%" height="500px" />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setPaymentIframeUrl(null)}>
+              {t2('close')}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Container>
   );
 };

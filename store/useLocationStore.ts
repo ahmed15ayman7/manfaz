@@ -11,11 +11,26 @@ interface LocationStore {
     setUserLocation: (location: Coordinates) => void;
     calculateDistance: (storeLocation: Coordinates) => number;
 }
-
+let initialLocation: Coordinates | null = null
+if (typeof window !== "undefined") {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            try {
+                const { latitude, longitude } = position.coords;
+                initialLocation = {
+                    latitude: latitude,
+                    longitude: longitude,
+                }
+            } catch (err) {
+                console.error("Error fetching location", err);
+            }
+        });
+    }
+}
 export const useLocationStore = create<LocationStore>()(
     persist(
         (set, get) => ({
-            userLocation: null,
+            userLocation: initialLocation,
             setUserLocation: (location) => set({ userLocation: location }),
             calculateDistance: (storeLocation) => {
                 const userLoc = get().userLocation;

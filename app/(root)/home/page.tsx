@@ -1,9 +1,9 @@
 "use client"
-import QuickActions from "@/components/cards/QuickActions";
+// import QuickActions from "@/components/cards/QuickActions";
 import Categories from "@/components/shared/Categories";
-import HomeHeader from "@/components/shared/HomeHeader";
+// import HomeHeader from "@/components/shared/HomeHeader";
 import PopularServices from "@/components/shared/PopularServices";
-import SearchBar from "@/components/shared/SearchBar";
+// import SearchBar from "@/components/shared/SearchBar";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,8 @@ import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconPlus, IconQuestionMark } from "@tabler/icons-react";
 import { Fab, Tooltip, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
-
+import OfferCaroasel from "@/components/shared/OfferCaroasel";
+import WelcomeUser from "@/components/shared/WelcomeUser";
 const actions = [
   { icon: <IconPlus size={24} />, name: 'طلب خدمة', action: 'request_service' },
   { icon: <IconQuestionMark size={24} />, name: 'المساعدة', action: 'help' },
@@ -30,14 +31,16 @@ export default function Home() {
     }
   }, [status, router]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-    };
+  // useEffect(() => {
+  //   // if (typeof window === 'undefined') return;
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  //   const handleScroll = () => {
+  //     setIsScrolled(window.scrollY > 100);
+  //   };
+
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
 
   const handleSpeedDialAction = (action: string) => {
     switch (action) {
@@ -51,7 +54,7 @@ export default function Home() {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="min-h-screen relative"
@@ -61,16 +64,17 @@ export default function Home() {
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <SearchBar placeholder={t('search_placeholder')} setSearch={setSearch} />
+        {/* <SearchBar placeholder={t('search_placeholder')} setSearch={setSearch} /> */}
+        <WelcomeUser onSearch={setSearch} />
       </motion.div>
 
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
         <QuickActions />
-      </motion.div>
+      </motion.div> */}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -109,6 +113,14 @@ export default function Home() {
             />
           ))}
         </SpeedDial>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <OfferCaroasel />
       </motion.div>
     </motion.div>
   );

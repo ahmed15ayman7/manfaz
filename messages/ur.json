@@ -194,7 +194,10 @@
     "type": "مقام کی قسم",
     "type_home": "گھر",
     "type_work": "دفتر",
-    "type_other": "دیگر",
+    "type_club": "کلب",
+    "type_hotel": "ہوٹل",
+    "type_school": "اسکول",
+    "type_party": "پارٹی",
     "address": "پتہ",
     "building": "عمارت",
     "apartment": "اپارٹمنٹ",
@@ -265,6 +268,7 @@
     }
   },
   "workers": {
+    "no_workers_available": "کوئی کارکنان دستیاب نہیں",
     "available_workers": "دستیاب کارکنان",
     "success_rate": "کامیابی کی شرح",
     "earned": "کمائی",
@@ -399,6 +403,7 @@
     }
   },
   "stores": {
+    "no_stores_found": "کوئی دکان نہیں ملی",
     "description": "بہترین مقامی دکانوں سے خریداری کریں۔",
     "available_stores": "دستیاب دکانیں",
     "offers": "آفرز",
@@ -488,6 +493,10 @@
         "closed": "بند ہے",
         "busy": "مصروف",
         "away": "دستیاب نہیں"
+      },
+      "search": {
+        "stores_placeholder": "دکان تلاش کریں",
+        "services_placeholder": "خدمات تلاش کریں"
       }
     }
   },
@@ -1165,9 +1174,59 @@
     "name_on_card": "کارڈ پر نام",
     "pay_now": "ابھی ادائیگی کریں",
     "invalid_card_number": "کارڈ نمبر درست نہیں ہے۔",
-      "invalid_expiry_date": "اختتامی تاریخ درست نہیں ہے۔",
-      "invalid_cvc": "CVC کوڈ درست نہیں ہے۔",
-      "name_required": "کارڈ پر نام درج کرنا ضروری ہے۔",
-      "invalid_amount": "رقم درست نہیں ہے۔"
+    "invalid_expiry_date": "اختتامی تاریخ درست نہیں ہے۔",
+    "invalid_cvc": "CVC کوڈ درست نہیں ہے۔",
+    "name_required": "کارڈ پر نام درج کرنا ضروری ہے۔",
+    "invalid_amount": "رقم درست نہیں ہے۔"
+  },
+  "offers": {
+    "title": "آپ کے آفرز",
+    "description": "ہمارے پاس دستیاب بہترین آفرز دریافت کریں",
+    "view_all": "سب دیکھیں",
+    "no_offers": "کوئی آفر دستیاب نہیں",
+    "no_offers_description": "جب آپ کے پاس کوئی آفر ہوگی تو یہاں ظاہر ہوں گے۔",
+    "addToCart": "کارٹ میں شامل کریں",
+    "included_products": "شامل کردہ مصنوعات",
+    "original_price": "اصل قیمت",
+    "discount": "رعایت",
+    "final_price": "آخری قیمت",
+    "valid_until": "تک درست",
+    "off": "رعایت"
+  },
+  "welcome_user": {
+    "search_placeholder": "اسٹور یا ریستوران تلاش کریں...",
+    "morning": "صبح بخیر، {name}!",
+    "evening": "شام بخیر، {name}!"
+  },
+  "locations": {
+    "title": "موقع انتخاب کریں",
+    "no_locations": "کوئی موقع نہیں",
+    "new_address": "نیا آدریس"
+  },
+  "confirm_location": {
+    "confirmLocation": "موقع تأکيد کریں",
+    "searchMap": "خریطہ میں تلاش کریں",
+    "address": "آدریس",
+    "choose": "انتخاب کریں",
+    "openLocationDialog": "موقع کی نافذہ کو بھیجیں",
+    "loading": "لوڈ ہو رہا ہے",
+    "locationSaved": "موقع کامیابی سے محفوظ ہو گیا",
+    "locationNotSaved": "موقع محفوظ نہیں ہو سکا"
+  },
+  "save_location": {
+    "extra_details": "اضافی تفصیلات",
+    "extra_details_hint": "عمارت نمبر، اپارٹمنٹ نمبر، نمایاں نشانی (اسکول کے قریب)",
+    "extra_details_placeholder": "اضافی تفصیلات درج کریں (اختیاری)",
+    "add_photo": "گھر یا داخلی راستے کی تصویر شامل کریں",
+    "save_for_later": "اس جگہ کو بعد میں استعمال کے لیے محفوظ کریں",
+    "home": "گھر",
+    "work": "کام",
+    "hotel": "ہوٹل",
+    "party": "مناسبت",
+    "school": "سکول",
+    "club": "کلب",
+    "custom_name_placeholder": "اس جگہ کو ایک نام دیں (اختیاری)",
+    "save_location": "مقام محفوظ کریں",
+    "cancel": "منسوخ کریں"
   }
 }

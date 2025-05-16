@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import axios from 'axios'
-import { apiUrl } from '@/constant'
+import { BASE_URL } from '@/lib/config'
 import useStore from '@/store/useLanguageStore'
 import useCartStore from '@/store/useCartStore'
 import CartBottomSheet from '@/components/shared/CartBottomSheet'
@@ -46,7 +46,7 @@ interface Service {
 }
 
 const getService = async ({ id, locale }: { id: string; locale: string }) => {
-  const res = await axios.get(`${apiUrl}/services/${id}?lang=${locale}`)
+  const res = await axios.get(`${BASE_URL}/services/${id}?lang=${locale}`)
   return res.data
 }
 
@@ -58,10 +58,10 @@ export default function ServicePage() {
   const t = useTranslations('services')
   const t2 = useTranslations('')
   const id = params.id as string
-  
+
   const [showCart, setShowCart] = useState(false)
 
-  const { data: serviceData, isLoading,refetch } = useQuery({
+  const { data: serviceData, isLoading, refetch } = useQuery({
     queryKey: ['service', id],
     queryFn: () => getService({ id, locale }),
   })
@@ -87,7 +87,7 @@ export default function ServicePage() {
       </div>
     )
   }
-  
+
   return (
     <div className="container mx-auto p-4 bg-white">
       {/* Main Image */}
@@ -176,29 +176,29 @@ export default function ServicePage() {
       )}
       {service.type === 'delivery' && (
         <div className="sticky bottom-0 left-0 right-0 bg-white border-t p-4 max-sm:bottom-16">
-        <div className="container mx-auto flex items-center justify-between gap-4 max-sm:flex-col">
-          <div>
-            <p className="text-gray-600">{t('price_includes_vat')}</p>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-xl">{service.price} {t2('home_service_details_view.price')}</span>
-              {service.installmentAvailable && (
-                <div className="flex items-center gap-1">
-                  <img src="/imgs/tabby.png" alt="Tabby" className="h-4" />
-                  <span className="text-sm text-gray-600">
-                    {t('monthly_installment', { amount: service.monthlyInstallment })}
-                  </span>
-                </div>
-              )}
+          <div className="container mx-auto flex items-center justify-between gap-4 max-sm:flex-col">
+            <div>
+              <p className="text-gray-600">{t('price_includes_vat')}</p>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-xl">{service.price} {t2('home_service_details_view.price')}</span>
+                {service.installmentAvailable && (
+                  <div className="flex items-center gap-1">
+                    <img src="/imgs/tabby.png" alt="Tabby" className="h-4" />
+                    <span className="text-sm text-gray-600">
+                      {t('monthly_installment', { amount: service.monthlyInstallment })}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
+            <button
+              onClick={() => handleAddToCart()}
+              className="bg-primary text-white max-sm:w-full  px-8 py-3 rounded-lg hover:bg-primary-600 transition-colors"
+            >
+              {t('add_to_cart')}
+            </button>
           </div>
-          <button
-            onClick={()=>handleAddToCart()}
-            className="bg-primary text-white max-sm:w-full  px-8 py-3 rounded-lg hover:bg-primary-600 transition-colors"
-          >
-            {t('add_to_cart')}
-          </button>
         </div>
-      </div>
       )}
       {/* Cart Bottom Sheet */}
       {/* <CartBottomSheet 

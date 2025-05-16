@@ -6,7 +6,7 @@ import axios from 'axios'
 import Image from 'next/image'
 import { toast } from 'react-toastify'
 import { io } from 'socket.io-client'
-import { apiUrl } from '@/constant'
+import { BASE_URL } from '@/lib/config'
 import useStore from '@/store/useLanguageStore'
 import { User, Worker } from '@/interfaces'
 import DashboardSkeleton from '@/components/skeletons/DashboardSkeleton'
@@ -25,7 +25,7 @@ const getWorkerDashboard = async ({ locale, id, role }: { locale: string, id: st
 export default function WorkerDashboardPage() {
   const { locale } = useStore()
   const t = useTranslations('worker_dashboard')
-  let { user:user2, status } = useUser()
+  let { user: user2, status } = useUser()
   const { data: dashboardData, isLoading, refetch } = useQuery({
     queryKey: ['worker-dashboard', user2?.id],
     queryFn: () => getWorkerDashboard({ locale, id: user2?.id || "", role: user2?.role || "" }),
@@ -35,7 +35,7 @@ export default function WorkerDashboardPage() {
     refetch()
 
     // Socket.io setup
-    const socket = io(apiUrl)
+    const socket = io(BASE_URL)
 
     socket.on('orderUpdated', () => {
       refetch()
@@ -66,7 +66,7 @@ export default function WorkerDashboardPage() {
     return <DashboardSkeleton />
   }
 
-  const { totalOrders, totalReviews, totalEarnings, ...user } =( dashboardData as User & {
+  const { totalOrders, totalReviews, totalEarnings, ...user } = (dashboardData as User & {
     totalOrders: number
     totalReviews: number
     totalEarnings: number
@@ -74,7 +74,7 @@ export default function WorkerDashboardPage() {
 
   const handleAvailabilityToggle = async () => {
     try {
-      await axios.put(`${apiUrl}/workers/${user.Worker?.[0]?.id}/availability`, {
+      await axios.put(`${BASE_URL}/workers/${user.Worker?.[0]?.id}/availability`, {
         isAvailable: !user?.Worker?.[0]?.isAvailable,
       })
       refetch()

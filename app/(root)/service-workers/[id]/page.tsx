@@ -6,13 +6,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import axios from 'axios'
 import Image from 'next/image'
-import { apiUrl } from '@/constant'
 import useStore from '@/store/useLanguageStore'
 import { Worker } from '@/interfaces'
 import { calculateDistance } from '@/lib/utils'
-
-const getWorkers = async ({ serviceId, locale }: { serviceId: string; locale: string }) => {
-  const res = await axios.get(`${apiUrl}/workers?serviceId=${serviceId}&lang=${locale}`)
+import { BASE_URL } from '@/lib/config'
+const getWorkers = async ({ serviceId, locale, userLocation }: { serviceId: string; locale: string, userLocation: any }) => {
+  const res = await axios.get(`${BASE_URL}/workers?serviceId=${serviceId}&lang=${locale}&longitude=${userLocation.longitude}&latitude=${userLocation.latitude}`)
   return res.data
 }
 
@@ -27,7 +26,7 @@ export default function ServiceWorkersPage() {
 
   const { data: workersData, isLoading } = useQuery({
     queryKey: ['workers', id],
-    queryFn: () => getWorkers({ serviceId: id, locale }),
+    queryFn: () => getWorkers({ serviceId: id, locale, userLocation }),
   })
 
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null)
@@ -65,14 +64,14 @@ export default function ServiceWorkersPage() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">{t('available_workers')}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {workers.map((worker) => {
+        {workers.length > 0 ? workers.map((worker) => {
           const distance = userLocation && worker.user?.locations?.[0]
             ? calculateDistance(
-                userLocation.latitude,
-                userLocation.longitude,
-                worker.user.locations[0].latitude,
-                worker.user.locations[0].longitude
-              )
+              userLocation.latitude,
+              userLocation.longitude,
+              worker.user.locations[0].latitude,
+              worker.user.locations[0].longitude
+            )
             : null
 
           return (
@@ -168,16 +167,14 @@ export default function ServiceWorkersPage() {
                   <button
                     onClick={() =>
                       router.push(
-                        `/checkout?workerId=${worker.id}&serviceId=${id}${
-                          parameterId ? `&parameterId=${parameterId}` : ''
+                        `/checkout?workerId=${worker.id}&serviceId=${id}${parameterId ? `&parameterId=${parameterId}` : ''
                         }`
                       )
                     }
-                    className={`flex-1 py-2 rounded transition-colors ${
-                      worker.isAvailable
-                        ? 'bg-primary text-white hover:bg-primary-600'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
+                    className={`flex-1 py-2 rounded transition-colors ${worker.isAvailable
+                      ? 'bg-primary text-white hover:bg-primary-600'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
                     disabled={!worker.isAvailable}
                   >
                     {t('order_now')}
@@ -186,7 +183,11 @@ export default function ServiceWorkersPage() {
               </div>
             </div>
           )
-        })}
+        }) : (
+          <div className="text-center text-gray-500">
+            {t('no_workers_available')}
+          </div>
+        )}
       </div>
     </div>
   )
