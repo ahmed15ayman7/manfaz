@@ -154,7 +154,7 @@ const OfferCaroasel = () => {
     // </MUIBox>
     if (isError) return <Alert severity="error">{t("error")}</Alert>
     return (
-        <MUIBox sx={{ width: "100%", maxWidth: "100vw", overflow: "hidden" }}>
+        <MUIBox sx={{ width: "100%", maxWidth: "100vw", overflow: "hidden", pt: 4 }}>
             <Typography
                 variant="h5"
                 component="h1"
@@ -163,13 +163,13 @@ const OfferCaroasel = () => {
                     mb: 2,
                     fontWeight: "bold",
                     px: 2,
-                    pt: 10,
                 }}
+                className="max-xl:hidden pt-10"
             >
                 {t("offers.title")}
             </Typography>
             <MUIBox
-                className="max-sm:max-w-[100vw] max-md:max-w-[90vw] max-w-[80vw]"
+                className="max-sm:max-w-[100vw] max-md:max-w-[90vw] max-w-[80vw] max-xl:pt-10"
                 sx={{
                     display: 'flex',
                     gap: 1,
@@ -187,13 +187,12 @@ const OfferCaroasel = () => {
                     <Card
                         key={index}
                         sx={{
-                            minWidth: 240,
-                            maxWidth: 240,
                             borderRadius: 4,
                             boxShadow: 3,
                             position: "relative",
                             cursor: "pointer",
                         }}
+                        className="max-xl:min-w-[160px] max-xl:max-w-[160px] min-w-[240px] max-w-[240px]"
                         onClick={() => {
                             router.push(`/offers/${offer.id}`)
                         }}

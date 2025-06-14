@@ -10,7 +10,7 @@ import { StoreOffer, Product, Store } from '@/interfaces';
 import useCartStore from '@/store/useCartStore';
 import { useTranslations } from 'next-intl';
 import { Store as StoreIcon, LocalOffer, AccessTime, ShoppingCart, Close } from '@mui/icons-material';
-
+import LoadingComponent from "@/components/shared/LoadingComponent";
 const OfferDetails = ({ params }: { params: { id: string } }) => {
     const { id } = params;
     const [offer, setOffer] = useState<StoreOffer | null>(null);
@@ -39,30 +39,11 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
 
     const handleAddToCart = () => {
         if (offer && store?.isActive) {
-            const tempProduct: Product = {
-                id: offer.id.toString(),
-                name: offer.name.toString(),
-                description: offer.description?.toString() || '',
-                price: 0,
-                storeId: store.id.toString(),
-                categoryId: '',
-                images: offer.image ? [offer.image.toString()] : [],
-                stock: 1,
-                isAvailable: true,
-                ingredients: [],
-                rating: 0,
-                reviewsCount: 0,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                ProductsOrder: [],
-                StoreOfferProduct: [],
-            };
-
             addToCart({
                 id: offer.id.toString(),
-                type: 'service',
+                type: 'offer',
                 quantity: 1,
-                product: tempProduct,
+                offer: offer,
             });
         }
     };
@@ -77,9 +58,7 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
 
     if (loading) {
         return (
-            <Container>
-                <Typography>Loading...</Typography>
-            </Container>
+            <LoadingComponent/>
         );
     }
 
@@ -116,6 +95,7 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
                                 </Grid>
                                 <Grid item>
                                     <Chip
+                                    style={{padding:"0 10px 0 0"}}
                                         label={store.isActive ? t('stores.store_details.store_status.open') : t('stores.store_details.store_status.closed')}
                                         color={store.isActive ? 'success' : 'error'}
                                         icon={store.isActive ? <AccessTime /> : <Close />}
@@ -162,6 +142,7 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
                                 <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
                                     {offer.discount && (
                                         <Chip
+                                        style={{padding:"0 10px 0 0"}}
                                             label={`${t('stores.store_details.off')} ${discountValue}%`}
                                             color="primary"
                                             icon={<LocalOffer />}
@@ -169,6 +150,7 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
                                     )}
                                     {offer.endDate && (
                                         <Chip
+                                        style={{padding:"0 10px 0 0"}}
                                             label={`${t('stores.store_details.valid_until')} ${new Date(offer.endDate).toLocaleDateString()}`}
                                             color="secondary"
                                             icon={<AccessTime />}
@@ -202,7 +184,7 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
                                                             justifyContent: 'space-between',
                                                         }}
                                                     >
-                                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', gap:"9px" }}>
                                                             {item.product?.images?.[0] && (
                                                                 <Box
                                                                     component="img"
@@ -227,7 +209,7 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
                                                             </Box>
                                                         </Box>
                                                         <Typography variant="subtitle1" color="primary">
-                                                            {item.product?.price} {t('currency')}
+                                                            {item.product?.price} {t('home_service_details_view.price')}
                                                         </Typography>
                                                     </Paper>
                                                 </motion.div>
@@ -239,7 +221,7 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                                                 <Typography>{t('offers.original_price')}</Typography>
                                                 <Typography sx={{ textDecoration: 'line-through' }}>
-                                                    {original} {t('currency')}
+                                                    {original} {t('home_service_details_view.price')}
                                                 </Typography>
                                             </Box>
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -247,14 +229,14 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
                                                     {t('offers.discount')} ({discountValue}%)
                                                 </Typography>
                                                 <Typography color="primary">
-                                                    -{original - discounted} {t('currency')}
+                                                    -{original - discounted} {t('home_service_details_view.price')}
                                                 </Typography>
                                             </Box>
                                             <Divider sx={{ my: 1 }} />
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                 <Typography variant="h6">{t('offers.final_price')}</Typography>
                                                 <Typography variant="h6" color="primary">
-                                                    {discounted} {t('currency')}
+                                                    {discounted} {t('home_service_details_view.price')}
                                                 </Typography>
                                             </Box>
                                         </Paper>
@@ -266,6 +248,7 @@ const OfferDetails = ({ params }: { params: { id: string } }) => {
                                     color="primary"
                                     size="large"
                                     fullWidth
+                                    className={"flex gap-4"}
                                     onClick={handleAddToCart}
                                     disabled={!store?.isActive}
                                     startIcon={<ShoppingCart />}

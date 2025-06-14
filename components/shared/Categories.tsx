@@ -101,7 +101,7 @@ const Categories = ({ search }: { search: string }) => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-4 gap-3 mt-2 max-xl:grid-cols-3"
+          className="grid grid-cols-4 gap-3 mt-2 max-xl:grid-cols-4"
         >
           {isLoading ? (
             Array(4).fill(0).map((_, i) => (

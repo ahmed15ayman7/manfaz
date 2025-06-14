@@ -14,7 +14,6 @@ import { toast } from 'react-toastify';
 const WalletPage = () => {
   let { user, status } = useUser()
   const t = useTranslations('wallet');
-  const t2 = useTranslations('common');
   const queryClient = useQueryClient();
   let locale = useLocale();
   const [paymentIframeUrl, setPaymentIframeUrl] = useState<string | null>(null);
@@ -248,13 +247,13 @@ const WalletPage = () => {
       </Dialog>
       {paymentIframeUrl && (
         <Dialog open={!!paymentIframeUrl} onClose={() => setPaymentIframeUrl(null)} maxWidth="sm" fullWidth>
-          <DialogTitle>{t('payment_iframe')}</DialogTitle>
+          {/* <DialogTitle>{t('payment_iframe')}</DialogTitle> */}
           <DialogContent>
-            <iframe src={paymentIframeUrl} width="100%" height="500px" />
+            <iframe src={paymentIframeUrl} width="100%" className={'h-[90vh]'} />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setPaymentIframeUrl(null)}>
-              {t2('close')}
+              {t('cancel')}
             </Button>
           </DialogActions>
         </Dialog>

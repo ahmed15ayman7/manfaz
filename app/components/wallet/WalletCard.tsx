@@ -52,13 +52,15 @@ const WalletCard = ({ balance, onDeposit, onWithdraw }: WalletCardProps) => {
             <Button
               variant="contained"
               startIcon={<IconPlus />}
+              className='flex items-center justify-center gap-2'
               onClick={() => setIsDepositOpen(true)}
               fullWidth
-            >
+              >
               {t('deposit')}
             </Button>
             <Button
               variant="outlined"
+              className='flex items-center justify-center gap-2'
               startIcon={<IconMinus />}
               onClick={() => setIsWithdrawOpen(true)}
               fullWidth

@@ -11,9 +11,9 @@ import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 // import PhoneInput from 'react-phone-input-2'
 // import "react-phone-input-2/lib/style.css"
-import { Select, MenuItem, SelectChangeEvent, Box, Typography, Chip, Divider, Card, Grid, Avatar, CardContent, Rating, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, CircularProgress } from "@mui/material";
+import { Select, MenuItem, SelectChangeEvent, Box, Typography, Chip, Divider, Card, Grid, Avatar, CardContent, Rating, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, CircularProgress, Paper } from "@mui/material";
 import { createOrder } from "@/lib/actions/orders.actions";
-import { OrdersStore, PaymentMethod, Service, ServiceParameter, Store, UserLocation, Worker } from "@/interfaces";
+import { OrdersStore, PaymentMethod, Service, ServiceParameter, Store, StoreOffer, UserLocation, Worker } from "@/interfaces";
 import axiosInstance from "@/lib/axios";
 import API_ENDPOINTS from "@/lib/apis";
 import { SkeletonLoader } from "@/components/shared/skeleton-loader";
@@ -90,6 +90,13 @@ const getUserLocations = async ({
   return res.data.data;
 };
 
+const getOffer = async ({ id, locale }: { id: string; locale: string }) => {
+  const res = await axiosInstance.get(
+    API_ENDPOINTS.offers.findOne(id, { lang: locale }, false)
+  );
+  return res.data.data as StoreOffer;
+};
+
 function CheckoutPage() {
   const router = useRouter();
   const t = useTranslations();
@@ -105,6 +112,9 @@ function CheckoutPage() {
   const [selectedServiceId, setSelectedServiceId] = useState(
     {} as (typeof items)[0]
   );
+  // useEffect(()=>{
+  //   clearCart();
+  // },[])
   const [formData, setFormData] = useState({
     locationId: "",
     latitude: 0,
@@ -194,18 +204,28 @@ function CheckoutPage() {
   // Use useQueries instead of mapping over items with individual useQuery hooks
   const itemQueries = useQueries({
     queries:
-      items?.map((item) => ({
-        queryKey: [item?.type, item?.id, locale],
-        queryFn: () =>
-          item?.type === "service"
-            ? getServiceParameter({
-              id: item?.id,
-              locale,
-              type: "serviceParameter",
-            })
-            : getService({ id: item?.id, locale, type: "delivery" }),
-        enabled: !!item?.id && !!locale,
-      })) || [],
+      items?.map((item) => item?.type !== "offer"
+        ? ({
+          queryKey: [item?.type, item?.id, locale],
+          queryFn: () =>
+            item?.type === "service"
+              ? getServiceParameter({
+                id: item?.id,
+                locale,
+                type: "serviceParameter",
+              })
+              : getService({ id: item?.id, locale, type: "delivery" }),
+          enabled: !!item?.id && !!locale,
+        }) : null).filter((item) => item !== null) || [],
+  });
+  const offerQueries = useQueries({
+    queries:
+      items?.map((item) => item?.type === "offer"
+        ? ({
+          queryKey: [item?.type, item?.id, locale],
+          queryFn: () => getOffer({ id: item?.id, locale }),
+          enabled: !!item?.id && !!locale,
+        }) : null).filter((item) => item !== null) || [],
   });
   let { data: userData, status } = useSession();
 
@@ -227,8 +247,8 @@ function CheckoutPage() {
       )
     }
   }, [])
-  const isLoading = itemQueries?.some((query) => query?.isLoading);
-  const isError = itemQueries?.some((query) => query?.isError);
+  const isLoading = itemQueries?.some((query) => query?.isLoading) || offerQueries?.some((query) => query?.isLoading);
+  const isError = itemQueries?.some((query) => query?.isError) || offerQueries?.some((query) => query?.isError);
   const { data: locations, isLoading: locationsLoading } = useQuery<
     UserLocation[]
   >({
@@ -255,7 +275,7 @@ function CheckoutPage() {
     if (status !== "loading" && userData && userData?.user) {
       setFormData({
         locationId: locations?.[0]?.id || "",
-        store: itemQueries
+        store: [...itemQueries, ...offerQueries]
           ?.map((query) => {
             return query?.data?.type
               ? null
@@ -288,8 +308,8 @@ function CheckoutPage() {
         notes: "",
         serviceId: items[0]?.id || "",
         providerId: "", // Assuming providerId will be set later
-        price: service && !workerLoading && !serviceLoading && !servicesLoading && workerId && serviceId && parameterId ? service?.price || 0 : getTotalPrice(),
-        totalAmount: service && !workerLoading && !serviceLoading && !servicesLoading && workerId && serviceId && parameterId ? service?.price || 0 : getTotalPrice(),
+        price: service && !workerLoading && !serviceLoading && !servicesLoading && workerId && serviceId && parameterId ? service?.price || 0 : getTotalPrice() + getTotalOfferPrice(),
+        totalAmount: service && !workerLoading && !serviceLoading && !servicesLoading && workerId && serviceId && parameterId ? service?.price || 0 : getTotalPrice() + getTotalOfferPrice(),
       });
     }
   }, [status, userData, items, itemQueries, service]);
@@ -302,7 +322,22 @@ function CheckoutPage() {
       ) || 0
     );
   };
+  const getTotalOfferPrice = () => {
+    return (
+      offerQueries?.reduce(
+        (total, query) => total + (calculateTotalOfferPrice(query?.data as StoreOffer)?.discounted || 0),
+        0
+      ) || 0
+    );
+  };
 
+  const calculateTotalOfferPrice = (offer: StoreOffer) => {
+    if (!offer?.products) return { original: 0, discounted: 0 };
+    const original = offer.products.reduce((sum, item) => sum + (item.product?.price || 0), 0);
+    const discountValue = Number(offer.discount) || 0;
+    const discounted = original * (1 - discountValue / 100);
+    return { original, discounted, discountValue };
+  };
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -638,6 +673,9 @@ function CheckoutPage() {
                 </h2>
                 <div className="space-y-4 mb-4">
                   {items?.map((item, index) => {
+                    if (item.type === "offer") {
+                      return null;
+                    }
                     const query = itemQueries[index];
                     const itemData = query?.data;
 
@@ -681,6 +719,56 @@ function CheckoutPage() {
                         >
                           ✕
                         </button>
+                      </div>
+                    );
+                  })}
+                  {offerQueries?.map((offer, index) => {
+                    const query = offerQueries[index];
+                    const offerData = query?.data;
+                    const { original, discounted, discountValue } = calculateTotalOfferPrice(offerData as StoreOffer);
+                    return (
+                      <div key={index} className="border-b pb-4 p-2   cursor-pointer border">
+                        <h3 className="text-sm font-medium">{offerData?.name}</h3>
+                        <div className="flex p-2  items-center gap-4 ">
+                          <Paper elevation={2} sx={{ p: 2, mt: 3 }} className="flex-grow">
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                              <Typography>{t('offers.original_price')}</Typography>
+                              <Typography sx={{ textDecoration: 'line-through' }}>
+                                {original} {t('home_service_details_view.price')}
+                              </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                              <Typography color="primary">
+                                {t('offers.discount')} ({discountValue}%)
+                              </Typography>
+                              <Typography color="primary">
+                                -{original - discounted} {t('home_service_details_view.price')}
+                              </Typography>
+                            </Box>
+                            <Divider sx={{ my: 1 }} />
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <Typography variant="h6">{t('offers.final_price')}</Typography>
+                              <Typography variant="h6" color="primary">
+                                {discounted} {t('home_service_details_view.price')}
+                              </Typography>
+                            </Box>
+                          </Paper>
+                          <button
+                            type="button"
+                            onClick={() => removeItem(offerData?.id!)}
+                            className="text-red-500 hover:text-red-600"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                        <div className="flex items-center gap-2 mt-4">
+                          {offerData?.products?.map((product, index) => (
+                            <div key={index} className="flex flex-col items-center gap-2">
+                              <img src={product.product?.images?.[0] || ""} alt={product.product?.name} className="w-10 h-10 rounded-lg object-cover" />
+                              <p className="text-sm text-gray-600">{product.product?.name}</p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     );
                   })}

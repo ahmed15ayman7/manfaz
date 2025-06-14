@@ -1,12 +1,13 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { Product } from '@/interfaces'
+import { Product, StoreOffer } from '@/interfaces'
 
 interface CartItem {
   id: string
-  type: 'service' | 'delivery' | 'product'
+  type: 'service' | 'delivery' | 'product' | 'offer'
   quantity: number
-  product?: Product
+  product?: Product,
+  offer?: StoreOffer
 }
 
 interface CartStore {
@@ -27,11 +28,11 @@ const useCartStore = create<CartStore>()(
       addItem: (item) => {
         const items = get().items
         const existingItem = items.find(i => i.id === item.id)
-        
+
         if (existingItem) {
           set({
-            items: items.map(i => 
-              i.id === item.id 
+            items: items.map(i =>
+              i.id === item.id
                 ? { ...i, quantity: i.quantity + item.quantity }
                 : i
             )
